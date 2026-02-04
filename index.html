@@ -11,6 +11,7 @@
       --fg: #eaeaea;
       --muted: #9a9a9a;
       --accent: #5eead4;
+      --nav: #111;
     }
 
     * {
@@ -27,13 +28,54 @@
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--fg);
-      overflow-x: hidden;
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
+    /* NAVBAR */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(17,17,17,0.9);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 8vw;
+      z-index: 1000;
+    }
+
+    nav .logo {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--fg);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .cv-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+    }
+
+    /* SECTIONS */
     section {
       min-height: 100vh;
-      padding: 6rem 10vw;
+      padding: 7rem 10vw;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -45,12 +87,13 @@
     }
 
     h2 {
-      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
       font-weight: 500;
+      margin-bottom: 1rem;
     }
 
     p {
-      max-width: 700px;
+      max-width: 720px;
       color: var(--muted);
     }
 
@@ -76,26 +119,18 @@
       background: #151515;
       padding: 2rem;
       border-radius: 16px;
-      transition: transform 0.3s ease, background 0.3s ease;
+      transition: transform 0.3s ease;
     }
 
     .card:hover {
       transform: translateY(-8px);
-      background: #1a1a1a;
-    }
-
-    /* CONTACT */
-    a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
     }
 
     footer {
       text-align: center;
       padding: 3rem 0;
-      font-size: 0.9rem;
       color: var(--muted);
+      font-size: 0.9rem;
     }
 
     /* SCROLL REVEAL */
@@ -113,65 +148,65 @@
 </head>
 <body>
 
+  <!-- NAVBAR -->
+  <nav>
+    <div class="logo">AF</div>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="cv.pdf" class="cv-btn" target="_blank">Want my CV?</a></li>
+    </ul>
+  </nav>
+
   <!-- HERO -->
-  <section class="hero reveal">
+  <section id="home" class="hero reveal">
     <h1 class="accent">Abdulrahman Fahim</h1>
-    <h2 style="margin-top: 1rem;">
+    <h2>
       I’m a <span id="typing" class="accent"></span>
     </h2>
     <p style="margin-top: 2rem;">
-      Minimal software. Strong foundations. Code that respects the machine.
+      Minimal software. Strong foundations.  
+      No trends. Just engineering.
     </p>
   </section>
 
   <!-- ABOUT -->
-  <section class="reveal">
+  <section id="about" class="reveal">
     <h2>About Me</h2>
     <p>
-      I’m a software engineer who values clarity over noise.  
-      I like systems that work, code that lasts, and solutions that don’t break
-      the moment a trend dies. التقليدي أحيانًا هو الصح.
+      I’m a software engineer who prefers things that age well.
+      Systems, backend logic, automation, and tools that actually
+      respect hardware and users. الجديد مهم، بس الأساس أهم.
     </p>
   </section>
 
   <!-- PROJECTS -->
-  <section class="reveal">
+  <section id="projects" class="reveal">
     <h2>Projects</h2>
     <div class="projects">
       <div class="card">
         <h3>Automation & Tooling</h3>
-        <p>
-          Background tools, scripts, and system utilities designed
-          to remove friction and save time.
-        </p>
+        <p>System utilities, background processes, workflow killers.</p>
       </div>
-
       <div class="card">
-        <h3>Backend & Services</h3>
-        <p>
-          APIs, databases, and infrastructure-focused services
-          built for reliability, not hype.
-        </p>
+        <h3>Backend Systems</h3>
+        <p>APIs, databases, infra-minded services built to last.</p>
       </div>
-
       <div class="card">
-        <h3>Game & Logic Systems</h3>
-        <p>
-          Performance-sensitive logic, real-time systems,
-          and gameplay architecture.
-        </p>
+        <h3>Logic & Simulation</h3>
+        <p>Performance-focused logic and real-time systems.</p>
       </div>
     </div>
   </section>
 
   <!-- CONTACT -->
-  <section class="reveal">
+  <section id="contact" class="reveal">
     <h2>Contact</h2>
-    <p>
-      If you want something built properly, not just quickly — let’s talk.
-    </p>
+    <p>If you want something built properly, not just fast.</p>
     <p style="margin-top: 1rem;">
-      <a href="mailto:your@email.com">your@email.com</a>
+      <a href="mailto:your@email.com" class="accent">your@email.com</a>
     </p>
   </section>
 
@@ -179,59 +214,57 @@
     © 2026 Abdulrahman Fahim
   </footer>
 
-  <!-- TYPING EFFECT -->
+  <!-- TYPING EFFECT (NO GLITCH) -->
   <script>
-    const roles = [
-      "Software Engineer",
-      "Full-Stack Developer",
-      "Backend Engineer",
-      "Systems Builder"
-    ];
+    document.addEventListener("DOMContentLoaded", () => {
+      const roles = [
+        "Software Engineer",
+        "Full-Stack Developer",
+        "Backend Engineer",
+        "Systems Builder"
+      ];
 
-    const typing = document.getElementById("typing");
-    let roleIndex = 0;
-    let charIndex = 0;
-    let deleting = false;
+      const el = document.getElementById("typing");
+      el.textContent = ""; // 🔥 prevents glitch
 
-    function typeLoop() {
-      const current = roles[roleIndex];
+      let word = 0, char = 0, del = false;
 
-      if (!deleting) {
-        typing.textContent = current.slice(0, charIndex++);
-        if (charIndex > current.length) {
-          setTimeout(() => deleting = true, 1200);
+      function loop() {
+        const current = roles[word];
+
+        if (!del) {
+          el.textContent = current.slice(0, char++);
+          if (char > current.length) setTimeout(() => del = true, 1200);
+        } else {
+          el.textContent = current.slice(0, char--);
+          if (char < 0) {
+            del = false;
+            word = (word + 1) % roles.length;
+          }
         }
-      } else {
-        typing.textContent = current.slice(0, charIndex--);
-        if (charIndex < 0) {
-          deleting = false;
-          roleIndex = (roleIndex + 1) % roles.length;
-        }
+
+        setTimeout(loop, del ? 50 : 90);
       }
 
-      setTimeout(typeLoop, deleting ? 50 : 90);
-    }
-
-    typeLoop();
+      loop();
+    });
   </script>
 
-  <!-- SCROLL ANIMATION -->
+  <!-- SCROLL ANIMATIONS -->
   <script>
-    const reveals = document.querySelectorAll('.reveal');
+    const items = document.querySelectorAll(".reveal");
 
-    function revealOnScroll() {
+    function reveal() {
       const trigger = window.innerHeight * 0.85;
-
-      reveals.forEach(el => {
-        const top = el.getBoundingClientRect().top;
-        if (top < trigger) {
-          el.classList.add('visible');
+      items.forEach(el => {
+        if (el.getBoundingClientRect().top < trigger) {
+          el.classList.add("visible");
         }
       });
     }
 
-    window.addEventListener('scroll', revealOnScroll);
-    revealOnScroll();
+    window.addEventListener("scroll", reveal);
+    reveal();
   </script>
 
 </body>
