@@ -28,7 +28,7 @@
       line-height: 1.6;
     }
 
-    /* NAV */
+    /* NAVBAR */
     nav {
       position: fixed;
       top: 0;
@@ -38,13 +38,14 @@
       backdrop-filter: blur(10px);
       display: flex;
       justify-content: space-between;
+      align-items: center;
       z-index: 1000;
     }
 
     nav ul {
+      list-style: none;
       display: flex;
       gap: 2rem;
-      list-style: none;
       align-items: center;
     }
 
@@ -88,16 +89,22 @@
     .accent { color: var(--accent); }
 
     .hero {
-      align-items: center;
       text-align: center;
+      align-items: center;
     }
 
-    /* 🔥 KEY FIX */
-    #typing {
-      opacity: 0;        /* hidden until JS starts */
+    /* 🔥 TYPING VIA DATA ATTRIBUTE */
+    .typing {
+      position: relative;
       white-space: nowrap;
     }
 
+    .typing::after {
+      content: attr(data-text);
+      color: var(--accent);
+    }
+
+    /* PROJECTS */
     .projects {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -112,8 +119,11 @@
       transition: transform 0.3s ease;
     }
 
-    .card:hover { transform: translateY(-8px); }
+    .card:hover {
+      transform: translateY(-8px);
+    }
 
+    /* SCROLL REVEAL */
     .reveal {
       opacity: 0;
       transform: translateY(40px);
@@ -141,24 +151,26 @@
     <li><a href="#about">About</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="cv.pdf" class="cv-btn" target="_blank">Want my CV?</a></li>
+    <li><a href="cv.pdf" target="_blank" class="cv-btn">Want my CV?</a></li>
   </ul>
 </nav>
 
 <section id="home" class="hero reveal">
   <h1 class="accent">Abdulrahman Fahim</h1>
-  <h2>I’m a <span id="typing" class="accent"></span></h2>
+  <h2>
+    I’m a <strong class="typing" data-text=""></strong>
+  </h2>
   <p style="margin-top:2rem">
-    Clean software. Strong fundamentals. No shortcuts.
+    Engineering that ages well. No hype.
   </p>
 </section>
 
 <section id="about" class="reveal">
   <h2>About</h2>
   <p>
-    I build systems that don’t rely on hype.
-    Automation, backend logic, real-world engineering.
-    الجديد حلو، بس الأساس هو اللي يعيش.
+    I build software with respect for fundamentals.
+    Automation, backend systems, real-world logic.
+    الجديد جميل، بس اللي يعيش هو الصح.
   </p>
 </section>
 
@@ -167,27 +179,27 @@
   <div class="projects">
     <div class="card">
       <h3>Automation</h3>
-      <p>Scripts & tools that remove human pain.</p>
+      <p>Tools that eliminate repetition.</p>
     </div>
     <div class="card">
       <h3>Backend</h3>
-      <p>APIs and services built to survive load.</p>
+      <p>APIs & services built for longevity.</p>
     </div>
     <div class="card">
       <h3>Systems</h3>
-      <p>Logic that respects performance.</p>
+      <p>Performance-aware logic.</p>
     </div>
   </div>
 </section>
 
 <section id="contact" class="reveal">
   <h2>Contact</h2>
-  <p>Let’s build something that actually lasts.</p>
+  <p>Let’s build something real.</p>
 </section>
 
 <footer>© 2026 Abdulrahman Fahim</footer>
 
-<!-- TYPING (FIXED) -->
+<!-- TYPING ENGINE (DATA-ATTRIBUTE BASED) -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const roles = [
@@ -197,20 +209,18 @@ document.addEventListener("DOMContentLoaded", () => {
     "Systems Builder"
   ];
 
-  const el = document.getElementById("typing");
-  let word = 0, char = 0, del = false;
+  const el = document.querySelector(".typing");
 
-  el.textContent = "";
-  el.style.opacity = "1"; // 🔥 SHOW ONLY NOW
+  let word = 0, char = 0, del = false;
 
   function loop() {
     const current = roles[word];
 
     if (!del) {
-      el.textContent = current.slice(0, char++);
+      el.dataset.text = current.slice(0, char++);
       if (char > current.length) setTimeout(() => del = true, 1200);
     } else {
-      el.textContent = current.slice(0, char--);
+      el.dataset.text = current.slice(0, char--);
       if (char < 0) {
         del = false;
         word = (word + 1) % roles.length;
