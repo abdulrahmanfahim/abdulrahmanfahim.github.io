@@ -1,3 +1,238 @@
-<h1>
-  Hello World
-</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Abdulrahman Fahim – Software Engineer</title>
+
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --fg: #eaeaea;
+      --muted: #9a9a9a;
+      --accent: #5eead4;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    section {
+      min-height: 100vh;
+      padding: 6rem 10vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: clamp(3rem, 6vw, 5rem);
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      font-weight: 500;
+    }
+
+    p {
+      max-width: 700px;
+      color: var(--muted);
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    /* HERO */
+    .hero {
+      align-items: center;
+      text-align: center;
+    }
+
+    /* PROJECTS */
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .card {
+      background: #151515;
+      padding: 2rem;
+      border-radius: 16px;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      background: #1a1a1a;
+    }
+
+    /* CONTACT */
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero reveal">
+    <h1 class="accent">Abdulrahman Fahim</h1>
+    <h2 style="margin-top: 1rem;">
+      I’m a <span id="typing" class="accent"></span>
+    </h2>
+    <p style="margin-top: 2rem;">
+      Minimal software. Strong foundations. Code that respects the machine.
+    </p>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="reveal">
+    <h2>About Me</h2>
+    <p>
+      I’m a software engineer who values clarity over noise.  
+      I like systems that work, code that lasts, and solutions that don’t break
+      the moment a trend dies. التقليدي أحيانًا هو الصح.
+    </p>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="reveal">
+    <h2>Projects</h2>
+    <div class="projects">
+      <div class="card">
+        <h3>Automation & Tooling</h3>
+        <p>
+          Background tools, scripts, and system utilities designed
+          to remove friction and save time.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Backend & Services</h3>
+        <p>
+          APIs, databases, and infrastructure-focused services
+          built for reliability, not hype.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Game & Logic Systems</h3>
+        <p>
+          Performance-sensitive logic, real-time systems,
+          and gameplay architecture.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="reveal">
+    <h2>Contact</h2>
+    <p>
+      If you want something built properly, not just quickly — let’s talk.
+    </p>
+    <p style="margin-top: 1rem;">
+      <a href="mailto:your@email.com">your@email.com</a>
+    </p>
+  </section>
+
+  <footer>
+    © 2026 Abdulrahman Fahim
+  </footer>
+
+  <!-- TYPING EFFECT -->
+  <script>
+    const roles = [
+      "Software Engineer",
+      "Full-Stack Developer",
+      "Backend Engineer",
+      "Systems Builder"
+    ];
+
+    const typing = document.getElementById("typing");
+    let roleIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+
+    function typeLoop() {
+      const current = roles[roleIndex];
+
+      if (!deleting) {
+        typing.textContent = current.slice(0, charIndex++);
+        if (charIndex > current.length) {
+          setTimeout(() => deleting = true, 1200);
+        }
+      } else {
+        typing.textContent = current.slice(0, charIndex--);
+        if (charIndex < 0) {
+          deleting = false;
+          roleIndex = (roleIndex + 1) % roles.length;
+        }
+      }
+
+      setTimeout(typeLoop, deleting ? 50 : 90);
+    }
+
+    typeLoop();
+  </script>
+
+  <!-- SCROLL ANIMATION -->
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+
+    function revealOnScroll() {
+      const trigger = window.innerHeight * 0.85;
+
+      reveals.forEach(el => {
+        const top = el.getBoundingClientRect().top;
+        if (top < trigger) {
+          el.classList.add('visible');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+  </script>
+
+</body>
+</html>
