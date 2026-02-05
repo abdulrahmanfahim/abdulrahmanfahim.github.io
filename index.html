@@ -32,7 +32,6 @@
       overflow-x: hidden;
     }
 
-    /* Ambient Background Glow */
     body::before {
       content: "";
       position: fixed;
@@ -76,7 +75,7 @@
       box-shadow: 0 0 15px var(--accent-glow);
     }
 
-    /* Hamburger & "X" Morph */
+    /* Mobile Menu Controls */
     .hamburger {
       display: none; flex-direction: column; justify-content: space-between;
       width: 25px; height: 18px; cursor: pointer; z-index: 2001; border: none; background: none; padding: 0;
@@ -86,7 +85,6 @@
     .hamburger.active span:nth-child(2) { opacity: 0; transform: translateX(10px); }
     .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-    /* Mobile Menu Controls */
     .menu-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 1500; opacity: 0; visibility: hidden; transition: var(--transition); }
     .menu-overlay.active { opacity: 1; visibility: visible; }
 
@@ -97,14 +95,13 @@
     .mobile-menu.active { right: 0; }
     .mobile-menu a { font-size: 1.3rem; color: var(--fg); text-decoration: none; font-weight: 700; transition: 0.3s; }
 
-    /* Main Typography */
+    /* Layout & Text */
     section { min-height: 100vh; padding: 10rem 10vw; display: flex; flex-direction: column; justify-content: center; }
     .section-title { color: var(--accent); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 1rem; display: block; }
     h1 { font-size: clamp(3rem, 10vw, 7rem); font-weight: 800; line-height: 0.95; margin-bottom: 2rem; letter-spacing: -3px; }
     .typing { color: var(--accent); border-right: 3px solid var(--accent); padding-right: 8px; animation: blink 0.8s infinite; }
     @keyframes blink { 50% { border-color: transparent; } }
 
-    /* The Unified Grid (Shiftfolio & Expertise) */
     .grid-container { 
       display: grid; 
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
@@ -112,7 +109,7 @@
       margin-top: 2rem; 
     }
 
-    /* Core Card Logic */
+    /* The "More Zoom" Fix */
     .demo-box, .card {
       position: relative;
       border-radius: 12px;
@@ -123,21 +120,27 @@
       background: #0d0d0d;
     }
 
-    /* Photo Box - No Gaps Fix */
     .demo-box { display: block; text-decoration: none; }
+    
     .demo-box img { 
       width: 100%; 
       height: 100%; 
-      object-fit: cover; /* Fills the box entirely */
-      object-position: top; /* Shows the top of the site */
+      object-fit: cover; 
+      object-position: 50% 20%; /* Centers and pushes focus slightly up */
+      transform: scale(1.15);    /* Increased base zoom */
       filter: grayscale(0.4); 
       transition: var(--transition); 
     }
-    .demo-box:hover img { transform: scale(1.05); filter: grayscale(0); }
+
+    /* Even more zoom on hover */
+    .demo-box:hover img { 
+      transform: scale(1.25); 
+      filter: grayscale(0); 
+    }
     
     .demo-info {
       position: absolute; bottom: 0; left: 0; width: 100%; padding: 2.5rem;
-      background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+      background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.2) 80%, transparent 100%);
       transform: translateY(10px); opacity: 0; transition: var(--transition);
     }
     .demo-box:hover .demo-info { transform: translateY(0); opacity: 1; }
@@ -162,7 +165,6 @@
     footer { padding: 6rem 0; text-align: center; border-top: 1px solid var(--border); color: var(--muted); }
     .footer-link { color: var(--accent); text-decoration: none; font-weight: 600; }
 
-    /* Responsive Adjustments */
     @media (max-width: 900px) {
       :root { --standard-height: 320px; }
       .nav-links { display: none; }
@@ -170,7 +172,6 @@
       h1 { font-size: 2.8rem; line-height: 1.1; letter-spacing: -1px; }
       section { padding: 6rem 8vw; }
       .card { padding: 2rem; }
-      .card h3 { font-size: 1.5rem; }
     }
   </style>
 </head>
@@ -185,9 +186,7 @@
     <li><a href="#contact">Contact</a></li>
     <li><a href="/CV" target="_blank" class="cv-btn">Open CV</a></li>
   </ul>
-  <button class="hamburger" id="hamburger-btn">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="hamburger" id="hamburger-btn"><span></span><span></span><span></span></button>
 </nav>
 
 <div class="menu-overlay" id="menu-overlay"></div>
@@ -205,7 +204,7 @@
     <h1 class="reveal">Abdulrahman <br/><span class="accent">Fahim</span></h1>
     <h2 class="reveal" style="color: var(--fg)">Specializing in <span class="typing" id="type-target"></span></h2>
     <p class="reveal hero-p" style="max-width: 600px; color: var(--muted); margin-top: 1.5rem; font-size: 1.1rem;">
-      Intermediate Computer Science student building robust full stack applications, managing secure Linux infrastructure, and optimizing networking protocols.
+      Intermediate Computer Science student building robust full stack applications and managing secure Linux infrastructure.
     </p>
   </section>
 
@@ -213,7 +212,7 @@
     <span class="section-title">01. Background</span>
     <h1 style="font-size: clamp(2rem, 5vw, 4.3rem);">Core <span class="accent">Architecture.</span></h1>
     <p style="font-size: 1.3rem; max-width: 800px; margin-top: 1.5rem;">
-      I bridge the gap between high-performance <b>Full Stack Development</b> and reliable <b>Linux Systems</b>. My approach integrates networking knowledge with modern web standards.
+      I bridge the gap between high-performance <b>Full Stack Development</b> and reliable <b>Linux Systems</b>.
     </p>
     <p style="margin-top: 1.5rem; font-style: italic; color: var(--accent); font-size: 1.1rem;">"الجديد جميل، بس اللي يعيش هو الصح"</p>
   </section>
@@ -223,14 +222,14 @@
     <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">Shiftfolio Showcase</h2>
     <div class="grid-container">
       <a href="/shiftfolio-light" class="demo-box">
-        <img src="/imgs/shiftfolio-light.png" alt="Shiftfolio Light Interface">
+        <img src="/imgs/shiftfolio-light.png" alt="Shiftfolio Light">
         <div class="demo-info">
             <h3>Shiftfolio Light</h3>
             <p class="accent">View Details →</p>
         </div>
       </a>
       <a href="/shiftfolio-dark" class="demo-box">
-        <img src="/imgs/shiftfolio-dark.png" alt="Shiftfolio Dark Interface">
+        <img src="/imgs/shiftfolio-dark.png" alt="Shiftfolio Dark">
         <div class="demo-info">
             <h3>Shiftfolio Dark</h3>
             <p class="accent">View Details →</p>
@@ -244,15 +243,15 @@
     <div class="grid-container">
       <div class="card">
         <h3>Full Stack Dev</h3>
-        <p>Building end-to-end applications using Next.js, React, and robust MongoDB backend architectures with a focus on performance.</p>
+        <p>Next.js, React, and MongoDB backend architectures focused on performance and scale.</p>
       </div>
       <div class="card">
         <h3>Linux Systems</h3>
-        <p>Enterprise-grade management of Debian-based systems, Proxmox environments, and hardened headless server deployments.</p>
+        <p>Advanced management of Debian systems, Proxmox virtualization, and hardened deployments.</p>
       </div>
       <div class="card">
         <h3>Networking</h3>
-        <p>Engineering secure network protocols, DNS management, and reliable remote infrastructure for modern applications.</p>
+        <p>Configuring secure network protocols and DNS management for reliable remote infrastructure.</p>
       </div>
     </div>
   </section>
@@ -260,7 +259,7 @@
   <section id="contact" class="reveal" style="text-align: center; align-items: center;">
     <span class="section-title">04. Connection</span>
     <h1 style="letter-spacing: -1px; font-size: clamp(2.5rem, 6vw, 4rem);">Ready to <span class="accent">Deploy?</span></h1>
-    <p style="margin-bottom: 2.5rem; font-size: 1.1rem;">Currently open to technical roles, full-stack projects, and software engineering collaborations.</p>
+    <p style="margin-bottom: 2.5rem; font-size: 1.1rem;">Currently open to technical roles and software collaborations.</p>
     <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="cv-btn" style="font-size: 1.1rem; padding: 1.4rem 3rem;">Start a Conversation</a>
   </section>
 </main>
@@ -271,7 +270,6 @@
 </footer>
 
 <script>
-// Mobile Menu Morph & Drawer
 const btn = document.getElementById('hamburger-btn');
 const drawer = document.getElementById('mobile-drawer');
 const overlay = document.getElementById('menu-overlay');
@@ -288,7 +286,6 @@ btn.addEventListener('click', toggleMenu);
 overlay.addEventListener('click', toggleMenu);
 links.forEach(link => link.addEventListener('click', toggleMenu));
 
-// Typing Animation
 document.addEventListener("DOMContentLoaded", () => {
   const roles = ["Linux Systems.", "Full Stack Apps.", "Networking.", "Shiftfolio Designs.", "Systems Engineering."];
   const el = document.getElementById("type-target");
@@ -299,7 +296,6 @@ document.addEventListener("DOMContentLoaded", () => {
     el.textContent = isDeleting ? currentWord.substring(0, charIdx - 1) : currentWord.substring(0, charIdx + 1);
     charIdx = isDeleting ? charIdx - 1 : charIdx + 1;
     timeout = isDeleting ? 50 : 100;
-
     if (!isDeleting && charIdx === currentWord.length) { isDeleting = true; timeout = 2500; }
     else if (isDeleting && charIdx === 0) { isDeleting = false; wordIdx = (wordIdx + 1) % roles.length; timeout = 500; }
     setTimeout(type, timeout);
@@ -307,7 +303,6 @@ document.addEventListener("DOMContentLoaded", () => {
   type();
 });
 
-// Scroll Reveal Observer
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
 }, { threshold: 0.1 });
