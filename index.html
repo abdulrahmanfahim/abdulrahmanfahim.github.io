@@ -64,20 +64,24 @@
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); }
     .nav-links a:hover { color: var(--accent); }
 
-    /* Audio Toggle Button */
+    /* Audio Toggle Button - Enhanced Visibility */
     .music-toggle {
-      background: none;
-      border: 1px solid var(--border);
+      background: rgba(94, 234, 212, 0.1);
+      border: 1px solid var(--accent);
       color: var(--accent);
-      padding: 0.5rem 0.8rem;
-      border-radius: 4px;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
       cursor: pointer;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 800;
+      letter-spacing: 1px;
       transition: var(--transition);
       margin-right: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .music-toggle:hover { background: var(--border); }
+    .music-toggle:hover { background: var(--accent); color: #000; }
 
     .cv-btn {
       background: var(--accent);
@@ -110,7 +114,7 @@
     .mobile-menu.active { right: 0; }
     .mobile-menu a { font-size: 1.3rem; color: var(--fg); text-decoration: none; font-weight: 700; transition: 0.3s; }
 
-    /* Layout & Text */
+    /* Layout & Reveal */
     section { min-height: 100vh; padding: 10rem 10vw; display: flex; flex-direction: column; justify-content: center; }
     .section-title { color: var(--accent); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 1rem; display: block; }
     h1 { font-size: clamp(3rem, 10vw, 7rem); font-weight: 800; line-height: 0.95; margin-bottom: 2rem; letter-spacing: -3px; }
@@ -134,8 +138,6 @@
       background: #0d0d0d;
     }
 
-    .demo-box { display: block; text-decoration: none; }
-    
     .demo-box img { 
       width: 100%; 
       height: 100%; 
@@ -146,10 +148,7 @@
       transition: var(--transition); 
     }
 
-    .demo-box:hover img { 
-      transform: scale(1.25); 
-      filter: grayscale(0); 
-    }
+    .demo-box:hover img { transform: scale(1.25); filter: grayscale(0); }
     
     .demo-info {
       position: absolute; bottom: 0; left: 0; width: 100%; padding: 2.5rem;
@@ -157,15 +156,8 @@
       transform: translateY(10px); opacity: 0; transition: var(--transition);
     }
     .demo-box:hover .demo-info { transform: translateY(0); opacity: 1; }
-    .demo-info h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
 
-    .card {
-      background: var(--card-bg);
-      padding: 3rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
+    .card { background: var(--card-bg); padding: 3rem; display: flex; flex-direction: column; justify-content: center; }
     .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px -10px var(--accent-glow); }
     .card h3 { font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--accent); font-weight: 800; }
     .card p { font-size: 1.1rem; color: var(--muted); line-height: 1.7; }
@@ -174,15 +166,13 @@
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     footer { padding: 6rem 0; text-align: center; border-top: 1px solid var(--border); color: var(--muted); }
-    .footer-link { color: var(--accent); text-decoration: none; font-weight: 600; }
 
     @media (max-width: 900px) {
       :root { --standard-height: 320px; }
       .nav-links { display: none; }
       .hamburger { display: flex; }
-      h1 { font-size: 2.8rem; line-height: 1.1; letter-spacing: -1px; }
+      h1 { font-size: 2.8rem; }
       section { padding: 6rem 8vw; }
-      .card { padding: 2rem; }
     }
   </style>
 </head>
@@ -191,7 +181,7 @@
 <nav>
   <div class="logo">AF<span class="accent">.</span></div>
   <ul class="nav-links">
-    <li><button class="music-toggle" id="music-btn">SOUND: OFF</button></li>
+    <li><button class="music-toggle" id="music-btn">AUDIO: ON</button></li>
     <li><a href="#home">Home</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#demos">Work</a></li>
@@ -203,7 +193,6 @@
 
 <audio id="bg-music" loop>
   <source src="music/background-music.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
 </audio>
 
 <div class="menu-overlay" id="menu-overlay"></div>
@@ -220,7 +209,7 @@
     <h2 class="reveal">Systems Engineer & Full Stack Developer</h2>
     <h1 class="reveal">Abdulrahman <br/><span class="accent">Fahim</span></h1>
     <h2 class="reveal" style="color: var(--fg)">Specializing in <span class="typing" id="type-target"></span></h2>
-    <p class="reveal hero-p" style="max-width: 600px; color: var(--muted); margin-top: 1.5rem; font-size: 1.1rem;">
+    <p class="reveal hero-p" style="max-width: 600px; color: var(--muted); margin-top: 1.5rem;">
       Intermediate Computer Science student building robust full stack applications and managing secure Linux infrastructure.
     </p>
   </section>
@@ -231,129 +220,98 @@
     <p style="font-size: 1.3rem; max-width: 800px; margin-top: 1.5rem;">
       I bridge the gap between high-performance <b>Full Stack Development</b> and reliable <b>Linux Systems</b>.
     </p>
-    <p style="margin-top: 1.5rem; font-style: italic; color: var(--accent); font-size: 1.1rem;">"الجديد جميل، بس اللي يعيش هو الصح"</p>
   </section>
 
   <section id="demos" class="reveal">
-    <span class="section-title">02. Portfolio Templates</span>
-    <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">Shiftfolio Showcase</h2>
+    <span class="section-title">02. Work Showcase</span>
     <div class="grid-container">
       <a href="/shiftfolio-light" class="demo-box">
-        <img src="/imgs/shiftfolio-light.png" alt="Shiftfolio Light">
-        <div class="demo-info">
-            <h3>Shiftfolio Light</h3>
-            <p class="accent">View Details →</p>
-        </div>
+        <img src="/imgs/shiftfolio-light.png" alt="Light">
+        <div class="demo-info"><h3>Shiftfolio Light</h3><p class="accent">View Details →</p></div>
       </a>
       <a href="/shiftfolio-dark" class="demo-box">
-        <img src="/imgs/shiftfolio-dark.png" alt="Shiftfolio Dark">
-        <div class="demo-info">
-            <h3>Shiftfolio Dark</h3>
-            <p class="accent">View Details →</p>
-        </div>
+        <img src="/imgs/shiftfolio-dark.png" alt="Dark">
+        <div class="demo-info"><h3>Shiftfolio Dark</h3><p class="accent">View Details →</p></div>
       </a>
     </div>
-  </section>
-
-  <section id="projects" class="reveal">
-    <span class="section-title">03. Expertise</span>
-    <div class="grid-container">
-      <div class="card">
-        <h3>Full Stack Dev</h3>
-        <p>Next.js, React, and MongoDB backend architectures focused on performance and scale.</p>
-      </div>
-      <div class="card">
-        <h3>Linux Systems</h3>
-        <p>Advanced management of Debian systems, Proxmox virtualization, and hardened deployments.</p>
-      </div>
-      <div class="card">
-        <h3>Networking</h3>
-        <p>Configuring secure network protocols and DNS management for reliable remote infrastructure.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact" class="reveal" style="text-align: center; align-items: center;">
-    <span class="section-title">04. Connection</span>
-    <h1 style="letter-spacing: -1px; font-size: clamp(2.5rem, 6vw, 4rem);">Ready to <span class="accent">Deploy?</span></h1>
-    <p style="margin-bottom: 2.5rem; font-size: 1.1rem;">Currently open to technical roles and software collaborations.</p>
-    <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="cv-btn" style="font-size: 1.1rem; padding: 1.4rem 3rem;">Start a Conversation</a>
   </section>
 </main>
 
 <footer>
   <p>© 2026 Abdulrahman Fahim — Systems & Software</p>
-  <p style="margin-top: 10px;"><a href="https://payhip.com/CtrlShiftCode" class="footer-link">Visit CtrlShiftCode Projects</a></p>
 </footer>
 
 <script>
-// --- AUDIO LOGIC ---
+// --- SOUND-FIRST AUDIO LOGIC ---
 const music = document.getElementById('bg-music');
 const musicBtn = document.getElementById('music-btn');
-let isPlaying = false;
+let musicStarted = false;
 
-// Function to toggle music
+function playMusic() {
+  music.play().then(() => {
+    musicBtn.textContent = "AUDIO: ON";
+    musicBtn.style.borderColor = "var(--accent)";
+    musicStarted = true;
+  }).catch(() => {
+    // If browser blocks it, we keep button as is until they click
+    console.log("Waiting for user interaction to start audio...");
+  });
+}
+
 function toggleMusic() {
-  if (isPlaying) {
-    music.pause();
-    musicBtn.textContent = "SOUND: OFF";
-  } else {
+  if (music.paused) {
     music.play();
-    musicBtn.textContent = "SOUND: ON";
+    musicBtn.textContent = "AUDIO: ON";
+    musicBtn.style.opacity = "1";
+  } else {
+    music.pause();
+    musicBtn.textContent = "AUDIO: OFF";
+    musicBtn.style.opacity = "0.5";
   }
-  isPlaying = !isPlaying;
 }
 
 musicBtn.addEventListener('click', (e) => {
-  e.stopPropagation(); // Prevents double-triggering
+  e.stopPropagation();
   toggleMusic();
 });
 
-// Autoplay workaround: Start music on first click anywhere if browser blocked it
+// AUTO-START TRIGGER: Plays music as soon as user clicks ANYWHERE on the page
 document.addEventListener('click', () => {
-  if(!isPlaying && music.paused) {
-    // Optionally uncomment below if you want it to start immediately on first click
-    // toggleMusic(); 
+  if(!musicStarted) {
+    playMusic();
   }
-}, { once: true });
+}, { once: false });
 
 
-// --- MENU LOGIC ---
+// --- REST OF SCRIPTS (MENU, TYPING, REVEAL) ---
 const btn = document.getElementById('hamburger-btn');
 const drawer = document.getElementById('mobile-drawer');
 const overlay = document.getElementById('menu-overlay');
-const links = document.querySelectorAll('.mobile-menu a');
 
-const toggleMenu = () => {
+btn.addEventListener('click', () => {
   btn.classList.toggle('active');
   drawer.classList.toggle('active');
   overlay.classList.toggle('active');
-  document.body.style.overflow = drawer.classList.contains('active') ? 'hidden' : 'auto';
-};
+});
 
-btn.addEventListener('click', toggleMenu);
-overlay.addEventListener('click', toggleMenu);
-links.forEach(link => link.addEventListener('click', toggleMenu));
-
-// --- TYPING LOGIC ---
 document.addEventListener("DOMContentLoaded", () => {
-  const roles = ["Linux Systems.", "Full Stack Apps.", "Networking.", "Shiftfolio Designs.", "Systems Engineering."];
+  const roles = ["Linux Systems.", "Full Stack Apps.", "Networking.", "Shiftfolio Designs."];
   const el = document.getElementById("type-target");
-  let wordIdx = 0, charIdx = 0, isDeleting = false, timeout = 100;
+  let wordIdx = 0, charIdx = 0, isDeleting = false;
 
   function type() {
     const currentWord = roles[wordIdx];
     el.textContent = isDeleting ? currentWord.substring(0, charIdx - 1) : currentWord.substring(0, charIdx + 1);
     charIdx = isDeleting ? charIdx - 1 : charIdx + 1;
-    timeout = isDeleting ? 50 : 100;
-    if (!isDeleting && charIdx === currentWord.length) { isDeleting = true; timeout = 2500; }
-    else if (isDeleting && charIdx === 0) { isDeleting = false; wordIdx = (wordIdx + 1) % roles.length; timeout = 500; }
-    setTimeout(type, timeout);
+    let typeSpeed = isDeleting ? 50 : 100;
+
+    if (!isDeleting && charIdx === currentWord.length) { isDeleting = true; typeSpeed = 2500; }
+    else if (isDeleting && charIdx === 0) { isDeleting = false; wordIdx = (wordIdx + 1) % roles.length; typeSpeed = 500; }
+    setTimeout(type, typeSpeed);
   }
   type();
 });
 
-// --- REVEAL LOGIC ---
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
 }, { threshold: 0.1 });
