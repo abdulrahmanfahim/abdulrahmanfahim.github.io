@@ -10,136 +10,159 @@
 
   <style>
     :root {
-      --bg: #0a0a0a;
-      --card-bg: #121212;
-      --fg: #f5f5f5;
-      --muted: #a0a0a0;
+      --bg: #050505;
+      --card-bg: rgba(18, 18, 18, 0.7);
+      --fg: #ffffff;
+      --muted: #888888;
       --accent: #5eead4;
-      --accent-dim: rgba(94, 234, 212, 0.1);
-      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      --accent-glow: rgba(94, 234, 212, 0.3);
+      --border: rgba(255, 255, 255, 0.08);
+      --transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
     html { scroll-behavior: smooth; }
+    
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg);
       color: var(--fg);
-      line-height: 1.7;
+      line-height: 1.6;
       overflow-x: hidden;
     }
 
+    /* Background Ambient Glow */
+    body::before {
+      content: "";
+      position: fixed;
+      top: -10%;
+      left: -10%;
+      width: 40%;
+      height: 40%;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      z-index: -1;
+      filter: blur(80px);
+    }
+
+    /* Navigation */
     nav {
       position: fixed;
       top: 0;
       width: 100%;
       padding: 1.5rem 8vw;
-      background: rgba(10, 10, 10, 0.8);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(5, 5, 5, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 1000;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid var(--border);
     }
 
-    .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -1px; }
+    .logo { font-weight: 800; font-size: 1.3rem; letter-spacing: -1px; }
     nav ul { list-style: none; display: flex; gap: 2.5rem; align-items: center; }
-    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: var(--transition); }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); }
     nav a:hover { color: var(--accent); }
 
     .cv-btn {
       background: var(--accent);
       color: #000 !important;
-      padding: 0.6rem 1.2rem;
-      border-radius: 8px;
-      font-weight: 700;
+      padding: 0.7rem 1.4rem;
+      border-radius: 4px;
+      font-weight: 800;
       text-decoration: none;
       transition: var(--transition);
+      box-shadow: 0 0 15px var(--accent-glow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .cv-btn:hover { opacity: 0.9; transform: scale(1.05); }
+    .cv-btn:hover { transform: translateY(-3px); background: #fff; box-shadow: 0 8px 25px var(--accent-glow); }
 
-    section { min-height: 100vh; padding: 5rem 10vw; display: flex; flex-direction: column; justify-content: center; }
-    h1 { font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
-    h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 400; color: var(--muted); }
-    p { max-width: 600px; font-size: 1.1rem; color: var(--muted); }
-    .accent { color: var(--accent); }
-
-    .typing {
-      color: var(--accent);
-      border-right: 2px solid var(--accent);
-      padding-right: 5px;
-      animation: blink 0.8s infinite;
-      min-height: 1.2em;
-      display: inline-block;
-    }
-
+    /* Hero Section */
+    section { min-height: 100vh; padding: 10rem 10vw; display: flex; flex-direction: column; justify-content: center; }
+    
+    h1 { font-size: clamp(3.5rem, 10vw, 7rem); font-weight: 800; line-height: 0.9; margin-bottom: 2rem; letter-spacing: -4px; }
+    h2 { font-size: clamp(1.2rem, 3vw, 1.8rem); font-weight: 500; color: var(--muted); margin-bottom: 1rem; }
+    
+    .typing { color: var(--accent); border-right: 3px solid var(--accent); padding-right: 8px; animation: blink 0.8s infinite; }
     @keyframes blink { 50% { border-color: transparent; } }
 
+    .hero-p { max-width: 600px; font-size: 1.2rem; color: var(--muted); margin-top: 1rem; }
+    .accent { color: var(--accent); }
+
+    /* Project Cards & Grid */
+    .section-title { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; color: var(--accent); margin-bottom: 3rem; display: block; }
+    
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 3rem;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
     }
 
     .card {
       background: var(--card-bg);
-      padding: 2.5rem;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.03);
+      padding: 3rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
       transition: var(--transition);
-      display: flex;
-      flex-direction: column;
+      position: relative;
     }
 
     .card:hover {
       transform: translateY(-10px);
       border-color: var(--accent);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
-    /* Shiftfolio Demo Styles */
+    /* Shiftfolio Showcase */
     .demo-container {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      gap: 3rem;
       margin-top: 2rem;
     }
+
     .demo-box {
       position: relative;
-      border-radius: 15px;
+      border-radius: 12px;
       overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.1);
-      transition: var(--transition);
+      background: #111;
+      aspect-ratio: 16/10;
+      border: 1px solid var(--border);
     }
+
     .demo-box img {
-      width: 100%;
-      height: auto;
-      display: block;
-      transition: transform 0.5s ease;
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+      filter: grayscale(0.5);
     }
-    .demo-box:hover img { transform: scale(1.05); }
-    .demo-overlay {
+
+    .demo-box:hover img { transform: scale(1.1); filter: grayscale(0); }
+
+    .demo-info {
       position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      bottom: 0; left: 0; width: 100%;
+      padding: 2rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      transform: translateY(20px);
       opacity: 0;
       transition: var(--transition);
     }
-    .demo-box:hover .demo-overlay { opacity: 1; }
 
-    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .demo-box:hover .demo-info { transform: translateY(0); opacity: 1; }
+
+    /* Reveal animations */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.19, 1, 0.22, 1); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    footer { text-align: center; padding: 4rem 0; font-size: 0.9rem; color: var(--muted); border-top: 1px solid rgba(255,255,255,0.05); }
+    footer { padding: 6rem 0; text-align: center; border-top: 1px solid var(--border); }
+    .footer-link { color: var(--accent); text-decoration: none; font-weight: 600; }
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       .demo-container { grid-template-columns: 1fr; }
-      section { padding: 2rem 5vw; }
+      nav ul { display: none; } /* Mobile menu can be added here */
     }
   </style>
 </head>
@@ -150,131 +173,111 @@
   <ul>
     <li><a href="#home">Home</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#projects">Work</a></li>
+    <li><a href="#demos">Portfolio</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="/CV" target="_blank" class="cv-btn">Open CV</a></li>
+    <li><a href="CV.pdf" target="_blank" class="cv-btn">Open CV</a></li>
   </ul>
 </nav>
 
 <main>
   <section id="home">
+    <h2 class="reveal">Engineer & Architect</h2>
     <h1 class="reveal">Abdulrahman <br/><span class="accent">Fahim</span></h1>
-    <h2 class="reveal">
-      I'm a <span class="typing" id="type-target"></span>
+    <h2 class="reveal" style="color: var(--fg)">
+      Building <span class="typing" id="type-target"></span>
     </h2>
-    <p class="reveal" style="margin-top:2rem">
-      Specializing in backend architecture, Next.js applications, and Linux automation. I build software that scales gracefully.
+    <p class="reveal hero-p">
+      Specializing in high-performance web systems and automated Linux infrastructure. Focused on code that survives the test of time.
     </p>
   </section>
 
   <section id="about" class="reveal">
-    <h2 class="accent" style="margin-bottom: 1.5rem;">01. About</h2>
-    <p>
-      I approach engineering with a "fundamentals-first" mindset. Using modern tools like <b>Next.js</b> and <b>Vite</b>, coupled with the stability of <b>Linux</b>, I build systems that are fast and maintainable.
+    <span class="section-title">01. Background</span>
+    <h1 style="font-size: clamp(2rem, 5vw, 4rem);">Scalable by <span class="accent">Design.</span></h1>
+    <p style="font-size: 1.4rem; max-width: 800px; margin-top: 2rem;">
+      I believe in the marriage of <b>Modern Frontend</b> and <b>Hardened Systems</b>. 
+      Whether it's deploying Proxmox clusters or architecting Next.js applications, my goal is peak efficiency.
     </p>
-    <p style="margin-top: 1rem; font-style: italic; color: var(--accent);">
-      الجديد جميل، بس اللي يعيش هو الصح.
+    <p style="margin-top: 1.5rem; font-style: italic; color: var(--accent); font-size: 1.2rem;">
+      "الجديد جميل، بس اللي يعيش هو الصح"
     </p>
   </section>
 
   <section id="demos" class="reveal">
-    <h2 class="accent" style="margin-bottom: 1.5rem;">02. Shiftfolio Series</h2>
-    <p>Minimalist, high-performance portfolio templates.</p>
+    <span class="section-title">02. Templates</span>
+    <h2 style="margin-bottom: 3rem;">The Shiftfolio Series</h2>
     <div class="demo-container">
       <a href="/shiftfolio-light" class="demo-box">
-        <img src="/imgs/shiftfolio-light.png" alt="Shiftfolio Light Mode">
-        <div class="demo-overlay">
-          <span class="cv-btn">View Light Demo</span>
+        <img src="/imgs/shiftfolio-light.png" alt="Shiftfolio Light">
+        <div class="demo-info">
+            <h3>Light Edition</h3>
+            <p class="accent">View Live Demo →</p>
         </div>
       </a>
       <a href="/shiftfolio-dark" class="demo-box">
-        <img src="/imgs/shiftfolio-dark.png" alt="Shiftfolio Dark Mode">
-        <div class="demo-overlay">
-          <span class="cv-btn">View Dark Demo</span>
+        <img src="/imgs/shiftfolio-dark.png" alt="Shiftfolio Dark">
+        <div class="demo-info">
+            <h3>Dark Edition</h3>
+            <p class="accent">View Live Demo →</p>
         </div>
       </a>
     </div>
   </section>
 
   <section id="projects" class="reveal">
-    <h2 class="accent" style="margin-bottom: 1.5rem;">03. Capabilities</h2>
+    <span class="section-title">03. Capabilities</span>
     <div class="projects-grid">
       <div class="card">
-        <h3>Modern Frontend</h3>
-        <p>Building reactive UIs with Next.js, React, and Vite for maximum speed.</p>
+        <h3>Architecture</h3>
+        <p>Designing full-stack applications with Next.js and MongoDB that handle traffic with zero latency.</p>
       </div>
       <div class="card">
-        <h3>Backend & Automation</h3>
-        <p>Architecting scalable backends using Node.js and MongoDB.</p>
+        <h3>Automation</h3>
+        <p>Streamlining deployments with Linux scripting and headless server management.</p>
       </div>
       <div class="card">
-        <h3>Linux & Virtualization</h3>
-        <p>Expertise in Proxmox VE and headless Linux environments (Ubuntu/Debian).</p>
+        <h3>Virtualization</h3>
+        <p>Proxmox VE specialist. Running high-availability environments for testing and production.</p>
       </div>
     </div>
   </section>
 
   <section id="contact" class="reveal" style="text-align: center; align-items: center;">
-    <h2 class="accent">04. Get In Touch</h2>
-    <h1 style="font-size: clamp(2rem, 5vw, 3.5rem);">Ready to build?</h1>
-    <p>Currently open to new opportunities and interesting collaborations.</p>
-    <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="cv-btn" style="margin-top: 2rem; display: inline-block; text-decoration: none;">Say Hello</a>
+    <span class="section-title">04. Engagement</span>
+    <h1 style="letter-spacing: -2px;">Let's build the <span class="accent">future.</span></h1>
+    <p style="margin-bottom: 3rem;">Currently accepting high-impact projects and collaborations.</p>
+    <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="cv-btn" style="font-size: 1.2rem; padding: 1.5rem 3rem; width: fit-content;">Start a Conversation</a>
   </section>
 </main>
 
 <footer>
-  <p>© 2026 Abdulrahman Fahim — Crafted for performance.</p>
+  <p>© 2026 Abdulrahman Fahim — <a href="https://payhip.com/CtrlShiftCode" class="footer-link">Visit CtrlShiftCode</a></p>
 </footer>
 
 <script>
+// Typing Animation
 document.addEventListener("DOMContentLoaded", () => {
-  const roles = [
-    "Next.js Developer.",
-    "Linux Systems Expert.",
-    "React Engineer.",
-    "Automation Architect.",
-    "Vite Specialist."
-  ];
-
+  const roles = ["Next.js Apps.", "Linux Systems.", "Automated Flows.", "React Interfaces.", "Scalable Backends."];
   const el = document.getElementById("type-target");
-  let wordIdx = 0;
-  let charIdx = 0;
-  let isDeleting = false;
-  let timeout = 100;
+  let wordIdx = 0, charIdx = 0, isDeleting = false, timeout = 100;
 
   function type() {
     const currentWord = roles[wordIdx];
-    if (isDeleting) {
-      el.textContent = currentWord.substring(0, charIdx - 1);
-      charIdx--;
-      timeout = 50;
-    } else {
-      el.textContent = currentWord.substring(0, charIdx + 1);
-      charIdx++;
-      timeout = 100;
-    }
+    el.textContent = isDeleting ? currentWord.substring(0, charIdx - 1) : currentWord.substring(0, charIdx + 1);
+    charIdx = isDeleting ? charIdx - 1 : charIdx + 1;
+    timeout = isDeleting ? 50 : 100;
 
-    if (!isDeleting && charIdx === currentWord.length) {
-      isDeleting = true;
-      timeout = 2000;
-    } else if (isDeleting && charIdx === 0) {
-      isDeleting = false;
-      wordIdx = (wordIdx + 1) % roles.length;
-      timeout = 500;
-    }
+    if (!isDeleting && charIdx === currentWord.length) { isDeleting = true; timeout = 2500; }
+    else if (isDeleting && charIdx === 0) { isDeleting = false; wordIdx = (wordIdx + 1) % roles.length; timeout = 500; }
     setTimeout(type, timeout);
   }
   type();
 });
 
-const observerOptions = { threshold: 0.1 };
+// Scroll Reveal
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, observerOptions);
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
