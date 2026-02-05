@@ -87,7 +87,7 @@
     .typing { color: var(--accent); border-right: 3px solid var(--accent); padding-right: 8px; animation: blink 0.8s infinite; }
     @keyframes blink { 50% { border-color: transparent; } }
 
-    /* WORK GRID - RESTORED */
+    /* WORK GRID */
     .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 2rem; }
     
     .demo-box {
@@ -167,7 +167,6 @@ const musicBtn = document.getElementById('music-btn');
 
 let audioCtx, analyser, dataArray, source;
 let initialized = false;
-let mouse = { x: -1000, y: -1000 };
 
 function initAudio() {
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -185,45 +184,40 @@ function resize() {
   canvas.height = window.innerHeight;
 }
 window.addEventListener('resize', resize);
-window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
 resize();
 
 function animate() {
   ctx.fillStyle = '#050505';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  let volume = 0;
-  if (initialized) {
+  let bassIntensity = 0;
+  if (initialized && !audio.paused) {
     analyser.getByteFrequencyData(dataArray);
-    volume = dataArray.reduce((a, b) => a + b) / dataArray.length;
+    // Focus specifically on the bass/low-end frequencies (first few bins)
+    bassIntensity = (dataArray[0] + dataArray[1] + dataArray[2] + dataArray[3]) / 4;
   }
 
   const spacing = 35;
-  const audioPulse = volume / 10; 
+  const time = Date.now() * 0.003; // Controls speed of the wave movement
 
   for (let x = spacing/2; x < canvas.width; x += spacing) {
     for (let y = spacing/2; y < canvas.height; y += spacing) {
-      const dx = x - mouse.x;
-      const dy = y - mouse.y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
       
-      // Reactive calculations
-      let size = 1 + (audioPulse * 0.4);
-      let opacity = 0.08 + (audioPulse / 60);
-
-      if (dist < 150) {
-        const force = (150 - dist) / 150;
-        size += force * 4;
-        opacity += force * 0.7;
-        ctx.shadowBlur = force * 15;
-        ctx.shadowColor = '#5eead4';
-      } else {
-        ctx.shadowBlur = 0;
-      }
+      // Vertical wave calculation (Bottom to Top)
+      const normalizedY = (canvas.height - y) / canvas.height;
+      const wavePattern = Math.sin((normalizedY * 8) + time);
+      
+      // Music factor: how much the bass affects the current dot
+      const musicImpact = bassIntensity / 255;
+      
+      // Calculate final opacity and size based on music intensity and wave position
+      // Dots only light up when the "wave" passes through AND there is bass
+      let opacity = 0.06 + (musicImpact * Math.max(0, wavePattern) * 0.8);
+      let dotSize = 1.1 + (musicImpact * Math.max(0, wavePattern) * 3.5);
 
       ctx.fillStyle = `rgba(94, 234, 212, ${opacity})`;
       ctx.beginPath();
-      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.arc(x, y, dotSize, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -232,6 +226,12 @@ function animate() {
 
 musicBtn.addEventListener('click', () => {
   if (!initialized) initAudio();
+  
+  // Resuming AudioContext is required for many browsers after a period of inactivity
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+
   if (audio.paused) {
     audio.play();
     musicBtn.textContent = "🔊 ANALYZING SOUND";
