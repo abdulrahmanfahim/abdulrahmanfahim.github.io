@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Abdulrahman Fahim | Software Engineer</title>
+  <title>Abdulrahman Fahim | Systems Engineer & Full Stack Developer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -31,14 +31,12 @@
       overflow-x: hidden;
     }
 
-    /* Background Ambient Glow */
+    /* Ambient Glow */
     body::before {
       content: "";
       position: fixed;
-      top: -10%;
-      left: -10%;
-      width: 40%;
-      height: 40%;
+      top: -10%; left: -10%;
+      width: 40%; height: 40%;
       background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
       z-index: -1;
       filter: blur(80px);
@@ -47,8 +45,7 @@
     /* Navigation */
     nav {
       position: fixed;
-      top: 0;
-      width: 100%;
+      top: 0; width: 100%;
       padding: 1.5rem 8vw;
       background: rgba(5, 5, 5, 0.8);
       backdrop-filter: blur(20px);
@@ -56,14 +53,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 1000;
+      z-index: 2000;
       border-bottom: 1px solid var(--border);
     }
 
-    .logo { font-weight: 800; font-size: 1.3rem; letter-spacing: -1px; }
-    nav ul { list-style: none; display: flex; gap: 2.5rem; align-items: center; }
-    nav a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); }
-    nav a:hover { color: var(--accent); }
+    .logo { font-weight: 800; font-size: 1.3rem; letter-spacing: -1px; z-index: 2001; }
+    
+    .nav-links { list-style: none; display: flex; gap: 2.5rem; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); }
+    .nav-links a:hover { color: var(--accent); }
 
     .cv-btn {
       background: var(--accent);
@@ -74,95 +72,106 @@
       text-decoration: none;
       transition: var(--transition);
       box-shadow: 0 0 15px var(--accent-glow);
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
-    .cv-btn:hover { transform: translateY(-3px); background: #fff; box-shadow: 0 8px 25px var(--accent-glow); }
 
-    /* Hero Section */
+    /* Hamburger & "X" Morph */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 30px;
+      height: 20px;
+      cursor: pointer;
+      z-index: 2001;
+      border: none;
+      background: none;
+      padding: 0;
+    }
+    
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background-color: var(--fg);
+      transition: var(--transition);
+      transform-origin: center;
+    }
+
+    /* Morphing into X */
+    .hamburger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+    .hamburger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+    /* Mobile Menu Overlay */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1500;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+    .menu-overlay.active { opacity: 1; visibility: visible; }
+
+    /* Side Drawer */
+    .mobile-menu {
+      position: fixed;
+      top: 0; right: -100%;
+      width: min(300px, 80%);
+      height: 100vh;
+      background: #0a0a0a;
+      z-index: 1600;
+      display: flex;
+      flex-direction: column;
+      padding: 8rem 2rem;
+      gap: 2rem;
+      transition: var(--transition);
+      border-left: 1px solid var(--border);
+    }
+    .mobile-menu.active { right: 0; }
+    .mobile-menu a { font-size: 1.5rem; color: var(--fg); text-decoration: none; font-weight: 700; transition: 0.3s; }
+    .mobile-menu a:hover { color: var(--accent); }
+
+    /* Main Sections */
     section { min-height: 100vh; padding: 10rem 10vw; display: flex; flex-direction: column; justify-content: center; }
-    
     h1 { font-size: clamp(3.5rem, 10vw, 7rem); font-weight: 800; line-height: 0.9; margin-bottom: 2rem; letter-spacing: -4px; }
-    h2 { font-size: clamp(1.2rem, 3vw, 1.8rem); font-weight: 500; color: var(--muted); margin-bottom: 1rem; }
-    
     .typing { color: var(--accent); border-right: 3px solid var(--accent); padding-right: 8px; animation: blink 0.8s infinite; }
     @keyframes blink { 50% { border-color: transparent; } }
 
-    .hero-p { max-width: 600px; font-size: 1.2rem; color: var(--muted); margin-top: 1rem; }
-    .accent { color: var(--accent); }
-
-    /* Project Cards & Grid */
-    .section-title { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 4px; color: var(--accent); margin-bottom: 3rem; display: block; }
-    
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 2rem;
-    }
-
-    .card {
-      background: var(--card-bg);
-      padding: 3rem;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      transition: var(--transition);
-      position: relative;
-    }
-
-    .card:hover {
-      transform: translateY(-10px);
-      border-color: var(--accent);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    }
-
-    /* Shiftfolio Showcase */
-    .demo-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      margin-top: 2rem;
-    }
-
+    /* Demos - Full Rectangle */
+    .demo-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
     .demo-box {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #111;
-      aspect-ratio: 16/10;
-      border: 1px solid var(--border);
+      position: relative; border-radius: 12px; overflow: hidden; background: #111;
+      height: 450px; border: 1px solid var(--border); display: block;
     }
-
-    .demo-box img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
-      filter: grayscale(0.5);
-    }
-
-    .demo-box:hover img { transform: scale(1.1); filter: grayscale(0); }
-
+    .demo-box img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1); filter: grayscale(0.5); }
+    .demo-box:hover img { transform: scale(1.05); filter: grayscale(0); }
     .demo-info {
-      position: absolute;
-      bottom: 0; left: 0; width: 100%;
-      padding: 2rem;
-      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-      transform: translateY(20px);
-      opacity: 0;
-      transition: var(--transition);
+      position: absolute; bottom: 0; left: 0; width: 100%; padding: 2.5rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+      transform: translateY(15px); opacity: 0; transition: var(--transition);
     }
-
     .demo-box:hover .demo-info { transform: translateY(0); opacity: 1; }
 
-    /* Reveal animations */
+    /* Expertise Cards */
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+    .card { background: var(--card-bg); padding: 3rem; border-radius: 12px; border: 1px solid var(--border); transition: var(--transition); }
+    .card:hover { transform: translateY(-10px); border-color: var(--accent); }
+
     .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.19, 1, 0.22, 1); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
     footer { padding: 6rem 0; text-align: center; border-top: 1px solid var(--border); }
     .footer-link { color: var(--accent); text-decoration: none; font-weight: 600; }
 
+    /* Responsive */
     @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
       .demo-container { grid-template-columns: 1fr; }
-      nav ul { display: none; } /* Mobile menu can be added here */
+      .demo-box { height: 350px; }
     }
   </style>
 </head>
@@ -170,33 +179,49 @@
 
 <nav>
   <div class="logo">AF<span class="accent">.</span></div>
-  <ul>
+  
+  <ul class="nav-links">
     <li><a href="#home">Home</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#demos">Portfolio</a></li>
+    <li><a href="#demos">Work</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="CV.pdf" target="_blank" class="cv-btn">Open CV</a></li>
   </ul>
+
+  <button class="hamburger" id="hamburger-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 </nav>
+
+<div class="menu-overlay" id="menu-overlay"></div>
+
+<div class="mobile-menu" id="mobile-drawer">
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#demos">Work</a>
+  <a href="#contact">Contact</a>
+  <a href="CV.pdf" target="_blank" class="accent">Open CV</a>
+</div>
 
 <main>
   <section id="home">
-    <h2 class="reveal">Engineer & Architect</h2>
+    <h2 class="reveal">Systems Engineer & Full Stack Developer</h2>
     <h1 class="reveal">Abdulrahman <br/><span class="accent">Fahim</span></h1>
     <h2 class="reveal" style="color: var(--fg)">
-      Building <span class="typing" id="type-target"></span>
+      Specializing in <span class="typing" id="type-target"></span>
     </h2>
-    <p class="reveal hero-p">
-      Specializing in high-performance web systems and automated Linux infrastructure. Focused on code that survives the test of time.
+    <p class="reveal" style="max-width: 600px; font-size: 1.2rem; color: var(--muted); margin-top: 1rem;">
+      Intermediate Computer Science student focused on building robust full stack applications, networking protocols, and managing hardened Linux infrastructure.
     </p>
   </section>
 
   <section id="about" class="reveal">
-    <span class="section-title">01. Background</span>
-    <h1 style="font-size: clamp(2rem, 5vw, 4rem);">Scalable by <span class="accent">Design.</span></h1>
+    <span class="section-title">01. Professional Profile</span>
+    <h1 style="font-size: clamp(2rem, 5vw, 4rem);">Core <span class="accent">Architecture.</span></h1>
     <p style="font-size: 1.4rem; max-width: 800px; margin-top: 2rem;">
-      I believe in the marriage of <b>Modern Frontend</b> and <b>Hardened Systems</b>. 
-      Whether it's deploying Proxmox clusters or architecting Next.js applications, my goal is peak efficiency.
+      I bridge the gap between high-performance <b>Full Stack Development</b> and reliable <b>Linux Systems</b>. My approach integrates deep networking knowledge with modern web standards to create secure, scalable environments.
     </p>
     <p style="margin-top: 1.5rem; font-style: italic; color: var(--accent); font-size: 1.2rem;">
       "الجديد جميل، بس اللي يعيش هو الصح"
@@ -204,60 +229,78 @@
   </section>
 
   <section id="demos" class="reveal">
-    <span class="section-title">02. Templates</span>
-    <h2 style="margin-bottom: 3rem;">The Shiftfolio Series</h2>
+    <span class="section-title">02. Web Demos</span>
+    <h2 style="margin-bottom: 3rem;">Static Web Development</h2>
     <div class="demo-container">
       <a href="/shiftfolio-light" class="demo-box">
         <img src="/imgs/shiftfolio-light.png" alt="Shiftfolio Light">
         <div class="demo-info">
-            <h3>Light Edition</h3>
-            <p class="accent">View Live Demo →</p>
+            <h3>Light Architecture</h3>
+            <p class="accent">Static Site Demo →</p>
         </div>
       </a>
       <a href="/shiftfolio-dark" class="demo-box">
         <img src="/imgs/shiftfolio-dark.png" alt="Shiftfolio Dark">
         <div class="demo-info">
-            <h3>Dark Edition</h3>
-            <p class="accent">View Live Demo →</p>
+            <h3>Dark Architecture</h3>
+            <p class="accent">Static Site Demo →</p>
         </div>
       </a>
     </div>
   </section>
 
   <section id="projects" class="reveal">
-    <span class="section-title">03. Capabilities</span>
+    <span class="section-title">03. Expertise</span>
     <div class="projects-grid">
       <div class="card">
-        <h3>Architecture</h3>
-        <p>Designing full-stack applications with Next.js and MongoDB that handle traffic with zero latency.</p>
+        <h3>Full Stack Dev</h3>
+        <p>Developing end-to-end applications using Next.js, React, and robust MongoDB backend structures.</p>
       </div>
       <div class="card">
-        <h3>Automation</h3>
-        <p>Streamlining deployments with Linux scripting and headless server management.</p>
+        <h3>Linux Systems</h3>
+        <p>Advanced management of Debian-based systems, Proxmox virtualization, and headless server environments.</p>
       </div>
       <div class="card">
-        <h3>Virtualization</h3>
-        <p>Proxmox VE specialist. Running high-availability environments for testing and production.</p>
+        <h3>Networking</h3>
+        <p>Configuring secure network protocols, DNS management, and local/remote infrastructure connectivity.</p>
       </div>
     </div>
   </section>
 
   <section id="contact" class="reveal" style="text-align: center; align-items: center;">
-    <span class="section-title">04. Engagement</span>
-    <h1 style="letter-spacing: -2px;">Let's build the <span class="accent">future.</span></h1>
-    <p style="margin-bottom: 3rem;">Currently accepting high-impact projects and collaborations.</p>
+    <span class="section-title">04. Connection</span>
+    <h1 style="letter-spacing: -2px;">Ready to <span class="accent">Deploy?</span></h1>
+    <p style="margin-bottom: 3rem;">Currently open to technical roles and software engineering collaborations.</p>
     <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="cv-btn" style="font-size: 1.2rem; padding: 1.5rem 3rem; width: fit-content;">Start a Conversation</a>
   </section>
 </main>
 
 <footer>
-  <p>© 2026 Abdulrahman Fahim — <a href="https://payhip.com/CtrlShiftCode" class="footer-link">Visit CtrlShiftCode</a></p>
+  <p>© 2026 Abdulrahman Fahim — Systems & Software</p>
+  <p style="margin-top: 10px;"><a href="https://payhip.com/CtrlShiftCode" class="footer-link">CtrlShiftCode Projects</a></p>
 </footer>
 
 <script>
+// Menu Logic
+const btn = document.getElementById('hamburger-btn');
+const drawer = document.getElementById('mobile-drawer');
+const overlay = document.getElementById('menu-overlay');
+const links = document.querySelectorAll('.mobile-menu a');
+
+const toggleMenu = () => {
+  btn.classList.toggle('active');
+  drawer.classList.toggle('active');
+  overlay.classList.toggle('active');
+  document.body.style.overflow = drawer.classList.contains('active') ? 'hidden' : 'auto';
+};
+
+btn.addEventListener('click', toggleMenu);
+overlay.addEventListener('click', toggleMenu);
+links.forEach(link => link.addEventListener('click', toggleMenu));
+
 // Typing Animation
 document.addEventListener("DOMContentLoaded", () => {
-  const roles = ["Next.js Apps.", "Linux Systems.", "Automated Flows.", "React Interfaces.", "Scalable Backends."];
+  const roles = ["Linux Systems.", "Full Stack Apps.", "Networking.", "Static Web Dev.", "Systems Engineering."];
   const el = document.getElementById("type-target");
   let wordIdx = 0, charIdx = 0, isDeleting = false, timeout = 100;
 
