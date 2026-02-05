@@ -30,7 +30,7 @@
       overflow-x: hidden;
     }
 
-    /* THE REACTIVE DOTS CANVAS */
+    /* BACKGROUND CANVAS */
     #bg-canvas {
       position: fixed;
       top: 0; left: 0;
@@ -39,6 +39,7 @@
       pointer-events: none;
     }
 
+    /* NAVIGATION */
     nav {
       position: fixed;
       top: 0; width: 100%;
@@ -59,18 +60,6 @@
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); }
     .nav-links a:hover { color: var(--accent); }
 
-    .music-toggle {
-      background: rgba(94, 234, 212, 0.1);
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 0.7rem;
-      font-weight: 800;
-      transition: var(--transition);
-    }
-
     .cv-btn {
       background: var(--accent);
       color: #000 !important;
@@ -81,14 +70,16 @@
       box-shadow: 0 0 15px var(--accent-glow);
     }
 
+    /* CONTENT LAYOUT */
     main { position: relative; z-index: 10; }
     section { min-height: 100vh; padding: 10rem 10vw; display: flex; flex-direction: column; justify-content: center; }
+    
     h1 { font-size: clamp(3rem, 10vw, 7rem); font-weight: 800; line-height: 0.95; margin-bottom: 2rem; letter-spacing: -3px; }
     .typing { color: var(--accent); border-right: 3px solid var(--accent); padding-right: 8px; animation: blink 0.8s infinite; }
     @keyframes blink { 50% { border-color: transparent; } }
 
     /* WORK GRID */
-    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; margin-top: 2rem; }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; margin-top: 2rem; }
     
     .demo-box {
       position: relative; border-radius: 12px; height: 450px; 
@@ -99,10 +90,27 @@
     .demo-box:hover img { transform: scale(1.05); filter: grayscale(0); opacity: 1; }
     .demo-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2.5rem; background: linear-gradient(to top, rgba(0,0,0,1) 0%, transparent 100%); }
 
+    /* CONTACT SECTION */
+    .contact-links { display: flex; flex-direction: column; gap: 2rem; margin-top: 3rem; }
+    .contact-item { 
+      font-size: clamp(1.2rem, 3.5vw, 2.5rem); 
+      font-weight: 600; 
+      color: var(--fg); 
+      text-decoration: none; 
+      transition: var(--transition);
+      width: fit-content;
+      display: flex;
+      flex-direction: column;
+      word-break: break-all;
+    }
+    .contact-item span { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; font-weight: 800; }
+    .contact-item:hover { color: var(--accent); transform: translateX(10px); }
+
+    /* REVEAL SYSTEM */
     .reveal { opacity: 0; transform: translateY(40px); transition: 1s var(--transition); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    footer { padding: 4rem 0; text-align: center; border-top: 1px solid var(--border); color: var(--muted); }
+    footer { padding: 4rem 0; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -112,10 +120,10 @@
 <nav>
   <div class="logo">AF<span class="accent">.</span></div>
   <ul class="nav-links">
-    <li><button class="music-toggle" id="music-btn">🔈 AUDIO: OFF</button></li>
     <li><a href="#home">Home</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#demos">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
     <li><a href="/CV" target="_blank" class="cv-btn">Open CV</a></li>
   </ul>
 </nav>
@@ -154,30 +162,56 @@
       </a>
     </div>
   </section>
+
+  <section id="contact" class="reveal">
+    <span class="accent" style="font-weight: 800; letter-spacing: 2px;">03. CONNECT</span>
+    <h1>Let's build <br/><span class="accent">together.</span></h1>
+    
+    <div class="contact-links">
+        <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="contact-item">
+            <span>Email</span> abdulrahmanfahim.dev@gmail.com
+        </a>
+        <a href="https://github.com/abdulrahmanfahim" target="_blank" class="contact-item">
+            <span>GitHub</span> github.com/abdulrahmanfahim
+        </a>
+        <a href="https://www.linkedin.com/in/abdulrahmanfahim-dev/" target="_blank" class="contact-item">
+            <span>LinkedIn</span> linkedin.com/in/abdulrahmanfahim-dev
+        </a>
+    </div>
+  </section>
 </main>
 
-<footer><p>© 2026 Abdulrahman Fahim</p></footer>
+<footer><p>© 2026 Abdulrahman Fahim — Systems & Software Engineer</p></footer>
 
 <script>
-// --- AUDIO REACTIVE ENGINE ---
+// --- AUDIO & WAVE ENGINE ---
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 const audio = document.getElementById('bg-music');
-const musicBtn = document.getElementById('music-btn');
 
-let audioCtx, analyser, dataArray, source;
-let initialized = false;
+let audioCtx, isAudioStarted = false;
 
-function initAudio() {
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  analyser = audioCtx.createAnalyser();
-  source = audioCtx.createMediaElementSource(audio);
-  source.connect(analyser);
-  analyser.connect(audioCtx.destination);
-  analyser.fftSize = 256;
-  dataArray = new Uint8Array(analyser.frequencyBinCount);
-  initialized = true;
+// UNLOCKS AUDIO ON FIRST MOUSE MOVE
+function unlockAudio() {
+    if (isAudioStarted) return;
+    
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    
+    audio.play().catch(e => {
+        // Fallback for strict browsers: if mousemove fails, click will catch it
+        console.log("Waiting for more definitive interaction...");
+    });
+    
+    isAudioStarted = true;
+    window.removeEventListener('mousemove', unlockAudio);
+    window.removeEventListener('click', unlockAudio);
 }
+
+window.addEventListener('mousemove', unlockAudio);
+window.addEventListener('click', unlockAudio);
 
 function resize() {
   canvas.width = window.innerWidth;
@@ -186,36 +220,40 @@ function resize() {
 window.addEventListener('resize', resize);
 resize();
 
+// --- RADIAL ARCH WAVE ANIMATION (SELF-SUSTAINING) ---
 function animate() {
   ctx.fillStyle = '#050505';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  let bassIntensity = 0;
-  if (initialized && !audio.paused) {
-    analyser.getByteFrequencyData(dataArray);
-    // Focus specifically on the bass/low-end frequencies (first few bins)
-    bassIntensity = (dataArray[0] + dataArray[1] + dataArray[2] + dataArray[3]) / 4;
-  }
-
   const spacing = 35;
-  const time = Date.now() * 0.003; // Controls speed of the wave movement
+  const time = Date.now() * 0.002; 
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
 
   for (let x = spacing/2; x < canvas.width; x += spacing) {
     for (let y = spacing/2; y < canvas.height; y += spacing) {
+      const dx = x - centerX;
+      const dy = y - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
       
-      // Vertical wave calculation (Bottom to Top)
-      const normalizedY = (canvas.height - y) / canvas.height;
-      const wavePattern = Math.sin((normalizedY * 8) + time);
-      
-      // Music factor: how much the bass affects the current dot
-      const musicImpact = bassIntensity / 255;
-      
-      // Calculate final opacity and size based on music intensity and wave position
-      // Dots only light up when the "wave" passes through AND there is bass
-      let opacity = 0.06 + (musicImpact * Math.max(0, wavePattern) * 0.8);
-      let dotSize = 1.1 + (musicImpact * Math.max(0, wavePattern) * 3.5);
+      // Calculate radial wave position
+      const wave = Math.sin((distance / 120) - time);
+      // Sharpens the peaks for an "arch" look
+      const intensity = Math.pow(Math.max(0, wave), 4); 
+
+      let opacity = 0.05 + (intensity * 0.7);
+      let dotSize = 1.1 + (intensity * 2.8);
 
       ctx.fillStyle = `rgba(94, 234, 212, ${opacity})`;
+      
+      // Add subtle glow to active arches
+      if (intensity > 0.8) {
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = 'rgba(94, 234, 212, 0.4)';
+      } else {
+        ctx.shadowBlur = 0;
+      }
+
       ctx.beginPath();
       ctx.arc(x, y, dotSize, 0, Math.PI * 2);
       ctx.fill();
@@ -224,28 +262,7 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-musicBtn.addEventListener('click', () => {
-  if (!initialized) initAudio();
-  
-  // Resuming AudioContext is required for many browsers after a period of inactivity
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-
-  if (audio.paused) {
-    audio.play();
-    musicBtn.textContent = "🔊 ANALYZING SOUND";
-    musicBtn.style.background = "var(--accent)";
-    musicBtn.style.color = "#000";
-  } else {
-    audio.pause();
-    musicBtn.textContent = "🔈 AUDIO: OFF";
-    musicBtn.style.background = "rgba(94, 234, 212, 0.1)";
-    musicBtn.style.color = "var(--accent)";
-  }
-});
-
-// --- UI SCRIPTS ---
+// --- TYPEWRITER ENGINE ---
 const roles = ["Linux Systems.", "Full Stack Apps.", "DevOps.", "Architecture."];
 const el = document.getElementById("type-target");
 let wIdx = 0, cIdx = 0, isDel = false;
@@ -254,17 +271,25 @@ function type() {
   const word = roles[wIdx];
   el.textContent = isDel ? word.substring(0, cIdx - 1) : word.substring(0, cIdx + 1);
   cIdx = isDel ? cIdx - 1 : cIdx + 1;
-  let speed = isDel ? 50 : 100;
-  if (!isDel && cIdx === word.length) { isDel = true; speed = 2500; }
-  else if (isDel && cIdx === 0) { isDel = false; wIdx = (wIdx + 1) % roles.length; speed = 500; }
+  let speed = isDel ? 50 : 120;
+  
+  if (!isDel && cIdx === word.length) { 
+    isDel = true; speed = 2500; 
+  } else if (isDel && cIdx === 0) { 
+    isDel = false; wIdx = (wIdx + 1) % roles.length; speed = 500; 
+  }
+  
   setTimeout(type, speed);
 }
 
+// --- INTERSECTION REVEAL ---
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
 }, { threshold: 0.1 });
 
 document.querySelectorAll('.reveal').forEach(e => observer.observe(e));
+
+// INITIALIZE
 animate();
 type();
 </script>
