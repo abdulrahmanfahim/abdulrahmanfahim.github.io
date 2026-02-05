@@ -31,7 +31,6 @@
       overflow-x: hidden;
     }
 
-    /* Ambient Glow */
     body::before {
       content: "";
       position: fixed;
@@ -79,8 +78,8 @@
       display: none;
       flex-direction: column;
       justify-content: space-between;
-      width: 30px;
-      height: 20px;
+      width: 25px;
+      height: 18px;
       cursor: pointer;
       z-index: 2001;
       border: none;
@@ -97,17 +96,16 @@
       transform-origin: center;
     }
 
-    /* Morphing into X */
-    .hamburger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-    .hamburger.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
-    .hamburger.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+    .hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; transform: translateX(10px); }
+    .hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
     /* Mobile Menu Overlay */
     .menu-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
       z-index: 1500;
       opacity: 0;
       visibility: hidden;
@@ -125,18 +123,26 @@
       z-index: 1600;
       display: flex;
       flex-direction: column;
-      padding: 8rem 2rem;
-      gap: 2rem;
+      padding: 8rem 2.5rem;
+      gap: 1.5rem;
       transition: var(--transition);
       border-left: 1px solid var(--border);
     }
     .mobile-menu.active { right: 0; }
-    .mobile-menu a { font-size: 1.5rem; color: var(--fg); text-decoration: none; font-weight: 700; transition: 0.3s; }
+    .mobile-menu a { font-size: 1.3rem; color: var(--fg); text-decoration: none; font-weight: 700; transition: 0.3s; }
     .mobile-menu a:hover { color: var(--accent); }
 
-    /* Main Sections */
+    /* Sections & Typography */
     section { min-height: 100vh; padding: 10rem 10vw; display: flex; flex-direction: column; justify-content: center; }
-    h1 { font-size: clamp(3.5rem, 10vw, 7rem); font-weight: 800; line-height: 0.9; margin-bottom: 2rem; letter-spacing: -4px; }
+    
+    h1 { 
+      font-size: clamp(3rem, 10vw, 7rem); 
+      font-weight: 800; 
+      line-height: 0.95; 
+      margin-bottom: 2rem; 
+      letter-spacing: -3px; 
+    }
+    
     .typing { color: var(--accent); border-right: 3px solid var(--accent); padding-right: 8px; animation: blink 0.8s infinite; }
     @keyframes blink { 50% { border-color: transparent; } }
 
@@ -166,12 +172,24 @@
     footer { padding: 6rem 0; text-align: center; border-top: 1px solid var(--border); }
     .footer-link { color: var(--accent); text-decoration: none; font-weight: 600; }
 
-    /* Responsive */
+    /* MOBILE ADJUSTMENTS (Font & Layout) */
     @media (max-width: 900px) {
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .demo-container { grid-template-columns: 1fr; }
-      .demo-box { height: 350px; }
+      .demo-box { height: 300px; }
+      
+      /* Prevents touching letters on small screens */
+      h1 { 
+        font-size: 2.8rem; 
+        line-height: 1.1; 
+        letter-spacing: -1px; 
+        margin-bottom: 1.5rem;
+      }
+      
+      h2 { font-size: 1.1rem; line-height: 1.4; }
+      section { padding: 6rem 8vw; }
+      .hero-p { font-size: 1rem; }
     }
   </style>
 </head>
@@ -185,7 +203,7 @@
     <li><a href="#about">About</a></li>
     <li><a href="#demos">Work</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="/CV/" target="_blank" class="cv-btn">Open CV</a></li>
+    <li><a href="/CV" target="_blank" class="cv-btn">Open CV</a></li>
   </ul>
 
   <button class="hamburger" id="hamburger-btn">
@@ -202,7 +220,7 @@
   <a href="#about">About</a>
   <a href="#demos">Work</a>
   <a href="#contact">Contact</a>
-  <a href="CV.pdf" target="_blank" class="accent">Open CV</a>
+  <a href="/CV" target="_blank" class="accent">Open CV</a>
 </div>
 
 <main>
@@ -212,25 +230,25 @@
     <h2 class="reveal" style="color: var(--fg)">
       Specializing in <span class="typing" id="type-target"></span>
     </h2>
-    <p class="reveal" style="max-width: 600px; font-size: 1.2rem; color: var(--muted); margin-top: 1rem;">
+    <p class="reveal hero-p" style="max-width: 600px; color: var(--muted); margin-top: 1rem;">
       Intermediate Computer Science student focused on building robust full stack applications, networking protocols, and managing hardened Linux infrastructure.
     </p>
   </section>
 
   <section id="about" class="reveal">
     <span class="section-title">01. Professional Profile</span>
-    <h1 style="font-size: clamp(2rem, 5vw, 4rem);">Core <span class="accent">Architecture.</span></h1>
-    <p style="font-size: 1.4rem; max-width: 800px; margin-top: 2rem;">
-      I bridge the gap between high-performance <b>Full Stack Development</b> and reliable <b>Linux Systems</b>. My approach integrates deep networking knowledge with modern web standards to create secure, scalable environments.
+    <h1 style="font-size: clamp(2rem, 5vw, 4.3rem);">Core <span class="accent">Architecture.</span></h1>
+    <p style="font-size: 1.3rem; max-width: 800px; margin-top: 1.5rem;">
+      I bridge the gap between high-performance <b>Full Stack Development</b> and reliable <b>Linux Systems</b>. My approach integrates networking knowledge with modern web standards to create secure, scalable environments.
     </p>
-    <p style="margin-top: 1.5rem; font-style: italic; color: var(--accent); font-size: 1.2rem;">
+    <p style="margin-top: 1.5rem; font-style: italic; color: var(--accent); font-size: 1.1rem;">
       "الجديد جميل، بس اللي يعيش هو الصح"
     </p>
   </section>
 
   <section id="demos" class="reveal">
     <span class="section-title">02. Web Demos</span>
-    <h2 style="margin-bottom: 3rem;">Static Web Development</h2>
+    <h2 style="margin-bottom: 2rem;">Static Web Development</h2>
     <div class="demo-container">
       <a href="/shiftfolio-light" class="demo-box">
         <img src="/imgs/shiftfolio-light.png" alt="Shiftfolio Light">
@@ -269,9 +287,9 @@
 
   <section id="contact" class="reveal" style="text-align: center; align-items: center;">
     <span class="section-title">04. Connection</span>
-    <h1 style="letter-spacing: -2px;">Ready to <span class="accent">Deploy?</span></h1>
-    <p style="margin-bottom: 3rem;">Currently open to technical roles and software engineering collaborations.</p>
-    <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="cv-btn" style="font-size: 1.2rem; padding: 1.5rem 3rem; width: fit-content;">Start a Conversation</a>
+    <h1 style="letter-spacing: -1px; font-size: clamp(2.5rem, 6vw, 4rem);">Ready to <span class="accent">Deploy?</span></h1>
+    <p style="margin-bottom: 2.5rem;">Currently open to technical roles and software engineering collaborations.</p>
+    <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="cv-btn" style="font-size: 1.1rem; padding: 1.2rem 2.5rem; width: fit-content;">Start a Conversation</a>
   </section>
 </main>
 
@@ -281,7 +299,7 @@
 </footer>
 
 <script>
-// Menu Logic
+// Menu Interaction
 const btn = document.getElementById('hamburger-btn');
 const drawer = document.getElementById('mobile-drawer');
 const overlay = document.getElementById('menu-overlay');
@@ -298,7 +316,7 @@ btn.addEventListener('click', toggleMenu);
 overlay.addEventListener('click', toggleMenu);
 links.forEach(link => link.addEventListener('click', toggleMenu));
 
-// Typing Animation
+// Typing Logic
 document.addEventListener("DOMContentLoaded", () => {
   const roles = ["Linux Systems.", "Full Stack Apps.", "Networking.", "Static Web Dev.", "Systems Engineering."];
   const el = document.getElementById("type-target");
