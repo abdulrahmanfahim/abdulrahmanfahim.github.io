@@ -146,19 +146,38 @@
     .typing { color: var(--accent); border-right: 3px solid var(--accent); padding-right: 8px; animation: blink 0.8s infinite; }
     @keyframes blink { 50% { border-color: transparent; } }
 
-    /* Demos - Full Rectangle */
+    /* Demos - NO ZOOM VERSION */
     .demo-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+    
     .demo-box {
-      position: relative; border-radius: 12px; overflow: hidden; background: #111;
-      height: 450px; border: 1px solid var(--border); display: block;
+      position: relative; 
+      border-radius: 12px; 
+      overflow: hidden; 
+      background: #0d0d0d; /* Background color for non-zoomed empty space */
+      height: 450px; 
+      border: 1px solid var(--border); 
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .demo-box img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1); filter: grayscale(0.5); }
-    .demo-box:hover img { transform: scale(1.05); filter: grayscale(0); }
+
+    .demo-box img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: contain; /* Shows full image without zooming/cropping */
+      transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+      filter: grayscale(0.2);
+    }
+
+    .demo-box:hover img { transform: scale(0.98); filter: grayscale(0); }
+
     .demo-info {
       position: absolute; bottom: 0; left: 0; width: 100%; padding: 2.5rem;
       background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
       transform: translateY(15px); opacity: 0; transition: var(--transition);
+      pointer-events: none;
     }
+
     .demo-box:hover .demo-info { transform: translateY(0); opacity: 1; }
 
     /* Expertise Cards */
@@ -172,24 +191,14 @@
     footer { padding: 6rem 0; text-align: center; border-top: 1px solid var(--border); }
     .footer-link { color: var(--accent); text-decoration: none; font-weight: 600; }
 
-    /* MOBILE ADJUSTMENTS (Font & Layout) */
+    /* Mobile */
     @media (max-width: 900px) {
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .demo-container { grid-template-columns: 1fr; }
       .demo-box { height: 300px; }
-      
-      /* Prevents touching letters on small screens */
-      h1 { 
-        font-size: 2.8rem; 
-        line-height: 1.1; 
-        letter-spacing: -1px; 
-        margin-bottom: 1.5rem;
-      }
-      
-      h2 { font-size: 1.1rem; line-height: 1.4; }
+      h1 { font-size: 2.8rem; line-height: 1.1; letter-spacing: -1px; margin-bottom: 1.5rem; }
       section { padding: 6rem 8vw; }
-      .hero-p { font-size: 1rem; }
     }
   </style>
 </head>
@@ -247,21 +256,21 @@
   </section>
 
   <section id="demos" class="reveal">
-    <span class="section-title">02. Web Demos</span>
-    <h2 style="margin-bottom: 2rem;">Static Web Development</h2>
+    <span class="section-title">02. Templates</span>
+    <h2 style="margin-bottom: 2rem;">Shiftfolio Showcase</h2>
     <div class="demo-container">
       <a href="/shiftfolio-light" class="demo-box">
         <img src="/imgs/shiftfolio-light.png" alt="Shiftfolio Light">
         <div class="demo-info">
-            <h3>Light Architecture</h3>
-            <p class="accent">Static Site Demo →</p>
+            <h3>Shiftfolio Light</h3>
+            <p class="accent">View Details →</p>
         </div>
       </a>
       <a href="/shiftfolio-dark" class="demo-box">
         <img src="/imgs/shiftfolio-dark.png" alt="Shiftfolio Dark">
         <div class="demo-info">
-            <h3>Dark Architecture</h3>
-            <p class="accent">Static Site Demo →</p>
+            <h3>Shiftfolio Dark</h3>
+            <p class="accent">View Details →</p>
         </div>
       </a>
     </div>
@@ -318,7 +327,7 @@ links.forEach(link => link.addEventListener('click', toggleMenu));
 
 // Typing Logic
 document.addEventListener("DOMContentLoaded", () => {
-  const roles = ["Linux Systems.", "Full Stack Apps.", "Networking.", "Static Web Dev.", "Systems Engineering."];
+  const roles = ["Linux Systems.", "Full Stack Apps.", "Networking.", "Shiftfolio Designs.", "Systems Engineering."];
   const el = document.getElementById("type-target");
   let wordIdx = 0, charIdx = 0, isDeleting = false, timeout = 100;
 
