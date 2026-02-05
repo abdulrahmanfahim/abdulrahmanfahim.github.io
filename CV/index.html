@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CV - Abdulrahman Fahim</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.5; color: #333; margin: 40px; background-color: white; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.5; color: #333; margin: 40px; background-color: white; max-width: 900px; margin: 40px auto; }
         .header { text-align: center; border-bottom: 2px solid #444; padding-bottom: 10px; margin-bottom: 20px; }
         h1 { margin: 0; color: #000; text-transform: uppercase; letter-spacing: 2px; }
         .contact { font-size: 0.9rem; margin-top: 5px; }
@@ -12,9 +13,9 @@
         h3 { border-left: 4px solid #444; padding-left: 10px; text-transform: uppercase; font-size: 1.1rem; margin-top: 25px; background: #f4f4f4; padding-top: 5px; padding-bottom: 5px; }
         ul { padding-left: 20px; }
         li { margin-bottom: 5px; }
-        .project-title { font-weight: bold; display: flex; justify-content: space-between; }
+        .project-title { font-weight: bold; display: flex; justify-content: space-between; margin-top: 15px; }
         .date { font-style: italic; color: #666; }
-        .skill-category { font-weight: bold; }
+        .skill-category { font-weight: bold; min-width: 140px; display: inline-block; }
     </style>
 </head>
 <body>
@@ -26,32 +27,43 @@
         <a href="mailto:abdulrahmanfahim.dev@gmail.com">abdulrahmanfahim.dev@gmail.com</a><br>
         Portfolio: <a href="https://abdulrahmanfahim.github.io">abdulrahmanfahim.github.io</a> | 
         GitHub: <a href="https://github.com/abdulrahmanfahim">github.com/abdulrahmanfahim</a> |
-        <a href="/CV/abdulrahman-fahim-CV.pdf" download="Abdulrahman_Fahim_CV.pdf">(Download this CV as PDF)</a>
+        <a href="/CV/abdulrahman-fahim-CV.pdf" download="Abdulrahman_Fahim_CV.pdf">(Download as PDF)</a>
     </div>
 </div>
 
 <h3>Personal Profile</h3>
-<p>I am a 13-year-old developer focused on Linux systems, networking, and modern full-stack web development. I am a self-driven learner who enjoys solving complex technical problems, managing virtualized environments, and building high-performance web applications using the latest JavaScript frameworks.</p>
+<p>I am a 13-year-old developer specializing in **DevSecOps**, Linux systems, and **Full-Stack Engineering**. I am a self-driven learner focused on building secure, high-performance web applications and automating delivery pipelines using modern CI/CD tools and virtualized infrastructure.</p>
 
 <h3>Technical Skills</h3>
 <ul>
     <li><span class="skill-category">Frontend:</span> React, Next.js, Vite, HTML5, CSS3, JavaScript (ES6+).</li>
-    <li><span class="skill-category">Operating Systems:</span> Linux (Advanced Terminal/CLI, Ubuntu, Debian, CentOS, Arch).</li>
-    <li><span class="skill-category">Virtualization:</span> Proxmox VE (Managing Virtual Machines and Containers).</li>
-    <li><span class="skill-category">Networking & DevOps:</span> SSH, DNS Management, Port Forwarding, Git/GitHub, Bash Scripting.</li>
-    <li><span class="skill-category">Development Tools:</span> NPM/Yarn, Vercel deployment, Linux server optimization.</li>
+    <li><span class="skill-category">Backend:</span> **Node.js**, Express, REST APIs.</li>
+    <li><span class="skill-category">Databases:</span> **MongoDB** (NoSQL), **PostgreSQL** (SQL).</li>
+    <li><span class="skill-category">DevSecOps & CI/CD:</span> **Jenkins**, Automated Pipelines, Linux Hardening, Git/GitHub.</li>
+    <li><span class="skill-category">Virtualization:</span> Proxmox VE (VMs & LXC Containers), Docker basics.</li>
+    <li><span class="skill-category">Networking:</span> SSH, DNS Management, Port Forwarding, Bash Scripting.</li>
 </ul>
 
 <h3>Technical Experience</h3>
 
 <div class="project-title">
-    <span>Modern Web Development (React & Next.js)</span>
-    <span class="date">2023 – Present</span>
+    <span>Full-Stack Development & Data Architecture</span>
+    <span class="date">2024 – Present</span>
 </div>
 <ul>
-    <li>Developed fast, SEO-friendly web applications using <strong>Next.js</strong> and <strong>Vite</strong> for optimized build times.</li>
-    <li>Implemented component-based architectures in <strong>React</strong> to create reusable UI elements.</li>
-    <li>Managed state and client-side routing to provide a seamless "Single Page Application" (SPA) experience.</li>
+    <li>Developed scalable backends using **Node.js**, creating efficient API endpoints for frontend consumption.</li>
+    <li>Architected database schemas using **MongoDB** for flexible data storage and **PostgreSQL** for relational data integrity.</li>
+    <li>Connected modern React/Next.js frontends to secure database layers to create dynamic, data-driven applications.</li>
+</ul>
+
+<div class="project-title">
+    <span>DevSecOps & Automation Pipelines</span>
+    <span class="date">2024 – Present</span>
+</div>
+<ul>
+    <li>Implemented CI/CD workflows using **Jenkins** to automate code testing and deployment processes.</li>
+    <li>Focused on **DevSecOps** principles by performing Linux server hardening and integrating security checks into the development lifecycle.</li>
+    <li>Automated system administration tasks using Bash scripting to optimize server resource management.</li>
 </ul>
 
 <div class="project-title">
@@ -59,19 +71,19 @@
     <span class="date">2023 – Present</span>
 </div>
 <ul>
-    <li>Successfully installed and configured 50+ Linux environments to test various distributions and server configurations.</li>
-    <li>Utilize Proxmox to manage multiple virtual machines (VMs), allowing for rapid testing and deployment of web services.</li>
-    <li>Experience in managing headless (CLI-only) systems, focusing on security and resource efficiency.</li>
+    <li>Utilize Proxmox to manage a fleet of virtual machines (VMs) and containers for sandboxed development.</li>
+    <li>Experience in managing headless (CLI-only) Debian and Ubuntu systems with a focus on high availability.</li>
+    <li>Configuration of secure remote access protocols and internal network routing.</li>
 </ul>
 
 <h3>Education & Learning</h3>
 <p><strong>Independent Technical Study</strong><br>
-100% self-taught through hands-on experimentation, technical documentation (Man pages, React Docs, Next.js Documentation), and community resources. Focus areas include modern frontend frameworks and system administration.</p>
+100% self-taught through documentation (Node.js Docs, Jenkins User Guide, PostgreSQL Wiki) and hands-on laboratory experimentation. Focus areas: Full-stack security, database optimization, and automated infrastructure.</p>
 
 <h3>Key Achievements</h3>
 <ul>
-    <li>Successfully transitioned from basic web design to building complex applications with React and Next.js.</li>
-    <li>Maintained a consistent learning schedule while staying up to date with modern web standards and Linux security practices.</li>
+    <li>Successfully integrated full-stack logic (Frontend, Backend, and Database) into personal production environments.</li>
+    <li>Built a private lab infrastructure capable of running automated Jenkins pipelines for software testing.</li>
 </ul>
 
 </body>
