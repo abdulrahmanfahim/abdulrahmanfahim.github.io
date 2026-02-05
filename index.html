@@ -19,14 +19,8 @@
       --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg);
@@ -35,7 +29,6 @@
       overflow-x: hidden;
     }
 
-    /* NAVBAR */
     nav {
       position: fixed;
       top: 0;
@@ -51,27 +44,9 @@
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
-    .logo {
-      font-weight: 800;
-      font-size: 1.2rem;
-      letter-spacing: -1px;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 2.5rem;
-      align-items: center;
-    }
-
-    nav a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: var(--transition);
-    }
-
+    .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -1px; }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; align-items: center; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: var(--transition); }
     nav a:hover { color: var(--accent); }
 
     .cv-btn {
@@ -80,38 +55,17 @@
       padding: 0.6rem 1.2rem;
       border-radius: 8px;
       font-weight: 700;
+      text-decoration: none;
+      transition: var(--transition);
     }
+    .cv-btn:hover { opacity: 0.9; transform: scale(1.05); }
 
-    section {
-      min-height: 100vh;
-      padding: 5rem 10vw;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    h1 {
-      font-size: clamp(3rem, 8vw, 5.5rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-    }
-
-    h2 {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 400;
-      color: var(--muted);
-    }
-
-    p {
-      max-width: 600px;
-      font-size: 1.1rem;
-      color: var(--muted);
-    }
-
+    section { min-height: 100vh; padding: 5rem 10vw; display: flex; flex-direction: column; justify-content: center; }
+    h1 { font-size: clamp(3rem, 8vw, 5.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
+    h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 400; color: var(--muted); }
+    p { max-width: 600px; font-size: 1.1rem; color: var(--muted); }
     .accent { color: var(--accent); }
 
-    /* TYPING CURSOR FIX */
     .typing {
       color: var(--accent);
       border-right: 2px solid var(--accent);
@@ -121,11 +75,8 @@
       display: inline-block;
     }
 
-    @keyframes blink {
-      50% { border-color: transparent; }
-    }
+    @keyframes blink { 50% { border-color: transparent; } }
 
-    /* PROJECTS */
     .projects-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -139,43 +90,55 @@
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.03);
       transition: var(--transition);
-      position: relative;
-      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .card:hover {
       transform: translateY(-10px);
       border-color: var(--accent);
-      background: rgba(255,255,255,0.02);
     }
 
-    .card h3 {
-      margin-bottom: 1rem;
-      font-size: 1.4rem;
+    /* Shiftfolio Demo Styles */
+    .demo-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
     }
-
-    /* SCROLL REVEAL */
-    .reveal {
+    .demo-box {
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: var(--transition);
+    }
+    .demo-box img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .demo-box:hover img { transform: scale(1.05); }
+    .demo-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       opacity: 0;
-      transform: translateY(30px);
-      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: var(--transition);
     }
+    .demo-box:hover .demo-overlay { opacity: 1; }
 
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    footer {
-      text-align: center;
-      padding: 4rem 0;
-      font-size: 0.9rem;
-      color: var(--muted);
-      border-top: 1px solid rgba(255,255,255,0.05);
-    }
+    footer { text-align: center; padding: 4rem 0; font-size: 0.9rem; color: var(--muted); border-top: 1px solid rgba(255,255,255,0.05); }
 
     @media (max-width: 768px) {
-      nav ul { display: none; } /* Consider adding a mobile menu later */
+      .demo-container { grid-template-columns: 1fr; }
       section { padding: 2rem 5vw; }
     }
   </style>
@@ -197,46 +160,65 @@
   <section id="home">
     <h1 class="reveal">Abdulrahman <br/><span class="accent">Fahim</span></h1>
     <h2 class="reveal">
-      I'm a  <span class="typing" id="type-target"></span>
+      I'm a <span class="typing" id="type-target"></span>
     </h2>
     <p class="reveal" style="margin-top:2rem">
-      Specializing in backend architecture and automation. I focus on software that scales gracefully and ages even better.
+      Specializing in backend architecture, Next.js applications, and Linux automation. I build software that scales gracefully.
     </p>
   </section>
 
   <section id="about" class="reveal">
     <h2 class="accent" style="margin-bottom: 1.5rem;">01. About</h2>
     <p>
-      I approach engineering with a "fundamentals-first" mindset. Whether it's high-performance APIs or complex automation workflows, I believe in building systems that don't just work today, but remain maintainable for years.
+      I approach engineering with a "fundamentals-first" mindset. Using modern tools like <b>Next.js</b> and <b>Vite</b>, coupled with the stability of <b>Linux</b>, I build systems that are fast and maintainable.
     </p>
     <p style="margin-top: 1rem; font-style: italic; color: var(--accent);">
       الجديد جميل، بس اللي يعيش هو الصح.
     </p>
   </section>
 
+  <section id="demos" class="reveal">
+    <h2 class="accent" style="margin-bottom: 1.5rem;">02. Shiftfolio Series</h2>
+    <p>Minimalist, high-performance portfolio templates.</p>
+    <div class="demo-container">
+      <a href="/shiftfolio-light" class="demo-box">
+        <img src="shiftfolio-light.png" alt="Shiftfolio Light Mode">
+        <div class="demo-overlay">
+          <span class="cv-btn">View Light Demo</span>
+        </div>
+      </a>
+      <a href="/shiftfolio-dark" class="demo-box">
+        <img src="shiftfolio-dark.png" alt="Shiftfolio Dark Mode">
+        <div class="demo-overlay">
+          <span class="cv-btn">View Dark Demo</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
   <section id="projects" class="reveal">
-    <h2 class="accent" style="margin-bottom: 1.5rem;">02. Selected Work</h2>
+    <h2 class="accent" style="margin-bottom: 1.5rem;">03. Capabilities</h2>
     <div class="projects-grid">
       <div class="card">
-        <h3>Backend Systems</h3>
-        <p>Architecting scalable backends using Mongo, NodeJS</p>
+        <h3>Modern Frontend</h3>
+        <p>Building reactive UIs with Next.js, React, and Vite for maximum speed.</p>
       </div>
       <div class="card">
-        <h3>Portfolios</h3>
-        <p>Specialize in minimal and professional portfolios in various types</p>
+        <h3>Backend & Automation</h3>
+        <p>Architecting scalable backends using Node.js and MongoDB.</p>
       </div>
       <div class="card">
-        <h3>Linux systems</h3>
-        <p>Expert in setting up systems like Ubuntu Server and Proxmox for companies</p>
+        <h3>Linux & Virtualization</h3>
+        <p>Expertise in Proxmox VE and headless Linux environments (Ubuntu/Debian).</p>
       </div>
     </div>
   </section>
 
   <section id="contact" class="reveal" style="text-align: center; align-items: center;">
-    <h2 class="accent">03. Get In Touch</h2>
+    <h2 class="accent">04. Get In Touch</h2>
     <h1 style="font-size: clamp(2rem, 5vw, 3.5rem);">Ready to build?</h1>
     <p>Currently open to new opportunities and interesting collaborations.</p>
-    <a href="mailto:hello@example.com" class="cv-btn" style="margin-top: 2rem; display: inline-block; text-decoration: none;">Say Hello</a>
+    <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="cv-btn" style="margin-top: 2rem; display: inline-block; text-decoration: none;">Say Hello</a>
   </section>
 </main>
 
@@ -245,13 +227,13 @@
 </footer>
 
 <script>
-// TYPING ENGINE - Fixed Glitch
 document.addEventListener("DOMContentLoaded", () => {
   const roles = [
-    "Software Engineer.",
-    "Fullstack Developer",
-    "Linux Systems expert.",
-    "Static Web Developer"
+    "Next.js Developer.",
+    "Linux Systems Expert.",
+    "React Engineer.",
+    "Automation Architect.",
+    "Vite Specialist."
   ];
 
   const el = document.getElementById("type-target");
@@ -262,7 +244,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function type() {
     const currentWord = roles[wordIdx];
-    
     if (isDeleting) {
       el.textContent = currentWord.substring(0, charIdx - 1);
       charIdx--;
@@ -275,20 +256,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!isDeleting && charIdx === currentWord.length) {
       isDeleting = true;
-      timeout = 2000; // Pause at end
+      timeout = 2000;
     } else if (isDeleting && charIdx === 0) {
       isDeleting = false;
       wordIdx = (wordIdx + 1) % roles.length;
       timeout = 500;
     }
-
     setTimeout(type, timeout);
   }
-
   type();
 });
 
-// SCROLL REVEAL
 const observerOptions = { threshold: 0.1 };
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -297,7 +275,6 @@ const observer = new IntersectionObserver((entries) => {
     }
   });
 }, observerOptions);
-
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 
