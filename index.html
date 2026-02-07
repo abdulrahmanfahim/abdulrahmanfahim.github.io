@@ -51,9 +51,8 @@
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; transition: var(--transition); }
     .nav-links a:hover { color: var(--accent); }
 
-    /* HAMBURGER */
-    .menu-btn { display: none; flex-direction: column; gap: 6px; background: none; border: none; z-index: 1001; }
-    .menu-btn span { display: block; width: 30px; height: 2px; background: var(--accent); transition: 0.3s ease; }
+    .menu-btn { display: none; flex-direction: column; gap: 6px; background: none; border: none; z-index: 1001; padding: 5px; }
+    .menu-btn span { display: block; width: 25px; height: 2px; background: var(--accent); transition: 0.3s ease; box-shadow: 0 0 8px var(--accent-dim); }
 
     .mobile-nav {
       position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
@@ -62,7 +61,8 @@
       gap: 2rem; z-index: 999; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .mobile-nav.active { right: 0; }
-    .mobile-nav a { font-family: 'Space Grotesk'; font-size: 2rem; font-weight: 700; color: #fff; text-decoration: none; text-transform: uppercase; }
+    .mobile-nav a { font-family: 'Space Grotesk'; font-size: 2rem; font-weight: 700; color: #fff; text-decoration: none; text-transform: uppercase; transition: 0.3s; }
+    .mobile-nav a:hover { color: var(--accent); letter-spacing: 4px; }
 
     .menu-btn.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .menu-btn.open span:nth-child(2) { opacity: 0; }
@@ -74,7 +74,7 @@
     main { position: relative; z-index: 10; }
     section { min-height: 100vh; padding: 0 10vw; display: flex; flex-direction: column; justify-content: center; }
 
-    .status-tag { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 3px; margin-bottom: 1.5rem; color: var(--accent); text-shadow: 0 0 12px rgba(0, 243, 255, 0.7); font-weight: bold; }
+    .status-tag { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 3px; margin-bottom: 1.5rem; color: var(--accent); text-shadow: 0 0 12px rgba(0, 243, 255, 0.7); font-weight: bold; min-height: 1.5em; }
     h1 { font-family: 'Space Grotesk'; font-size: clamp(3.5rem, 11vw, 8rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; color: #fff; }
     .typing { color: var(--accent); font-family: 'Space Grotesk'; }
     .cursor-blink { display: inline-block; width: 10px; height: 4px; background: var(--accent); animation: blink 1s infinite; margin-left: 5px; }
@@ -86,19 +86,47 @@
     .tech-item span { color: var(--accent); margin-right: 10px; }
     @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    /* ABOUT GRID */
+    /* ABOUT */
     .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 3rem; }
     .about-box { background: var(--glass); padding: 3rem; border-radius: 4px; border-left: 4px solid var(--accent); backdrop-filter: blur(12px); transition: 0.4s; }
     .about-box:hover { transform: translateX(10px); background: rgba(25, 25, 25, 0.9); }
 
-    /* WORK */
-    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 3rem; margin-top: 4rem; }
-    .project-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; transition: var(--transition); text-decoration: none; color: inherit; }
-    .project-card:hover { border-color: var(--accent); transform: translateY(-12px); }
-    .card-img { height: 280px; overflow: hidden; }
+    /* 3D WORK CARDS */
+    .grid-container { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); 
+      gap: 3rem; 
+      margin-top: 4rem;
+      perspective: 1000px;
+    }
+    
+    .project-card { 
+      background: var(--glass); 
+      border: 1px solid var(--glass-border); 
+      border-radius: 16px; 
+      overflow: hidden; 
+      text-decoration: none; 
+      color: inherit;
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out, border-color 0.4s;
+      will-change: transform;
+    }
+    
+    .project-card:hover { border-color: var(--accent); }
+    
+    .card-img { 
+      height: 280px; 
+      overflow: hidden; 
+      transform: translateZ(20px);
+    }
+    
     .card-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: 0.8s; }
-    .project-card:hover .card-img img { filter: grayscale(0); transform: scale(1.1); }
-    .card-content { padding: 2.5rem; }
+    .project-card:hover .card-img img { filter: grayscale(0); transform: scale(1.05); }
+    
+    .card-content { 
+      padding: 2.5rem; 
+      transform: translateZ(40px);
+    }
 
     /* CONTACT */
     .contact-line { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding: 2.5rem 0; transition: 0.4s; text-decoration: none; }
@@ -117,7 +145,8 @@
     @media (max-width: 900px) {
       .nav-links { display: none; }
       .menu-btn { display: flex; }
-      .grid-container { grid-template-columns: 1fr; }
+      .grid-container { grid-template-columns: 1fr; perspective: none; }
+      .project-card { transform: none !important; }
     }
   </style>
 </head>
@@ -187,13 +216,13 @@
   <section id="demos" class="reveal">
     <p class="mono accent">02. ACTIVE_DEPLOYMENTS</p>
     <div class="grid-container">
-      <a href="/shiftfolio-light" class="project-card">
+      <a href="/shiftfolio-light" class="project-card tilt-card">
         <div class="card-img"><img src="/imgs/shiftfolio-light.png" alt="Light"></div>
-        <div class="card-content"><h3>Shiftfolio Light</h3><p class="mono" style="color: var(--accent); margin-top: 10px;">UI/UX Engine</p></div>
+        <div class="card-content"><h3>Shiftfolio Light</h3><p class="mono" style="color: var(--accent); margin-top: 10px;">Static Portfolio</p></div>
       </a>
-      <a href="/shiftfolio-dark" class="project-card">
+      <a href="/shiftfolio-dark" class="project-card tilt-card">
         <div class="card-img"><img src="/imgs/shiftfolio-dark.png" alt="Dark"></div>
-        <div class="card-content"><h3>Shiftfolio Dark</h3><p class="mono" style="color: var(--accent); margin-top: 10px;">System Engine</p></div>
+        <div class="card-content"><h3>Shiftfolio Dark</h3><p class="mono" style="color: var(--accent); margin-top: 10px;">Static Portfolio</p></div>
       </a>
     </div>
   </section>
@@ -214,13 +243,48 @@
 </footer>
 
 <script>
+// --- AUDIO AUTO-PLAY SYSTEM ---
+const audio = new Audio('/music/background-music.mp3');
+audio.loop = true;
+let audioStarted = false;
+
+const initAudio = () => {
+  if (!audioStarted) {
+    audio.play().catch(() => { /* Silent fail if browser blocks */ });
+    audioStarted = true;
+  }
+};
+// Trigger play on the first click anywhere on the page
+document.addEventListener('click', initAudio, { once: true });
+
+
 // --- MOBILE MENU ---
 const menuToggle = document.getElementById('menuToggle');
 const mobileNav = document.getElementById('mobileNav');
 menuToggle.onclick = () => { menuToggle.classList.toggle('open'); mobileNav.classList.toggle('active'); };
-document.querySelectorAll('.mobile-nav a').forEach(l => l.onclick = () => { menuToggle.classList.remove('open'); mobileNav.classList.remove('active'); });
+document.querySelectorAll('.mobile-nav a').forEach(l => {
+  l.onclick = () => { menuToggle.classList.remove('open'); mobileNav.classList.remove('active'); };
+});
 
-// --- STATUS SCRAMBLE (2s Interval) ---
+// --- 3D TILT EFFECT ---
+const cards = document.querySelectorAll('.tilt-card');
+cards.forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -15;
+    const rotateY = ((x - centerX) / centerX) * 15;
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+  });
+});
+
+// --- FIXED STATUS SCRAMBLE ---
 const statusEl = document.getElementById('status-glitch');
 const phrases = ["[ System Online ]", "[ System Updating ]", "[ Portfolio Running Perfectly ]"];
 let sIdx = 0;
@@ -229,27 +293,36 @@ function scramble(newText) {
   const chars = "!<>-_\\/[]{}—=+*^?#________";
   const timer = setInterval(() => {
     let output = "";
-    for (let i = 0; i < Math.max(statusEl.innerText.length, newText.length); i++) {
-      if (i < frame / 2) output += newText[i] || "";
+    for (let i = 0; i < newText.length; i++) {
+      if (i < frame / 2) output += newText[i];
       else output += chars[Math.floor(Math.random() * chars.length)];
     }
     statusEl.innerText = output;
     if (frame / 2 >= newText.length) clearInterval(timer);
     frame++;
-  }, 30);
+  }, 15);
 }
-setInterval(() => { sIdx = (sIdx + 1) % phrases.length; scramble(phrases[sIdx]); }, 2000);
+setInterval(() => { sIdx = (sIdx + 1) % phrases.length; scramble(phrases[sIdx]); }, 6000);
 
-// --- NEURAL NETWORK ---
+// --- NEURAL NETWORK CANVAS ---
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
 function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 class P {
-  constructor() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height; this.vx = (Math.random()-0.5)*1.3; this.vy = (Math.random()-0.5)*1.3; }
-  update() { this.x += this.vx; this.y += this.vy; if (this.x<0||this.x>canvas.width) this.vx*=-1; if (this.y<0||this.y>canvas.height) this.vy*=-1; }
+  constructor() { 
+    this.x = Math.random()*canvas.width; 
+    this.y = Math.random()*canvas.height; 
+    this.vx = (Math.random()-0.5)*1.3; 
+    this.vy = (Math.random()-0.5)*1.3; 
+  }
+  update() { 
+    this.x += this.vx; this.y += this.vy; 
+    if (this.x<0||this.x>canvas.width) this.vx*=-1; 
+    if (this.y<0||this.y>canvas.height) this.vy*=-1; 
+  }
 }
-function init() { particles = []; for(let i=0; i<90; i++) particles.push(new P()); }
+function init() { particles = []; for(let i=0; i<95; i++) particles.push(new P()); }
 function animate() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
   particles.forEach((p, i) => {
@@ -258,16 +331,16 @@ function animate() {
     ctx.beginPath(); ctx.arc(p.x, p.y, 2.2, 0, Math.PI*2); ctx.fill();
     for(let j=i+1; j<particles.length; j++) {
       let d = Math.hypot(p.x-particles[j].x, p.y-particles[j].y);
-      if(d<230) { ctx.strokeStyle = `rgba(0, 243, 255, ${0.6-d/230})`; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke(); }
+      if(d<230) { 
+        ctx.strokeStyle = `rgba(0, 243, 255, ${0.6-d/230})`; 
+        ctx.lineWidth = 1.4; 
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke(); 
+      }
     }
   });
   requestAnimationFrame(animate);
 }
 window.onresize = resize; resize(); init(); animate();
-
-// --- CURSOR ---
-const cursor = document.getElementById('cursor'), dot = document.getElementById('cursor-dot');
-window.onmousemove = (e) => { cursor.style.top = dot.style.top = e.clientY+'px'; cursor.style.left = dot.style.left = e.clientX+'px'; };
 
 // --- TYPEWRITER ---
 const roles = ["Systems Engineer", "Full Stack Dev", "Infrastructure Architect"];
@@ -283,10 +356,22 @@ function type() {
 }
 type();
 
-// --- REVEAL ---
-const obs = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold: 0.1});
+// --- CURSOR ---
+const cursor = document.getElementById('cursor'), dot = document.getElementById('cursor-dot');
+window.onmousemove = (e) => { 
+  cursor.style.top = dot.style.top = e.clientY+'px'; 
+  cursor.style.left = dot.style.left = e.clientX+'px'; 
+};
+
+// --- REVEAL ON SCROLL ---
+const obs = new IntersectionObserver(entries => { 
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); 
+}, {threshold: 0.1});
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-const marqueeInner = document.getElementById('marquee-inner'); marqueeInner.innerHTML += marqueeInner.innerHTML + marqueeInner.innerHTML;
+
+// --- MARQUEE ---
+const marqueeInner = document.getElementById('marquee-inner');
+marqueeInner.innerHTML += marqueeInner.innerHTML + marqueeInner.innerHTML;
 </script>
 </body>
 </html>
