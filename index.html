@@ -3,127 +3,176 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Abdulrahman Fahim | Systems Engineer & Full Stack Developer</title>
+  <title>Abdulrahman Fahim | Systems Architect</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #050505;
-      --fg: #ffffff;
+      --bg: #030303;
+      --fg: #e2e2e2;
       --muted: #888888;
-      --accent: #5eead4;
-      --accent-glow: rgba(94, 234, 212, 0.3);
-      --border: rgba(255, 255, 255, 0.08);
-      --transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+      --accent: #00f3ff;
+      --accent-dim: rgba(0, 243, 255, 0.1);
+      --glass: rgba(20, 20, 20, 0.6);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
-    html { scroll-behavior: smooth; }
+    * { margin: 0; padding: 0; box-sizing: border-box; outline: none; cursor: default; }
     
+    /* CUSTOM CURSOR */
+    body { cursor: none; }
+    #cursor {
+      position: fixed; top: 0; left: 0; width: 20px; height: 20px;
+      border: 1px solid var(--accent); border-radius: 50%;
+      pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s; mix-blend-mode: difference;
+    }
+    #cursor-dot {
+      position: fixed; top: 0; left: 0; width: 4px; height: 4px;
+      background: var(--accent); border-radius: 50%;
+      pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
+    }
+    a:hover ~ #cursor, button:hover ~ #cursor { width: 50px; height: 50px; background: var(--accent-dim); }
+
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg);
       color: var(--fg);
-      line-height: 1.6;
       overflow-x: hidden;
+      line-height: 1.6;
     }
 
-    /* BACKGROUND CANVAS */
-    #bg-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    /* NAVIGATION */
-    nav {
-      position: fixed;
-      top: 0; width: 100%;
-      padding: 1.5rem 8vw;
-      background: rgba(5, 5, 5, 0.8);
-      backdrop-filter: blur(20px);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 2000;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .logo { font-weight: 800; font-size: 1.3rem; letter-spacing: -1px; }
+    /* TYPOGRAPHY UTILS */
+    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.03em; }
     .accent { color: var(--accent); }
+    .mono { font-family: 'Courier New', monospace; font-size: 0.85rem; letter-spacing: 0.05em; color: var(--muted); }
+
+    /* CANVAS */
+    #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; padding: 1.5rem 6vw;
+      background: rgba(3, 3, 3, 0.85); backdrop-filter: blur(12px);
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 100; border-bottom: 1px solid var(--glass-border);
+    }
+    .logo { font-weight: 700; font-size: 1.5rem; letter-spacing: -1px; z-index: 102; cursor: pointer; }
+    
+    .nav-actions { display: flex; align-items: center; gap: 2rem; z-index: 102; }
     
     .nav-links { list-style: none; display: flex; gap: 2.5rem; align-items: center; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; transition: var(--transition); }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; transition: var(--transition); cursor: pointer; }
     .nav-links a:hover { color: var(--accent); }
 
-    .cv-btn {
-      background: var(--accent);
-      color: #000 !important;
-      padding: 0.7rem 1.4rem;
-      border-radius: 4px;
-      font-weight: 800;
-      text-decoration: none;
-      box-shadow: 0 0 15px var(--accent-glow);
+    .cv-btn { 
+      background: var(--accent); color: #000 !important; 
+      padding: 0.6rem 1.2rem; border-radius: 2px; font-weight: 700; 
+      font-family: 'Space Grotesk'; letter-spacing: 0;
+      transition: transform 0.2s;
+    }
+    .cv-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px var(--accent-dim); }
+
+    /* MOBILE MENU */
+    .ham-menu { display: none; cursor: pointer; flex-direction: column; gap: 6px; z-index: 102; }
+    .ham-menu span { width: 24px; height: 2px; background: var(--fg); transition: 0.3s; }
+    @media (max-width: 900px) {
+      .ham-menu { display: flex; }
+      .nav-links {
+        position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+        background: #030303; flex-direction: column; justify-content: center;
+        transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+      }
+      .nav-links.active { right: 0; }
+      .nav-links a { font-size: 2rem; }
     }
 
-    /* CONTENT LAYOUT */
+    /* SECTIONS */
     main { position: relative; z-index: 10; }
-    section { min-height: 100vh; padding: 10rem 10vw; display: flex; flex-direction: column; justify-content: center; }
-    
-    h1 { font-size: clamp(3rem, 10vw, 7rem); font-weight: 800; line-height: 0.95; margin-bottom: 2rem; letter-spacing: -3px; }
-    .typing { color: var(--accent); border-right: 3px solid var(--accent); padding-right: 8px; animation: blink 0.8s infinite; }
-    @keyframes blink { 50% { border-color: transparent; } }
+    section { min-height: 100vh; padding: 0 10vw; display: flex; flex-direction: column; justify-content: center; }
 
-    /* WORK GRID */
-    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; margin-top: 2rem; }
-    
-    .demo-box {
-      position: relative; border-radius: 12px; height: 450px; 
-      border: 1px solid var(--border); overflow: hidden; transition: var(--transition); background: rgba(13, 13, 13, 0.8);
-      text-decoration: none; color: inherit;
+    /* HERO */
+    .hero-content { position: relative; }
+    h1 { 
+      font-size: clamp(3.5rem, 11vw, 8rem); font-weight: 800; line-height: 1.1; 
+      margin-bottom: 1.5rem; color: #fff;
     }
-    .demo-box img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.5); transition: var(--transition); opacity: 0.6; }
-    .demo-box:hover img { transform: scale(1.05); filter: grayscale(0); opacity: 1; }
-    .demo-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2.5rem; background: linear-gradient(to top, rgba(0,0,0,1) 0%, transparent 100%); }
+    
+    .typing { color: var(--accent); font-family: 'Space Grotesk'; }
+    .cursor-blink { display: inline-block; width: 10px; height: 4px; background: var(--accent); animation: blink 1s infinite; }
 
-    /* CONTACT SECTION */
-    .contact-links { display: flex; flex-direction: column; gap: 2rem; margin-top: 3rem; }
-    .contact-item { 
-      font-size: clamp(1.2rem, 3.5vw, 2.5rem); 
-      font-weight: 600; 
-      color: var(--fg); 
-      text-decoration: none; 
-      transition: var(--transition);
-      width: fit-content;
-      display: flex;
-      flex-direction: column;
-      word-break: break-all;
+    /* TECH STACK MARQUEE */
+    .marquee-container {
+      width: 100vw; margin-left: -10vw; margin-top: 4rem;
+      background: rgba(255,255,255,0.02); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
+      padding: 1.5rem 0; overflow: hidden; white-space: nowrap; position: relative;
     }
-    .contact-item span { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; font-weight: 800; }
-    .contact-item:hover { color: var(--accent); transform: translateX(10px); }
+    .marquee-content { display: inline-block; animation: scroll 30s linear infinite; }
+    .tech-item { display: inline-block; margin: 0 2rem; font-family: 'Space Grotesk'; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
+    .tech-item span { color: var(--accent); margin-right: 8px; }
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    /* REVEAL SYSTEM */
-    .reveal { opacity: 0; transform: translateY(40px); transition: 1s var(--transition); }
+    /* GLASS CARDS */
+    .grid-container { 
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); 
+      gap: 2rem; margin-top: 3rem; 
+    }
+    .project-card {
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 12px; overflow: hidden; transition: var(--transition);
+      position: relative; group: 1; display: flex; flex-direction: column;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+    
+    .card-img { height: 260px; overflow: hidden; position: relative; }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; filter: grayscale(1); }
+    .project-card:hover .card-img img { transform: scale(1.05); filter: grayscale(0); }
+    
+    .card-content { padding: 2rem; }
+    .tags { display: flex; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .tag { font-size: 0.7rem; color: var(--accent); border: 1px solid var(--accent-dim); padding: 0.3rem 0.6rem; border-radius: 100px; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .project-link { position: absolute; top: 1.5rem; right: 1.5rem; background: #000; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.8); transition: var(--transition); cursor: pointer; }
+    .project-card:hover .project-link { opacity: 1; transform: scale(1); }
+
+    /* CONTACT */
+    .contact-line { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding: 2rem 0; transition: 0.3s; cursor: pointer; }
+    .contact-line:hover { padding-left: 20px; border-color: var(--accent); }
+    .contact-line h2 { font-size: 2rem; color: var(--muted); transition: 0.3s; }
+    .contact-line:hover h2 { color: #fff; }
+    .arrow { font-size: 1.5rem; color: var(--accent); opacity: 0; transform: translateX(-20px); transition: 0.3s; }
+    .contact-line:hover .arrow { opacity: 1; transform: translateX(0); }
+
+    /* UTILS */
+    .reveal { opacity: 0; transform: translateY(40px); transition: 0.8s var(--transition); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
+    footer { padding: 4rem 0; text-align: center; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--glass-border); }
 
-    footer { padding: 4rem 0; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; }
   </style>
 </head>
 <body>
+
+<div id="cursor"></div>
+<div id="cursor-dot"></div>
 
 <canvas id="bg-canvas"></canvas>
 
 <nav>
   <div class="logo">AF<span class="accent">.</span></div>
-  <ul class="nav-links">
+  
+  <div class="nav-actions">
+    <div class="ham-menu" id="ham-trigger"><span></span><span></span><span></span></div>
+  </div>
+
+  <ul class="nav-links" id="nav-menu">
     <li><a href="#home">Home</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#demos">Work</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#about">About Me</a></li>
+    <li><a href="#demos">Selected Work</a></li>
+    <li><a href="#contact">Contact Me</a></li>
     <li><a href="/CV" target="_blank" class="cv-btn">Open CV</a></li>
   </ul>
 </nav>
@@ -134,136 +183,202 @@
 
 <main>
   <section id="home">
-    <h1 class="reveal">Abdulrahman <br/><span class="accent">Fahim</span></h1>
-    <h2 class="reveal">Systems Engineer & <span class="typing" id="type-target"></span></h2>
-    <p class="reveal" style="color: var(--muted); max-width: 600px; margin-top: 1.5rem;">
-      Bridging the gap between high-performance Full Stack Development and secure Linux Infrastructure.
-    </p>
+    <div class="hero-content reveal">
+      <h1>Abdulrahman<br>Fahim<span class="accent">.</span></h1>
+    </div>
+    <h2 class="reveal" style="font-weight: 400; color: var(--muted); max-width: 600px;">
+      <span class="typing" id="type-target"></span><span class="cursor-blink"></span>
+    </h2>
+    
+    <div class="marquee-container reveal">
+      <div class="marquee-content">
+        <div class="tech-item"><span>//</span> Linux Kernel</div>
+        <div class="tech-item"><span>//</span> Linux Networking</div>
+        <div class="tech-item"><span>//</span> Docker</div>
+        <div class="tech-item"><span>//</span> Kubernetes</div>
+        <div class="tech-item"><span>//</span> React.js</div>
+        <div class="tech-item"><span>//</span> Node.js</div>
+        <div class="tech-item"><span>//</span> CI/CD & Jenkins Pipelines</div>
+        <div class="tech-item"><span>//</span> Linux Kernel</div>
+        <div class="tech-item"><span>//</span> Docker</div>
+        <div class="tech-item"><span>//</span> Kubernetes</div>
+        <div class="tech-item"><span>//</span> React.js</div>
+        <div class="tech-item"><span>//</span> Node.js</div>
+      </div>
+    </div>
   </section>
 
   <section id="about" class="reveal">
-    <span class="accent" style="font-weight: 800; letter-spacing: 2px;">01. ARCHITECTURE</span>
-    <h1 style="font-size: clamp(2.5rem, 5vw, 4rem);">Core Infrastructure & <span class="accent">Scale.</span></h1>
-    <p style="font-size: 1.2rem; max-width: 800px; color: var(--muted);">
-      Specializing in containerized environments, networking protocols, and building robust web applications that handle load with elegance.
-    </p>
+    <p class="mono accent">01. ABOUT</p>
+    <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); margin-top: 1rem;">Bridging Logic & <span class="accent">Scale.</span></h1>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 2rem;">
+      <div style="background: var(--glass); padding: 2rem; border-left: 2px solid var(--accent);">
+        <h3 style="margin-bottom: 1rem;">Infrastructure</h3>
+        <p style="color: var(--muted);">Designing resilient containerized environments. I don't just write code; I engineer the ecosystem it lives in.</p>
+      </div>
+      <div style="background: var(--glass); padding: 2rem; border-left: 2px solid #fff;">
+        <h3 style="margin-bottom: 1rem;">Full Stack</h3>
+        <p style="color: var(--muted);">Building pixel-perfect interfaces backed by perfect backend services like NodeJs and MongoDb. Performance is not a feature; it's a requirement.</p>
+      </div>
+    </div>
   </section>
 
   <section id="demos" class="reveal">
-    <span class="accent" style="font-weight: 800; letter-spacing: 2px;">02. WORK</span>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+      <div>
+        <p class="mono accent">02. DEPLOYMENTS</p>
+        <h1 style="font-size: clamp(2rem, 5vw, 3.5rem);">Selected Works</h1>
+      </div>
+    </div>
+
     <div class="grid-container">
-      <a href="/shiftfolio-light" class="demo-box">
-        <img src="/imgs/shiftfolio-light.png" alt="Light UI">
-        <div class="demo-info"><h3>Shiftfolio Light</h3><p class="accent">Portfolio Template (View Live Demo) →</p></div>
+      <a href="/shiftfolio-light" class="project-card">
+        <div class="project-link">↗</div>
+        <div class="card-img"><img src="/imgs/shiftfolio-light.png" alt="UI Light"></div>
+        <div class="card-content">
+          <div class="tags"><span class="tag">Static</span></div>
+          <h3>Shiftfolio Light</h3>
+          <p class="mono" style="margin-top: 0.5rem;">Minimalist Portfolio Engine</p>
+        </div>
       </a>
-      <a href="/shiftfolio-dark" class="demo-box">
-        <img src="/imgs/shiftfolio-dark.png" alt="Dark UI">
-        <div class="demo-info"><h3>Shiftfolio Dark</h3><p class="accent">Portfolio Template (View Live Demo) →</p></div>
+      
+      <a href="/shiftfolio-dark" class="project-card">
+        <div class="project-link">↗</div>
+        <div class="card-img"><img src="/imgs/shiftfolio-dark.png" alt="UI Dark"></div>
+        <div class="card-content">
+          <div class="tags"><span class="tag">Static</span></div>
+          <h3>Shiftfolio Dark</h3>
+          <p class="mono" style="margin-top: 0.5rem;">Minimalist Portfolio Engine</p>
+        </div>
       </a>
     </div>
   </section>
 
   <section id="contact" class="reveal">
-    <span class="accent" style="font-weight: 800; letter-spacing: 2px;">03. CONNECT</span>
-    <h1>Let's build <br/><span class="accent">together.</span></h1>
+    <p class="mono accent">03. CONTACT</p>
+    <h1 style="margin: 1rem 0 3rem 0;">Ready to collaborate?</h1>
     
-    <div class="contact-links">
-        <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="contact-item">
-            <span>Email</span> abdulrahmanfahim.dev@gmail.com
-        </a>
-        <a href="https://github.com/abdulrahmanfahim" target="_blank" class="contact-item">
-            <span>GitHub</span> github.com/abdulrahmanfahim
-        </a>
-        <a href="https://www.linkedin.com/in/abdulrahmanfahim-dev/" target="_blank" class="contact-item">
-            <span>LinkedIn</span> linkedin.com/in/abdulrahmanfahim-dev
-        </a>
+    <div class="contact-list">
+      <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="contact-line">
+        <h2>abdulrahmanfahim.dev@gmail.com</h2>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://github.com/abdulrahmanfahim" target="_blank" class="contact-line">
+        <h2>github.com/abdulrahmanfahim</h2>
+        <span class="arrow">→</span>
+      </a>
+      <a href="https://linkedin.com/in/abdulrahmanfahim-dev" target="_blank" class="contact-line">
+        <h2>linkedin.com/in/abdulrahmanfahim-dev</h2>
+        <span class="arrow">→</span>
+      </a>
     </div>
   </section>
 </main>
 
-<footer><p>© 2026 Abdulrahman Fahim — Systems & Software Engineer</p></footer>
+<footer>
+  <p class="mono">SYSTEM SHUTDOWN :: © 2026 ABDULRAHMAN FAHIM</p>
+</footer>
 
 <script>
-// --- AUDIO & WAVE ENGINE ---
+// --- AUDIO ENGINE (No Button, Auto-play only) ---
+const audio = document.getElementById('bg-music');
+let isPlaying = false;
+
+// Auto-start on first click anywhere
+window.addEventListener('click', () => {
+  if (!isPlaying) {
+    audio.play().then(() => {
+      isPlaying = true;
+    }).catch(e => console.log("Audio blocked"));
+  }
+}, { once: true });
+
+
+// --- CUSTOM CURSOR ---
+const cursor = document.getElementById('cursor');
+const cursorDot = document.getElementById('cursor-dot');
+window.addEventListener('mousemove', (e) => {
+  cursor.style.top = e.clientY + 'px';
+  cursor.style.left = e.clientX + 'px';
+  cursorDot.style.top = e.clientY + 'px';
+  cursorDot.style.left = e.clientX + 'px';
+});
+
+
+// --- NETWORK CANVAS (Brighter & Faster) ---
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
-const audio = document.getElementById('bg-music');
-
-let audioCtx, isAudioStarted = false;
-
-// UNLOCKS AUDIO ON FIRST MOUSE MOVE
-function unlockAudio() {
-    if (isAudioStarted) return;
-    
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
-    
-    audio.play().catch(e => {
-        // Fallback for strict browsers: if mousemove fails, click will catch it
-        console.log("Waiting for more definitive interaction...");
-    });
-    
-    isAudioStarted = true;
-    window.removeEventListener('mousemove', unlockAudio);
-    window.removeEventListener('click', unlockAudio);
-}
-
-window.addEventListener('mousemove', unlockAudio);
-window.addEventListener('click', unlockAudio);
+let particles = [];
 
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
+  initParticles();
 }
-window.addEventListener('resize', resize);
-resize();
 
-// --- RADIAL ARCH WAVE ANIMATION (SELF-SUSTAINING) ---
+class Particle {
+  constructor() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    // Increased velocity for more movement
+    this.vx = (Math.random() - 0.5) * 1.5; 
+    this.vy = (Math.random() - 0.5) * 1.5;
+    this.size = Math.random() * 2.5; // Slightly larger dots
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+  }
+  draw() {
+    // Brighter dots (Cyan/White mix)
+    ctx.fillStyle = 'rgba(200, 255, 255, 0.5)';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function initParticles() {
+  particles = [];
+  // More particles for a busier look
+  const count = window.innerWidth < 768 ? 60 : 110;
+  for (let i = 0; i < count; i++) particles.push(new Particle());
+}
+
 function animate() {
-  ctx.fillStyle = '#050505';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  const spacing = 35;
-  const time = Date.now() * 0.002; 
-  const centerX = canvas.width / 2;
-  const centerY = canvas.height / 2;
-
-  for (let x = spacing/2; x < canvas.width; x += spacing) {
-    for (let y = spacing/2; y < canvas.height; y += spacing) {
-      const dx = x - centerX;
-      const dy = y - centerY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      
-      // Calculate radial wave position
-      const wave = Math.sin((distance / 120) - time);
-      // Sharpens the peaks for an "arch" look
-      const intensity = Math.pow(Math.max(0, wave), 4); 
-
-      let opacity = 0.05 + (intensity * 0.7);
-      let dotSize = 1.1 + (intensity * 2.8);
-
-      ctx.fillStyle = `rgba(94, 234, 212, ${opacity})`;
-      
-      // Add subtle glow to active arches
-      if (intensity > 0.8) {
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = 'rgba(94, 234, 212, 0.4)';
-      } else {
-        ctx.shadowBlur = 0;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  for (let i = 0; i < particles.length; i++) {
+    particles[i].update();
+    particles[i].draw();
+    for (let j = i; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      // Increased connection distance and opacity
+      if (dist < 180) {
+        // Much brighter lines (0.3 max opacity vs 0.1 previously)
+        ctx.strokeStyle = `rgba(0, 243, 255, ${0.3 - dist/1000})`;
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.stroke();
       }
-
-      ctx.beginPath();
-      ctx.arc(x, y, dotSize, 0, Math.PI * 2);
-      ctx.fill();
     }
   }
   requestAnimationFrame(animate);
 }
 
-// --- TYPEWRITER ENGINE ---
-const roles = ["Linux Systems.", "Full Stack Apps.", "DevOps.", "Architecture."];
+window.addEventListener('resize', resize);
+resize();
+animate();
+
+
+// --- TYPEWRITER ---
+const roles = ["Systems Engineer", "Full Stack Dev", "Infrastructure Architect"];
 const el = document.getElementById("type-target");
 let wIdx = 0, cIdx = 0, isDel = false;
 
@@ -271,27 +386,46 @@ function type() {
   const word = roles[wIdx];
   el.textContent = isDel ? word.substring(0, cIdx - 1) : word.substring(0, cIdx + 1);
   cIdx = isDel ? cIdx - 1 : cIdx + 1;
-  let speed = isDel ? 50 : 120;
-  
-  if (!isDel && cIdx === word.length) { 
-    isDel = true; speed = 2500; 
-  } else if (isDel && cIdx === 0) { 
-    isDel = false; wIdx = (wIdx + 1) % roles.length; speed = 500; 
-  }
-  
+  let speed = isDel ? 30 : 100;
+  if (!isDel && cIdx === word.length) { isDel = true; speed = 2000; }
+  else if (isDel && cIdx === 0) { isDel = false; wIdx = (wIdx + 1) % roles.length; speed = 500; }
   setTimeout(type, speed);
 }
+type();
 
-// --- INTERSECTION REVEAL ---
+
+// --- OBSERVER ---
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, { threshold: 0.1 });
-
 document.querySelectorAll('.reveal').forEach(e => observer.observe(e));
 
-// INITIALIZE
-animate();
-type();
+
+// --- MOBILE MENU ---
+const ham = document.getElementById('ham-trigger');
+const nav = document.getElementById('nav-menu');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+// Toggle Menu
+ham.addEventListener('click', () => {
+  nav.classList.toggle('active');
+  toggleHamAnim();
+});
+
+// Close Menu when link is clicked
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    nav.classList.remove('active');
+    toggleHamAnim();
+  });
+});
+
+function toggleHamAnim() {
+  const isActive = nav.classList.contains('active');
+  ham.children[0].style.transform = isActive ? 'translateY(8px) rotate(45deg)' : 'none';
+  ham.children[1].style.opacity = isActive ? '0' : '1';
+  ham.children[2].style.transform = isActive ? 'translateY(-8px) rotate(-45deg)' : 'none';
+}
 </script>
 
 </body>
