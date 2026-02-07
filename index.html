@@ -14,29 +14,14 @@
       --fg: #e2e2e2;
       --muted: #888888;
       --accent: #00f3ff;
-      --accent-dim: rgba(0, 243, 255, 0.1);
-      --glass: rgba(20, 20, 20, 0.6);
-      --glass-border: rgba(255, 255, 255, 0.08);
+      --accent-dim: rgba(0, 243, 255, 0.3);
+      --glass: rgba(15, 15, 15, 0.8);
+      --glass-border: rgba(255, 255, 255, 0.12);
       --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; outline: none; cursor: default; }
+    * { margin: 0; padding: 0; box-sizing: border-box; outline: none; cursor: none; }
     
-    /* CUSTOM CURSOR */
-    body { cursor: none; }
-    #cursor {
-      position: fixed; top: 0; left: 0; width: 20px; height: 20px;
-      border: 1px solid var(--accent); border-radius: 50%;
-      pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
-      transition: width 0.2s, height 0.2s; mix-blend-mode: difference;
-    }
-    #cursor-dot {
-      position: fixed; top: 0; left: 0; width: 4px; height: 4px;
-      background: var(--accent); border-radius: 50%;
-      pointer-events: none; z-index: 9999; transform: translate(-50%, -50%);
-    }
-    a:hover ~ #cursor, button:hover ~ #cursor { width: 50px; height: 50px; background: var(--accent-dim); }
-
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -46,152 +31,130 @@
       line-height: 1.6;
     }
 
-    /* TYPOGRAPHY UTILS */
-    h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.03em; }
-    .accent { color: var(--accent); }
-    .mono { font-family: 'Courier New', monospace; font-size: 0.85rem; letter-spacing: 0.05em; color: var(--muted); }
+    /* CUSTOM CURSOR */
+    #cursor { position: fixed; top: 0; left: 0; width: 22px; height: 22px; border: 1.5px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; mix-blend-mode: difference; }
+    #cursor-dot { position: fixed; top: 0; left: 0; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
 
-    /* CANVAS */
-    #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+    /* PERMANENT BRIGHT CANVAS */
+    #bg-canvas { 
+      position: fixed; 
+      top: 0; left: 0; 
+      width: 100%; height: 100%; 
+      z-index: 1; 
+      pointer-events: none; 
+      filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.5)) brightness(1.2);
+    }
 
     /* NAV */
     nav {
       position: fixed; top: 0; width: 100%; padding: 1.5rem 6vw;
-      background: rgba(3, 3, 3, 0.85); backdrop-filter: blur(12px);
+      background: rgba(3, 3, 3, 0.9); backdrop-filter: blur(15px);
       display: flex; justify-content: space-between; align-items: center;
       z-index: 100; border-bottom: 1px solid var(--glass-border);
     }
-    .logo { font-weight: 700; font-size: 1.5rem; letter-spacing: -1px; z-index: 102; cursor: pointer; }
-    
-    .nav-actions { display: flex; align-items: center; gap: 2rem; z-index: 102; }
+    .logo { font-weight: 700; font-size: 1.5rem; letter-spacing: -1px; font-family: 'Space Grotesk'; }
+    .accent { color: var(--accent); }
     
     .nav-links { list-style: none; display: flex; gap: 2.5rem; align-items: center; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; transition: var(--transition); cursor: pointer; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; transition: var(--transition); }
     .nav-links a:hover { color: var(--accent); }
 
-    .cv-btn { 
-      background: var(--accent); color: #000 !important; 
-      padding: 0.6rem 1.2rem; border-radius: 2px; font-weight: 700; 
-      font-family: 'Space Grotesk'; letter-spacing: 0;
-      transition: transform 0.2s;
-    }
-    .cv-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 15px var(--accent-dim); }
-
-    /* MOBILE MENU */
-    .ham-menu { display: none; cursor: pointer; flex-direction: column; gap: 6px; z-index: 102; }
-    .ham-menu span { width: 24px; height: 2px; background: var(--fg); transition: 0.3s; }
-    @media (max-width: 900px) {
-      .ham-menu { display: flex; }
-      .nav-links {
-        position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
-        background: #030303; flex-direction: column; justify-content: center;
-        transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
-      }
-      .nav-links.active { right: 0; }
-      .nav-links a { font-size: 2rem; }
-    }
+    .cv-btn { background: var(--accent); color: #000 !important; padding: 0.6rem 1.4rem; border-radius: 2px; font-weight: 700; font-family: 'Space Grotesk'; text-decoration: none; box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
 
     /* SECTIONS */
     main { position: relative; z-index: 10; }
     section { min-height: 100vh; padding: 0 10vw; display: flex; flex-direction: column; justify-content: center; }
 
     /* HERO */
-    .hero-content { position: relative; }
-    h1 { 
-      font-size: clamp(3.5rem, 11vw, 8rem); font-weight: 800; line-height: 1.1; 
-      margin-bottom: 1.5rem; color: #fff;
+    .status-tag { 
+      font-family: 'Courier New', monospace; 
+      font-size: 1rem; 
+      letter-spacing: 3px; 
+      margin-bottom: 1.5rem; 
+      color: var(--accent);
+      min-height: 1.2em;
+      text-shadow: 0 0 12px rgba(0, 243, 255, 0.7);
+      font-weight: bold;
     }
-    
+    h1 { font-family: 'Space Grotesk'; font-size: clamp(3.5rem, 11vw, 8rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; color: #fff; }
     .typing { color: var(--accent); font-family: 'Space Grotesk'; }
-    .cursor-blink { display: inline-block; width: 10px; height: 4px; background: var(--accent); animation: blink 1s infinite; }
+    .cursor-blink { display: inline-block; width: 10px; height: 4px; background: var(--accent); animation: blink 1s infinite; margin-left: 5px; }
 
-    /* TECH STACK MARQUEE */
+    /* MARQUEE */
     .marquee-container {
       width: 100vw; margin-left: -10vw; margin-top: 4rem;
-      background: rgba(255,255,255,0.02); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
-      padding: 1.5rem 0; overflow: hidden; white-space: nowrap; position: relative;
+      background: rgba(255,255,255,0.05); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
+      padding: 1.8rem 0; overflow: hidden; white-space: nowrap; position: relative;
     }
-    .marquee-content { display: inline-block; animation: scroll 30s linear infinite; }
-    .tech-item { display: inline-block; margin: 0 2rem; font-family: 'Space Grotesk'; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; }
-    .tech-item span { color: var(--accent); margin-right: 8px; }
+    .marquee-content { display: flex; animation: scroll 40s linear infinite; will-change: transform; }
+    .tech-item { display: inline-block; margin: 0 2.8rem; font-family: 'Space Grotesk'; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; font-size: 0.9rem; }
+    .tech-item span { color: var(--accent); margin-right: 10px; }
+    
     @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-    /* GLASS CARDS */
-    .grid-container { 
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); 
-      gap: 2rem; margin-top: 3rem; 
-    }
+    /* ABOUT GRID */
+    .about-box { background: var(--glass); padding: 3rem; border-radius: 4px; border-left: 4px solid var(--accent); backdrop-filter: blur(12px); margin-bottom: 2rem; }
+
+    /* WORK GRID */
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 3rem; margin-top: 4rem; }
     .project-card {
       background: var(--glass); border: 1px solid var(--glass-border);
-      border-radius: 12px; overflow: hidden; transition: var(--transition);
-      position: relative; group: 1; display: flex; flex-direction: column;
+      border-radius: 16px; overflow: hidden; transition: var(--transition);
+      position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit;
     }
-    .project-card:hover { border-color: var(--accent); transform: translateY(-5px); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-    
-    .card-img { height: 260px; overflow: hidden; position: relative; }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; filter: grayscale(1); }
-    .project-card:hover .card-img img { transform: scale(1.05); filter: grayscale(0); }
-    
-    .card-content { padding: 2rem; }
-    .tags { display: flex; gap: 0.8rem; margin-bottom: 1rem; flex-wrap: wrap; }
-    .tag { font-size: 0.7rem; color: var(--accent); border: 1px solid var(--accent-dim); padding: 0.3rem 0.6rem; border-radius: 100px; text-transform: uppercase; letter-spacing: 1px; }
-    
-    .project-link { position: absolute; top: 1.5rem; right: 1.5rem; background: #000; color: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.8); transition: var(--transition); cursor: pointer; }
-    .project-card:hover .project-link { opacity: 1; transform: scale(1); }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-12px); box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+    .card-img { height: 280px; overflow: hidden; }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; filter: grayscale(1); }
+    .project-card:hover .card-img img { transform: scale(1.1); filter: grayscale(0); }
+    .card-content { padding: 2.5rem; }
+    .tag { font-size: 0.75rem; color: var(--accent); border: 1.5px solid var(--accent-dim); padding: 0.4rem 0.8rem; border-radius: 100px; text-transform: uppercase; font-weight: 800; }
 
     /* CONTACT */
-    .contact-line { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding: 2rem 0; transition: 0.3s; cursor: pointer; }
-    .contact-line:hover { padding-left: 20px; border-color: var(--accent); }
-    .contact-line h2 { font-size: 2rem; color: var(--muted); transition: 0.3s; }
-    .contact-line:hover h2 { color: #fff; }
-    .arrow { font-size: 1.5rem; color: var(--accent); opacity: 0; transform: translateX(-20px); transition: 0.3s; }
+    .contact-line { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding: 2.5rem 0; transition: 0.4s; text-decoration: none; }
+    .contact-line:hover { padding-left: 25px; border-color: var(--accent); }
+    .contact-line h2 { font-size: clamp(1.2rem, 4vw, 2.2rem); color: var(--muted); transition: 0.3s; }
+    .contact-line:hover h2 { color: #fff; text-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
+    .arrow { font-size: 1.8rem; color: var(--accent); opacity: 0; transform: translateX(-30px); transition: 0.4s; }
     .contact-line:hover .arrow { opacity: 1; transform: translateX(0); }
 
-    /* UTILS */
-    .reveal { opacity: 0; transform: translateY(40px); transition: 0.8s var(--transition); }
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(50px); transition: 1s var(--transition); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
-    footer { padding: 4rem 0; text-align: center; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--glass-border); }
-
+    .mono { font-family: 'Courier New', monospace; font-size: 0.9rem; letter-spacing: 0.1em; color: var(--muted); font-weight: bold; }
+    footer { padding: 5rem 0; text-align: center; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--glass-border); }
+    
+    @keyframes blink { 50% { opacity: 0; } }
   </style>
 </head>
 <body>
 
 <div id="cursor"></div>
 <div id="cursor-dot"></div>
-
 <canvas id="bg-canvas"></canvas>
 
 <nav>
   <div class="logo">AF<span class="accent">.</span></div>
-  
-  <div class="nav-actions">
-    <div class="ham-menu" id="ham-trigger"><span></span><span></span><span></span></div>
-  </div>
-
-  <ul class="nav-links" id="nav-menu">
+  <ul class="nav-links">
     <li><a href="#home">Home</a></li>
-    <li><a href="#about">About Me</a></li>
-    <li><a href="#demos">Selected Work</a></li>
-    <li><a href="#contact">Contact Me</a></li>
-    <li><a href="/CV" target="_blank" class="cv-btn">Open CV</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#demos">Deployments</a></li>
+    <li><a href="#contact">Terminal</a></li>
+    <li><a href="/CV" target="_blank" class="cv-btn">Fetch CV</a></li>
   </ul>
 </nav>
-
-<audio id="bg-music" loop crossorigin="anonymous">
-  <source src="music/background-music.mp3" type="audio/mpeg">
-</audio>
 
 <main>
   <section id="home">
     <div class="hero-content reveal">
+      <p class="status-tag" id="status-glitch">[ System Architect ]</p>
       <h1>Abdulrahman<br>Fahim<span class="accent">.</span></h1>
     </div>
-    <h2 class="reveal" style="font-weight: 400; color: var(--muted); max-width: 600px;">
+    <h2 class="reveal" style="font-weight: 400; color: var(--muted); max-width: 650px; font-size: 1.5rem;">
       <span class="typing" id="type-target"></span><span class="cursor-blink"></span>
     </h2>
     
     <div class="marquee-container reveal">
-      <div class="marquee-content">
+      <div class="marquee-content" id="marquee-inner">
         <div class="tech-item"><span>//</span> Linux Kernel</div>
         <div class="tech-item"><span>//</span> Linux Networking</div>
         <div class="tech-item"><span>//</span> Docker</div>
@@ -199,65 +162,51 @@
         <div class="tech-item"><span>//</span> React.js</div>
         <div class="tech-item"><span>//</span> Node.js</div>
         <div class="tech-item"><span>//</span> CI/CD & Jenkins Pipelines</div>
-        <div class="tech-item"><span>//</span> Linux Kernel</div>
-        <div class="tech-item"><span>//</span> Docker</div>
-        <div class="tech-item"><span>//</span> Kubernetes</div>
-        <div class="tech-item"><span>//</span> React.js</div>
-        <div class="tech-item"><span>//</span> Node.js</div>
       </div>
     </div>
   </section>
 
   <section id="about" class="reveal">
-    <p class="mono accent">01. ABOUT</p>
-    <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); margin-top: 1rem;">Bridging Logic & <span class="accent">Scale.</span></h1>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 2rem;">
-      <div style="background: var(--glass); padding: 2rem; border-left: 2px solid var(--accent);">
-        <h3 style="margin-bottom: 1rem;">Infrastructure</h3>
-        <p style="color: var(--muted);">Designing resilient containerized environments. I don't just write code; I engineer the ecosystem it lives in.</p>
+    <p class="mono accent">01. CORE_LOGIC</p>
+    <h1 style="font-size: clamp(2.5rem, 6vw, 4rem); margin-top: 1rem;">Bridging Logic & <span class="accent">Scale.</span></h1>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 3rem;">
+      <div class="about-box">
+        <h3 style="margin-bottom: 1.5rem; font-family: 'Space Grotesk'; font-size: 1.8rem;">Infrastructure</h3>
+        <p style="color: var(--muted); font-size: 1.1rem;">Designing resilient containerized environments. I engineer the high-availability ecosystem code lives in.</p>
       </div>
-      <div style="background: var(--glass); padding: 2rem; border-left: 2px solid #fff;">
-        <h3 style="margin-bottom: 1rem;">Full Stack</h3>
-        <p style="color: var(--muted);">Building pixel-perfect interfaces backed by perfect backend services like NodeJs and MongoDb. Performance is not a feature; it's a requirement.</p>
+      <div class="about-box" style="border-left-color: #fff;">
+        <h3 style="margin-bottom: 1.5rem; font-family: 'Space Grotesk'; font-size: 1.8rem;">Full Stack</h3>
+        <p style="color: var(--muted); font-size: 1.1rem;">Building pixel-perfect interfaces backed by robust backend services. Performance is a baseline requirement.</p>
       </div>
     </div>
   </section>
 
   <section id="demos" class="reveal">
-    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-      <div>
-        <p class="mono accent">02. DEPLOYMENTS</p>
-        <h1 style="font-size: clamp(2rem, 5vw, 3.5rem);">Selected Works</h1>
-      </div>
-    </div>
-
+    <p class="mono accent">02. ACTIVE_DEPLOYMENTS</p>
+    <h1 style="font-size: clamp(2.5rem, 6vw, 4rem);">Selected Works</h1>
     <div class="grid-container">
       <a href="/shiftfolio-light" class="project-card">
-        <div class="project-link">↗</div>
-        <div class="card-img"><img src="/imgs/shiftfolio-light.png" alt="UI Light"></div>
+        <div class="card-img"><img src="/imgs/shiftfolio-light.png" alt="Shiftfolio Light"></div>
         <div class="card-content">
-          <div class="tags"><span class="tag">Static</span></div>
-          <h3>Shiftfolio Light</h3>
-          <p class="mono" style="margin-top: 0.5rem;">Minimalist Portfolio Engine</p>
+          <div class="tags" style="margin-bottom: 1.5rem;"><span class="tag">Static</span></div>
+          <h3 style="font-size: 1.8rem;">Shiftfolio Light</h3>
+          <p class="mono" style="margin-top: 0.8rem; color: var(--accent);">Minimalist Portfolio Engine</p>
         </div>
       </a>
-      
       <a href="/shiftfolio-dark" class="project-card">
-        <div class="project-link">↗</div>
-        <div class="card-img"><img src="/imgs/shiftfolio-dark.png" alt="UI Dark"></div>
+        <div class="card-img"><img src="/imgs/shiftfolio-dark.png" alt="Shiftfolio Dark"></div>
         <div class="card-content">
-          <div class="tags"><span class="tag">Static</span></div>
-          <h3>Shiftfolio Dark</h3>
-          <p class="mono" style="margin-top: 0.5rem;">Minimalist Portfolio Engine</p>
+          <div class="tags" style="margin-bottom: 1.5rem;"><span class="tag">Static</span></div>
+          <h3 style="font-size: 1.8rem;">Shiftfolio Dark</h3>
+          <p class="mono" style="margin-top: 0.8rem; color: var(--accent);">Minimalist Portfolio Engine</p>
         </div>
       </a>
     </div>
   </section>
 
   <section id="contact" class="reveal">
-    <p class="mono accent">03. CONTACT</p>
-    <h1 style="margin: 1rem 0 3rem 0;">Ready to collaborate?</h1>
-    
+    <p class="mono accent">03. ESTABLISH_CONNECTION</p>
+    <h1 style="margin: 1rem 0 3.5rem 0; font-size: clamp(2.5rem, 6vw, 4rem);">Ready to collaborate?</h1>
     <div class="contact-list">
       <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="contact-line">
         <h2>abdulrahmanfahim.dev@gmail.com</h2>
@@ -276,36 +225,55 @@
 </main>
 
 <footer>
-  <p class="mono">SYSTEM SHUTDOWN :: © 2026 ABDULRAHMAN FAHIM</p>
+  <p class="mono" style="color: var(--accent);">[ SYSTEM STATUS: OPERATIONAL ]</p>
+  <p class="mono" style="margin-top: 10px;">© 2026 ABDULRAHMAN FAHIM</p>
 </footer>
 
 <script>
-// --- AUDIO ENGINE (No Button, Auto-play only) ---
-const audio = document.getElementById('bg-music');
-let isPlaying = false;
+// --- STATUS SCRAMBLE ---
+const statusEl = document.getElementById('status-glitch');
+const statusPhrases = [
+  "[ System Online ]",
+  "[ System Updating ]",
+  "[ Portfolio Running Perfectly ]"
+];
+let statusIdx = 0;
+const chars = "!<>-_\\/[]{}—=+*^?#________";
 
-// Auto-start on first click anywhere
-window.addEventListener('click', () => {
-  if (!isPlaying) {
-    audio.play().then(() => {
-      isPlaying = true;
-    }).catch(e => console.log("Audio blocked"));
-  }
-}, { once: true });
+function scrambleText(newText) {
+  let frame = 0;
+  const length = Math.max(statusEl.innerText.length, newText.length);
+  const timer = setInterval(() => {
+    let output = "";
+    for (let i = 0; i < length; i++) {
+      if (i < frame / 2) output += newText[i] || "";
+      else output += chars[Math.floor(Math.random() * chars.length)];
+    }
+    statusEl.innerText = output;
+    if (frame / 2 >= length) clearInterval(timer);
+    frame++;
+  }, 15); // Faster scramble speed for 2s interval
+}
 
+// 2 SECOND INTERVAL FOR STATUS UPDATES
+setInterval(() => {
+  statusIdx = (statusIdx + 1) % statusPhrases.length;
+  scrambleText(statusPhrases[statusIdx]);
+}, 4000);
 
-// --- CUSTOM CURSOR ---
+// --- MARQUEE ---
+const marqueeInner = document.getElementById('marquee-inner');
+marqueeInner.innerHTML += marqueeInner.innerHTML + marqueeInner.innerHTML; 
+
+// --- CURSOR ---
 const cursor = document.getElementById('cursor');
-const cursorDot = document.getElementById('cursor-dot');
+const dot = document.getElementById('cursor-dot');
 window.addEventListener('mousemove', (e) => {
-  cursor.style.top = e.clientY + 'px';
-  cursor.style.left = e.clientX + 'px';
-  cursorDot.style.top = e.clientY + 'px';
-  cursorDot.style.left = e.clientX + 'px';
+  cursor.style.top = dot.style.top = e.clientY + 'px';
+  cursor.style.left = dot.style.left = e.clientX + 'px';
 });
 
-
-// --- NETWORK CANVAS (Brighter & Faster) ---
+// --- PERMANENT HIGH-GLOW NEURAL NETWORK ---
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
@@ -313,120 +281,70 @@ let particles = [];
 function resize() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  initParticles();
 }
 
 class Particle {
   constructor() {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
-    // Increased velocity for more movement
-    this.vx = (Math.random() - 0.5) * 1.5; 
-    this.vy = (Math.random() - 0.5) * 1.5;
-    this.size = Math.random() * 2.5; // Slightly larger dots
+    this.vx = (Math.random() - 0.5) * 1.3;
+    this.vy = (Math.random() - 0.5) * 1.3;
   }
   update() {
-    this.x += this.vx;
-    this.y += this.vy;
+    this.x += this.vx; this.y += this.vy;
     if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
     if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
   }
-  draw() {
-    // Brighter dots (Cyan/White mix)
-    ctx.fillStyle = 'rgba(200, 255, 255, 0.5)';
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-  }
 }
 
-function initParticles() {
+function init() {
   particles = [];
-  // More particles for a busier look
-  const count = window.innerWidth < 768 ? 60 : 110;
-  for (let i = 0; i < count; i++) particles.push(new Particle());
+  for(let i=0; i<100; i++) particles.push(new Particle());
 }
 
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  for (let i = 0; i < particles.length; i++) {
-    particles[i].update();
-    particles[i].draw();
-    for (let j = i; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      // Increased connection distance and opacity
-      if (dist < 180) {
-        // Much brighter lines (0.3 max opacity vs 0.1 previously)
-        ctx.strokeStyle = `rgba(0, 243, 255, ${0.3 - dist/1000})`;
-        ctx.lineWidth = 0.8;
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.stroke();
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach((p, i) => {
+    p.update();
+    ctx.fillStyle = 'rgba(0, 243, 255, 0.85)';
+    ctx.beginPath(); ctx.arc(p.x, p.y, 2.2, 0, Math.PI*2); ctx.fill();
+    
+    for(let j=i+1; j<particles.length; j++) {
+      let d = Math.hypot(p.x - particles[j].x, p.y - particles[j].y);
+      let threshold = 230;
+      if(d < threshold) {
+        ctx.strokeStyle = `rgba(0, 243, 255, ${0.6 - d/threshold})`;
+        ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
       }
     }
-  }
+  });
   requestAnimationFrame(animate);
 }
 
 window.addEventListener('resize', resize);
-resize();
-animate();
-
+resize(); init(); animate();
 
 // --- TYPEWRITER ---
 const roles = ["Systems Engineer", "Full Stack Dev", "Infrastructure Architect"];
-const el = document.getElementById("type-target");
-let wIdx = 0, cIdx = 0, isDel = false;
+const typeEl = document.getElementById("type-target");
+let wIdx=0, cIdx=0, isDel=false;
 
 function type() {
   const word = roles[wIdx];
-  el.textContent = isDel ? word.substring(0, cIdx - 1) : word.substring(0, cIdx + 1);
-  cIdx = isDel ? cIdx - 1 : cIdx + 1;
-  let speed = isDel ? 30 : 100;
-  if (!isDel && cIdx === word.length) { isDel = true; speed = 2000; }
-  else if (isDel && cIdx === 0) { isDel = false; wIdx = (wIdx + 1) % roles.length; speed = 500; }
+  typeEl.textContent = isDel ? word.substring(0, cIdx--) : word.substring(0, cIdx++);
+  let speed = isDel ? 50 : 100;
+  if(!isDel && cIdx > word.length) { isDel=true; speed=2000; }
+  else if(isDel && cIdx < 0) { isDel=false; wIdx=(wIdx+1)%roles.length; cIdx=0; speed=500; }
   setTimeout(type, speed);
 }
 type();
 
-
-// --- OBSERVER ---
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(e => observer.observe(e));
-
-
-// --- MOBILE MENU ---
-const ham = document.getElementById('ham-trigger');
-const nav = document.getElementById('nav-menu');
-const navLinks = document.querySelectorAll('.nav-links a');
-
-// Toggle Menu
-ham.addEventListener('click', () => {
-  nav.classList.toggle('active');
-  toggleHamAnim();
-});
-
-// Close Menu when link is clicked
-navLinks.forEach(link => {
-  link.addEventListener('click', () => {
-    nav.classList.remove('active');
-    toggleHamAnim();
-  });
-});
-
-function toggleHamAnim() {
-  const isActive = nav.classList.contains('active');
-  ham.children[0].style.transform = isActive ? 'translateY(8px) rotate(45deg)' : 'none';
-  ham.children[1].style.opacity = isActive ? '0' : '1';
-  ham.children[2].style.transform = isActive ? 'translateY(-8px) rotate(-45deg)' : 'none';
-}
+// --- REVEAL ---
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.1});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
-
 </body>
 </html>
