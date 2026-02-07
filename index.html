@@ -15,13 +15,12 @@
       --muted: #888888;
       --accent: #00f3ff;
       --accent-dim: rgba(0, 243, 255, 0.3);
-      --glass: rgba(15, 15, 15, 0.8);
+      --glass: rgba(15, 15, 15, 0.85);
       --glass-border: rgba(255, 255, 255, 0.12);
       --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; outline: none; cursor: none; }
-    
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -31,99 +30,95 @@
       line-height: 1.6;
     }
 
-    /* CUSTOM CURSOR */
+    /* CURSOR */
     #cursor { position: fixed; top: 0; left: 0; width: 22px; height: 22px; border: 1.5px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; mix-blend-mode: difference; }
     #cursor-dot { position: fixed; top: 0; left: 0; width: 5px; height: 5px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
 
-    /* PERMANENT BRIGHT CANVAS */
-    #bg-canvas { 
-      position: fixed; 
-      top: 0; left: 0; 
-      width: 100%; height: 100%; 
-      z-index: 1; 
-      pointer-events: none; 
-      filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.5)) brightness(1.2);
-    }
+    /* BG CANVAS */
+    #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.5)) brightness(1.2); }
 
-    /* NAV */
+    /* NAVIGATION */
     nav {
       position: fixed; top: 0; width: 100%; padding: 1.5rem 6vw;
       background: rgba(3, 3, 3, 0.9); backdrop-filter: blur(15px);
       display: flex; justify-content: space-between; align-items: center;
-      z-index: 100; border-bottom: 1px solid var(--glass-border);
+      z-index: 1000; border-bottom: 1px solid var(--glass-border);
     }
-    .logo { font-weight: 700; font-size: 1.5rem; letter-spacing: -1px; font-family: 'Space Grotesk'; }
+    .logo { font-weight: 700; font-size: 1.5rem; letter-spacing: -1px; font-family: 'Space Grotesk'; z-index: 1001; }
     .accent { color: var(--accent); }
     
     .nav-links { list-style: none; display: flex; gap: 2.5rem; align-items: center; }
     .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; transition: var(--transition); }
     .nav-links a:hover { color: var(--accent); }
 
-    .cv-btn { background: var(--accent); color: #000 !important; padding: 0.6rem 1.4rem; border-radius: 2px; font-weight: 700; font-family: 'Space Grotesk'; text-decoration: none; box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
+    /* HAMBURGER */
+    .menu-btn { display: none; flex-direction: column; gap: 6px; background: none; border: none; z-index: 1001; }
+    .menu-btn span { display: block; width: 30px; height: 2px; background: var(--accent); transition: 0.3s ease; }
 
-    /* SECTIONS */
+    .mobile-nav {
+      position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+      background: var(--glass); backdrop-filter: blur(30px);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      gap: 2rem; z-index: 999; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mobile-nav.active { right: 0; }
+    .mobile-nav a { font-family: 'Space Grotesk'; font-size: 2rem; font-weight: 700; color: #fff; text-decoration: none; text-transform: uppercase; }
+
+    .menu-btn.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .menu-btn.open span:nth-child(2) { opacity: 0; }
+    .menu-btn.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    .cv-btn { background: var(--accent); color: #000 !important; padding: 0.6rem 1.4rem; border-radius: 2px; font-weight: 700; font-family: 'Space Grotesk'; text-decoration: none; box-shadow: 0 0 20px var(--accent-dim); }
+
+    /* HERO */
     main { position: relative; z-index: 10; }
     section { min-height: 100vh; padding: 0 10vw; display: flex; flex-direction: column; justify-content: center; }
 
-    /* HERO */
-    .status-tag { 
-      font-family: 'Courier New', monospace; 
-      font-size: 1rem; 
-      letter-spacing: 3px; 
-      margin-bottom: 1.5rem; 
-      color: var(--accent);
-      min-height: 1.2em;
-      text-shadow: 0 0 12px rgba(0, 243, 255, 0.7);
-      font-weight: bold;
-    }
+    .status-tag { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 3px; margin-bottom: 1.5rem; color: var(--accent); text-shadow: 0 0 12px rgba(0, 243, 255, 0.7); font-weight: bold; }
     h1 { font-family: 'Space Grotesk'; font-size: clamp(3.5rem, 11vw, 8rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; color: #fff; }
     .typing { color: var(--accent); font-family: 'Space Grotesk'; }
     .cursor-blink { display: inline-block; width: 10px; height: 4px; background: var(--accent); animation: blink 1s infinite; margin-left: 5px; }
 
     /* MARQUEE */
-    .marquee-container {
-      width: 100vw; margin-left: -10vw; margin-top: 4rem;
-      background: rgba(255,255,255,0.05); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
-      padding: 1.8rem 0; overflow: hidden; white-space: nowrap; position: relative;
-    }
-    .marquee-content { display: flex; animation: scroll 40s linear infinite; will-change: transform; }
+    .marquee-container { width: 100vw; margin-left: -10vw; margin-top: 4rem; background: rgba(255,255,255,0.05); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); padding: 1.8rem 0; overflow: hidden; white-space: nowrap; }
+    .marquee-content { display: flex; animation: scroll 40s linear infinite; }
     .tech-item { display: inline-block; margin: 0 2.8rem; font-family: 'Space Grotesk'; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; font-size: 0.9rem; }
     .tech-item span { color: var(--accent); margin-right: 10px; }
-    
     @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
     /* ABOUT GRID */
-    .about-box { background: var(--glass); padding: 3rem; border-radius: 4px; border-left: 4px solid var(--accent); backdrop-filter: blur(12px); margin-bottom: 2rem; }
+    .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 3rem; }
+    .about-box { background: var(--glass); padding: 3rem; border-radius: 4px; border-left: 4px solid var(--accent); backdrop-filter: blur(12px); transition: 0.4s; }
+    .about-box:hover { transform: translateX(10px); background: rgba(25, 25, 25, 0.9); }
 
-    /* WORK GRID */
+    /* WORK */
     .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 3rem; margin-top: 4rem; }
-    .project-card {
-      background: var(--glass); border: 1px solid var(--glass-border);
-      border-radius: 16px; overflow: hidden; transition: var(--transition);
-      position: relative; display: flex; flex-direction: column; text-decoration: none; color: inherit;
-    }
-    .project-card:hover { border-color: var(--accent); transform: translateY(-12px); box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+    .project-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 16px; overflow: hidden; transition: var(--transition); text-decoration: none; color: inherit; }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-12px); }
     .card-img { height: 280px; overflow: hidden; }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; filter: grayscale(1); }
-    .project-card:hover .card-img img { transform: scale(1.1); filter: grayscale(0); }
+    .card-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: 0.8s; }
+    .project-card:hover .card-img img { filter: grayscale(0); transform: scale(1.1); }
     .card-content { padding: 2.5rem; }
-    .tag { font-size: 0.75rem; color: var(--accent); border: 1.5px solid var(--accent-dim); padding: 0.4rem 0.8rem; border-radius: 100px; text-transform: uppercase; font-weight: 800; }
 
     /* CONTACT */
     .contact-line { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--glass-border); padding: 2.5rem 0; transition: 0.4s; text-decoration: none; }
-    .contact-line:hover { padding-left: 25px; border-color: var(--accent); }
     .contact-line h2 { font-size: clamp(1.2rem, 4vw, 2.2rem); color: var(--muted); transition: 0.3s; }
     .contact-line:hover h2 { color: #fff; text-shadow: 0 0 15px rgba(0, 243, 255, 0.4); }
     .arrow { font-size: 1.8rem; color: var(--accent); opacity: 0; transform: translateX(-30px); transition: 0.4s; }
     .contact-line:hover .arrow { opacity: 1; transform: translateX(0); }
 
-    /* REVEAL */
+    /* UTILS */
     .reveal { opacity: 0; transform: translateY(50px); transition: 1s var(--transition); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
     .mono { font-family: 'Courier New', monospace; font-size: 0.9rem; letter-spacing: 0.1em; color: var(--muted); font-weight: bold; }
-    footer { padding: 5rem 0; text-align: center; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--glass-border); }
-    
+    footer { padding: 5rem 0; text-align: center; color: var(--muted); border-top: 1px solid var(--glass-border); }
     @keyframes blink { 50% { opacity: 0; } }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .menu-btn { display: flex; }
+      .grid-container { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -137,11 +132,20 @@
   <ul class="nav-links">
     <li><a href="#home">Home</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#demos">Deployments</a></li>
-    <li><a href="#contact">Terminal</a></li>
+    <li><a href="#demos">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
     <li><a href="/CV" target="_blank" class="cv-btn">Fetch CV</a></li>
   </ul>
+  <button class="menu-btn" id="menuToggle"><span></span><span></span><span></span></button>
 </nav>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="#home">Home</a>
+  <a href="#about">About</a>
+  <a href="#demos">Work</a>
+  <a href="#contact">Contact</a>
+  <a href="/CV" target="_blank" style="color: var(--accent); margin-top: 20px;">[ OPEN CV ]</a>
+</div>
 
 <main>
   <section id="home">
@@ -152,7 +156,6 @@
     <h2 class="reveal" style="font-weight: 400; color: var(--muted); max-width: 650px; font-size: 1.5rem;">
       <span class="typing" id="type-target"></span><span class="cursor-blink"></span>
     </h2>
-    
     <div class="marquee-container reveal">
       <div class="marquee-content" id="marquee-inner">
         <div class="tech-item"><span>//</span> Linux Kernel</div>
@@ -161,15 +164,15 @@
         <div class="tech-item"><span>//</span> Kubernetes</div>
         <div class="tech-item"><span>//</span> React.js</div>
         <div class="tech-item"><span>//</span> Node.js</div>
-        <div class="tech-item"><span>//</span> CI/CD & Jenkins Pipelines</div>
+        <div class="tech-item"><span>//</span> CI/CD & Jenkins</div>
       </div>
     </div>
   </section>
 
   <section id="about" class="reveal">
     <p class="mono accent">01. CORE_LOGIC</p>
-    <h1 style="font-size: clamp(2.5rem, 6vw, 4rem); margin-top: 1rem;">Bridging Logic & <span class="accent">Scale.</span></h1>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; margin-top: 3rem;">
+    <h1 style="font-size: clamp(2.5rem, 6vw, 4rem); margin-top: 1rem;">Who am <span class="accent">I?</span></h1>
+    <div class="about-grid">
       <div class="about-box">
         <h3 style="margin-bottom: 1.5rem; font-family: 'Space Grotesk'; font-size: 1.8rem;">Infrastructure</h3>
         <p style="color: var(--muted); font-size: 1.1rem;">Designing resilient containerized environments. I engineer the high-availability ecosystem code lives in.</p>
@@ -183,153 +186,93 @@
 
   <section id="demos" class="reveal">
     <p class="mono accent">02. ACTIVE_DEPLOYMENTS</p>
-    <h1 style="font-size: clamp(2.5rem, 6vw, 4rem);">Selected Works</h1>
     <div class="grid-container">
       <a href="/shiftfolio-light" class="project-card">
-        <div class="card-img"><img src="/imgs/shiftfolio-light.png" alt="Shiftfolio Light"></div>
-        <div class="card-content">
-          <div class="tags" style="margin-bottom: 1.5rem;"><span class="tag">Static</span></div>
-          <h3 style="font-size: 1.8rem;">Shiftfolio Light</h3>
-          <p class="mono" style="margin-top: 0.8rem; color: var(--accent);">Minimalist Portfolio Engine</p>
-        </div>
+        <div class="card-img"><img src="/imgs/shiftfolio-light.png" alt="Light"></div>
+        <div class="card-content"><h3>Shiftfolio Light</h3><p class="mono" style="color: var(--accent); margin-top: 10px;">UI/UX Engine</p></div>
       </a>
       <a href="/shiftfolio-dark" class="project-card">
-        <div class="card-img"><img src="/imgs/shiftfolio-dark.png" alt="Shiftfolio Dark"></div>
-        <div class="card-content">
-          <div class="tags" style="margin-bottom: 1.5rem;"><span class="tag">Static</span></div>
-          <h3 style="font-size: 1.8rem;">Shiftfolio Dark</h3>
-          <p class="mono" style="margin-top: 0.8rem; color: var(--accent);">Minimalist Portfolio Engine</p>
-        </div>
+        <div class="card-img"><img src="/imgs/shiftfolio-dark.png" alt="Dark"></div>
+        <div class="card-content"><h3>Shiftfolio Dark</h3><p class="mono" style="color: var(--accent); margin-top: 10px;">System Engine</p></div>
       </a>
     </div>
   </section>
 
   <section id="contact" class="reveal">
     <p class="mono accent">03. ESTABLISH_CONNECTION</p>
-    <h1 style="margin: 1rem 0 3.5rem 0; font-size: clamp(2.5rem, 6vw, 4rem);">Ready to collaborate?</h1>
+    <h1 style="margin: 1rem 0 3.5rem 0; font-size: clamp(2.5rem, 6vw, 4rem);">Contact me.</h1>
     <div class="contact-list">
-      <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="contact-line">
-        <h2>abdulrahmanfahim.dev@gmail.com</h2>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://github.com/abdulrahmanfahim" target="_blank" class="contact-line">
-        <h2>github.com/abdulrahmanfahim</h2>
-        <span class="arrow">→</span>
-      </a>
-      <a href="https://linkedin.com/in/abdulrahmanfahim-dev" target="_blank" class="contact-line">
-        <h2>linkedin.com/in/abdulrahmanfahim-dev</h2>
-        <span class="arrow">→</span>
-      </a>
+      <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="contact-line"><h2>Email</h2><span class="arrow">→</span></a>
+      <a href="https://github.com/abdulrahmanfahim" target="_blank" class="contact-line"><h2>Github</h2><span class="arrow">→</span></a>
+      <a href="https://linkedin.com/in/abdulrahmanfahim-dev" target="_blank" class="contact-line"><h2>LinkedIn</h2><span class="arrow">→</span></a>
     </div>
   </section>
 </main>
 
 <footer>
   <p class="mono" style="color: var(--accent);">[ SYSTEM STATUS: OPERATIONAL ]</p>
-  <p class="mono" style="margin-top: 10px;">© 2026 ABDULRAHMAN FAHIM</p>
 </footer>
 
 <script>
-// --- STATUS SCRAMBLE ---
-const statusEl = document.getElementById('status-glitch');
-const statusPhrases = [
-  "[ System Online ]",
-  "[ System Updating ]",
-  "[ Portfolio Running Perfectly ]"
-];
-let statusIdx = 0;
-const chars = "!<>-_\\/[]{}—=+*^?#________";
+// --- MOBILE MENU ---
+const menuToggle = document.getElementById('menuToggle');
+const mobileNav = document.getElementById('mobileNav');
+menuToggle.onclick = () => { menuToggle.classList.toggle('open'); mobileNav.classList.toggle('active'); };
+document.querySelectorAll('.mobile-nav a').forEach(l => l.onclick = () => { menuToggle.classList.remove('open'); mobileNav.classList.remove('active'); });
 
-function scrambleText(newText) {
+// --- STATUS SCRAMBLE (2s Interval) ---
+const statusEl = document.getElementById('status-glitch');
+const phrases = ["[ System Online ]", "[ System Updating ]", "[ Portfolio Running Perfectly ]"];
+let sIdx = 0;
+function scramble(newText) {
   let frame = 0;
-  const length = Math.max(statusEl.innerText.length, newText.length);
+  const chars = "!<>-_\\/[]{}—=+*^?#________";
   const timer = setInterval(() => {
     let output = "";
-    for (let i = 0; i < length; i++) {
+    for (let i = 0; i < Math.max(statusEl.innerText.length, newText.length); i++) {
       if (i < frame / 2) output += newText[i] || "";
       else output += chars[Math.floor(Math.random() * chars.length)];
     }
     statusEl.innerText = output;
-    if (frame / 2 >= length) clearInterval(timer);
+    if (frame / 2 >= newText.length) clearInterval(timer);
     frame++;
-  }, 15); // Faster scramble speed for 2s interval
+  }, 30);
 }
+setInterval(() => { sIdx = (sIdx + 1) % phrases.length; scramble(phrases[sIdx]); }, 2000);
 
-// 2 SECOND INTERVAL FOR STATUS UPDATES
-setInterval(() => {
-  statusIdx = (statusIdx + 1) % statusPhrases.length;
-  scrambleText(statusPhrases[statusIdx]);
-}, 4000);
-
-// --- MARQUEE ---
-const marqueeInner = document.getElementById('marquee-inner');
-marqueeInner.innerHTML += marqueeInner.innerHTML + marqueeInner.innerHTML; 
-
-// --- CURSOR ---
-const cursor = document.getElementById('cursor');
-const dot = document.getElementById('cursor-dot');
-window.addEventListener('mousemove', (e) => {
-  cursor.style.top = dot.style.top = e.clientY + 'px';
-  cursor.style.left = dot.style.left = e.clientX + 'px';
-});
-
-// --- PERMANENT HIGH-GLOW NEURAL NETWORK ---
+// --- NEURAL NETWORK ---
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 let particles = [];
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+class P {
+  constructor() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height; this.vx = (Math.random()-0.5)*1.3; this.vy = (Math.random()-0.5)*1.3; }
+  update() { this.x += this.vx; this.y += this.vy; if (this.x<0||this.x>canvas.width) this.vx*=-1; if (this.y<0||this.y>canvas.height) this.vy*=-1; }
 }
-
-class Particle {
-  constructor() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.vx = (Math.random() - 0.5) * 1.3;
-    this.vy = (Math.random() - 0.5) * 1.3;
-  }
-  update() {
-    this.x += this.vx; this.y += this.vy;
-    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-  }
-}
-
-function init() {
-  particles = [];
-  for(let i=0; i<100; i++) particles.push(new Particle());
-}
-
+function init() { particles = []; for(let i=0; i<90; i++) particles.push(new P()); }
 function animate() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
   particles.forEach((p, i) => {
     p.update();
     ctx.fillStyle = 'rgba(0, 243, 255, 0.85)';
     ctx.beginPath(); ctx.arc(p.x, p.y, 2.2, 0, Math.PI*2); ctx.fill();
-    
     for(let j=i+1; j<particles.length; j++) {
-      let d = Math.hypot(p.x - particles[j].x, p.y - particles[j].y);
-      let threshold = 230;
-      if(d < threshold) {
-        ctx.strokeStyle = `rgba(0, 243, 255, ${0.6 - d/threshold})`;
-        ctx.lineWidth = 1.4;
-        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
-      }
+      let d = Math.hypot(p.x-particles[j].x, p.y-particles[j].y);
+      if(d<230) { ctx.strokeStyle = `rgba(0, 243, 255, ${0.6-d/230})`; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke(); }
     }
   });
   requestAnimationFrame(animate);
 }
+window.onresize = resize; resize(); init(); animate();
 
-window.addEventListener('resize', resize);
-resize(); init(); animate();
+// --- CURSOR ---
+const cursor = document.getElementById('cursor'), dot = document.getElementById('cursor-dot');
+window.onmousemove = (e) => { cursor.style.top = dot.style.top = e.clientY+'px'; cursor.style.left = dot.style.left = e.clientX+'px'; };
 
 // --- TYPEWRITER ---
 const roles = ["Systems Engineer", "Full Stack Dev", "Infrastructure Architect"];
 const typeEl = document.getElementById("type-target");
 let wIdx=0, cIdx=0, isDel=false;
-
 function type() {
   const word = roles[wIdx];
   typeEl.textContent = isDel ? word.substring(0, cIdx--) : word.substring(0, cIdx++);
@@ -341,10 +284,9 @@ function type() {
 type();
 
 // --- REVEAL ---
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, {threshold: 0.1});
+const obs = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, {threshold: 0.1});
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+const marqueeInner = document.getElementById('marquee-inner'); marqueeInner.innerHTML += marqueeInner.innerHTML + marqueeInner.innerHTML;
 </script>
 </body>
 </html>
