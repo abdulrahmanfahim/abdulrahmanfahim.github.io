@@ -1,10 +1,11 @@
 #!/bin/bash
 
+export TERM=xterm
+
 # ==========================================
 # Abdu's Tools - Futuristic K3S & ERP Deployer
 # ==========================================
 
-# Ensure script is run as root
 if [[ $EUID -ne 0 ]]; then
    echo "Please run as root (sudo)."
    exit 1
@@ -13,72 +14,78 @@ fi
 BACKTITLE="Abdu's Futuristic Deployer"
 TITLE="Abdu's Tools"
 
-# --- Function: Force Gateway Setup ---
+# --- Install dialog if missing ---
+if ! command -v dialog &>/dev/null; then
+    apt update -y >/dev/null 2>&1
+    apt install -y dialog >/dev/null 2>&1
+fi
+
+# --- Gateway Configuration ---
 configure_gateway() {
-    GATEWAY=$(whiptail --backtitle "$BACKTITLE" --title "Network Configuration" \
-        --inputbox "Enter your IPv4 Gateway (example: 192.168.1.1)" 8 50 3>&1 1>&2 2>&3)
+
+    GATEWAY=$(dialog --clear \
+        --backtitle "$BACKTITLE" \
+        --title "Network Configuration" \
+        --inputbox "Enter your IPv4 Gateway\nExample: 192.168.1.1" \
+        8 50 \
+        3>&1 1>&2 2>&3)
+
+    clear
 
     if [ -z "$GATEWAY" ]; then
-        echo "Gateway is required. Exiting."
+        echo "Gateway required. Exiting."
         exit 1
     fi
 
-    echo "Configuring default route via $GATEWAY ..."
-    
-    # Remove existing default route
     ip route del default 2>/dev/null
-
-    # Add new default route
-    ip route add default via $GATEWAY
+    ip route add default via "$GATEWAY"
 
     sleep 2
 
-    echo "Testing IPv4 connectivity..."
     if ! curl -4 -I https://github.com --max-time 10 &>/dev/null; then
-        whiptail --backtitle "$BACKTITLE" --title "Network Error" \
-            --msgbox "IPv4 connectivity failed.\nPlease verify your gateway and firewall." 8 50
+        dialog --title "Network Error" \
+               --msgbox "IPv4 connectivity failed.\nCheck gateway/firewall." 7 50
+        clear
         exit 1
     fi
 
-    whiptail --backtitle "$BACKTITLE" --title "Success" \
-        --msgbox "IPv4 network configured successfully!" 8 40
+    dialog --title "Success" \
+           --msgbox "Gateway configured successfully!" 6 40
+    clear
 }
 
-# --- Function: Install Dependencies ---
+# --- Install Dependencies ---
 setup_env() {
-    echo "Installing dependencies..."
 
-    if command -v apt-get &> /dev/null; then
-        apt-get update -y > /dev/null 2>&1
-        apt-get install -y curl git vim whiptail sshpass netcat-openbsd > /dev/null 2>&1
-    elif command -v yum &> /dev/null; then
-        yum install -y epel-release > /dev/null 2>&1
-        yum install -y curl git vim whiptail sshpass nc > /dev/null 2>&1
-    else
-        echo "Unsupported package manager."
-        exit 1
+    if command -v apt-get &>/dev/null; then
+        apt update -y >/dev/null 2>&1
+        apt install -y curl git vim sshpass netcat-openbsd >/dev/null 2>&1
     fi
 }
 
-# --- Function: Install K3S ---
+# --- Install K3S ---
 install_k3s() {
 
-    NODE_TYPE=$(whiptail --backtitle "$BACKTITLE" --title "K3S Installation" \
-        --menu "Select Node Type:" 15 60 2 \
-        "1" "Master Node" \
-        "2" "Worker Node" \
+    NODE_TYPE=$(dialog --clear \
+        --backtitle "$BACKTITLE" \
+        --title "K3S Installation" \
+        --menu "Select Node Type:" \
+        15 60 2 \
+        1 "Master Node" \
+        2 "Worker Node" \
         3>&1 1>&2 2>&3)
 
+    clear
     [ -z "$NODE_TYPE" ] && return
 
     if [ "$NODE_TYPE" -eq 1 ]; then
 
-        TRAEFIK_CHOICE=$(whiptail --backtitle "$BACKTITLE" --title "Ingress Controller" \
-            --yesno "Install Traefik?" 7 50 3>&1 1>&2 2>&3)
+        dialog --yesno "Install Traefik?" 7 40
+        TRAEFIK=$?
 
         echo "Installing K3s Master..."
 
-        if [ $? -eq 0 ]; then
+        if [ $TRAEFIK -eq 0 ]; then
             curl -4 -sfL https://get.k3s.io | sh -
         else
             curl -4 -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable traefik" sh -
@@ -87,30 +94,34 @@ install_k3s() {
         IP=$(hostname -I | awk '{print $1}')
         TOKEN=$(cat /var/lib/rancher/k3s/server/node-token)
 
-        whiptail --backtitle "$BACKTITLE" --title "Success" \
-            --msgbox "Master Installed!\n\nIP: $IP\nToken: $TOKEN" 12 60
+        dialog --msgbox "Master Installed!\n\nIP: $IP\nToken: $TOKEN" 12 60
+        clear
 
     else
-        MASTER_IP=$(whiptail --inputbox "Enter Master IP:" 8 40 3>&1 1>&2 2>&3)
-        TOKEN=$(whiptail --inputbox "Enter Master Token:" 8 60 3>&1 1>&2 2>&3)
 
-        echo "Installing Worker..."
+        MASTER_IP=$(dialog --inputbox "Enter Master IP:" 8 40 3>&1 1>&2 2>&3)
+        MASTER_TOKEN=$(dialog --inputbox "Enter Master Token:" 8 60 3>&1 1>&2 2>&3)
+        clear
+
         curl -4 -sfL https://get.k3s.io | \
         K3S_URL="https://$MASTER_IP:6443" \
-        K3S_TOKEN="$TOKEN" sh -
+        K3S_TOKEN="$MASTER_TOKEN" sh -
 
-        whiptail --msgbox "Worker joined successfully!" 6 40
+        dialog --msgbox "Worker joined successfully!" 6 40
+        clear
     fi
 }
 
-# --- Function: Install ERP Stack ---
+# --- Install ERP Stack ---
 install_erp_stack() {
 
-    MASTER_IP=$(whiptail --inputbox "Master IP:" 8 40 3>&1 1>&2 2>&3)
-    MASTER_USER=$(whiptail --inputbox "SSH User:" 8 40 "root" 3>&1 1>&2 2>&3)
-    MASTER_PASS=$(whiptail --passwordbox "SSH Password:" 8 40 3>&1 1>&2 2>&3)
-    PG_PASS=$(whiptail --passwordbox "PostgreSQL Password:" 8 40 3>&1 1>&2 2>&3)
-    DNS_NAME=$(whiptail --inputbox "DNS Hostname (erp.local):" 8 40 3>&1 1>&2 2>&3)
+    MASTER_IP=$(dialog --inputbox "Master IP:" 8 40 3>&1 1>&2 2>&3)
+    MASTER_USER=$(dialog --inputbox "SSH User:" 8 40 "root" 3>&1 1>&2 2>&3)
+    MASTER_PASS=$(dialog --passwordbox "SSH Password:" 8 40 3>&1 1>&2 2>&3)
+    PG_PASS=$(dialog --passwordbox "PostgreSQL Password:" 8 40 3>&1 1>&2 2>&3)
+    DNS_NAME=$(dialog --inputbox "DNS Hostname (erp.local):" 8 40 3>&1 1>&2 2>&3)
+
+    clear
 
     export SSHPASS=$MASTER_PASS
 
@@ -151,21 +162,26 @@ helm upgrade --install monitoring prometheus-community/kube-prometheus-stack
 
 EOF
 
-    whiptail --msgbox "ERP Stack deployed successfully!" 8 50
+    dialog --msgbox "ERP Stack deployed successfully!" 8 50
+    clear
 }
 
-# --- Main Execution ---
-
+# --- Main ---
 configure_gateway
 setup_env
 
 while true; do
-    CHOICE=$(whiptail --menu "Select an operation:" 15 60 4 \
-        "1" "Install K3S" \
-        "2" "Install ERP Stack" \
-        "3" "Exit" \
+    CHOICE=$(dialog --clear \
+        --backtitle "$BACKTITLE" \
+        --title "$TITLE" \
+        --menu "Select an operation:" \
+        15 60 3 \
+        1 "Install K3S" \
+        2 "Install ERP Stack" \
+        3 "Exit" \
         3>&1 1>&2 2>&3)
 
+    clear
     [ $? -ne 0 ] && break
 
     case $CHOICE in
