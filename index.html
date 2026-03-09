@@ -1,400 +1,998 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Abdulrahman Fahim | Systems Architect</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #030303;
-      --fg: #e2e2e2;
-      --muted: #a0a0a0;
-      --accent: #00f3ff;
-      --accent-dim: rgba(0, 243, 255, 0.25);
-      --glass: rgba(20, 20, 25, 0.65);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; outline: none; cursor: none; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg);
-      color: var(--fg);
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
-    /* CURSOR */
-    #cursor { position: fixed; top: 0; left: 0; width: 24px; height: 24px; border: 1.5px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.25s, height 0.25s; mix-blend-mode: difference; }
-    #cursor-dot { position: fixed; top: 0; left: 0; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
-    /* BG CANVAS - softer */
-    #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; filter: brightness(1.1) contrast(1.05); opacity: 0.85; }
-    /* NAVIGATION - cleaner glass */
-    nav {
-      position: fixed; top: 0; width: 100%; padding: 1.4rem 5vw;
-      background: var(--glass); backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      display: flex; justify-content: space-between; align-items: center;
-      z-index: 1000; border-bottom: 1px solid var(--glass-border);
-      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
-    }
-    .logo { font-weight: 700; font-size: 1.6rem; letter-spacing: -0.8px; font-family: 'Space Grotesk'; }
-    .accent { color: var(--accent); }
-    .nav-links { list-style: none; display: flex; gap: 2.2rem; align-items: center; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; transition: var(--transition); }
-    .nav-links a:hover { color: var(--accent); transform: translateY(-1px); }
-    .menu-btn { display: none; flex-direction: column; gap: 5px; background: none; border: none; z-index: 1001; padding: 8px; }
-    .menu-btn span { display: block; width: 24px; height: 2.2px; background: var(--accent); transition: 0.3s ease; box-shadow: 0 0 6px var(--accent-dim); }
-    .mobile-nav {
-      position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
-      background: rgba(10,10,15,0.92); backdrop-filter: blur(30px);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      gap: 2.5rem; z-index: 999; transition: right 0.5s cubic-bezier(0.16,1,0.3,1);
-    }
-    .mobile-nav.active { right: 0; }
-    .mobile-nav a { font-family: 'Space Grotesk'; font-size: 2.2rem; font-weight: 600; color: #fff; text-decoration: none; transition: var(--transition); }
-    .mobile-nav a:hover { color: var(--accent); transform: scale(1.05); }
-    .menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .menu-btn.open span:nth-child(2) { opacity: 0; transform: scale(0.5); }
-    .menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    .cv-btn { background: linear-gradient(135deg, var(--accent), #00c0d0); color: #000 !important; padding: 0.7rem 1.6rem; border-radius: 6px; font-weight: 700; font-family: 'Space Grotesk'; text-decoration: none; box-shadow: 0 4px 20px var(--accent-dim); transition: var(--transition); }
-    .cv-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--accent-dim); }
-    /* HERO - untouched as requested */
-    main { position: relative; z-index: 10; }
-    section { min-height: 100vh; padding: 0 8vw; display: flex; flex-direction: column; justify-content: center; }
-    .status-tag { font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 3px; margin-bottom: 1.5rem; color: var(--accent); text-shadow: 0 0 12px rgba(0, 243, 255, 0.7); font-weight: bold; min-height: 1.5em; }
-    h1 { font-family: 'Space Grotesk'; font-size: clamp(3.5rem, 11vw, 8rem); font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; color: #fff; }
-    .typing { color: var(--accent); font-family: 'Space Grotesk'; }
-    .cursor-blink { display: inline-block; width: 10px; height: 4px; background: var(--accent); animation: blink 1s infinite; margin-left: 5px; }
-    /* MARQUEE - cleaner */
-    .marquee-container { width: 100vw; margin-left: -8vw; margin-top: 4rem; background: rgba(255,255,255,0.03); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); padding: 1.6rem 0; overflow: hidden; white-space: nowrap; }
-    .marquee-content { display: flex; animation: scroll 45s linear infinite; }
-    .tech-item { display: inline-block; margin: 0 3rem; font-family: 'Space Grotesk'; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 2.5px; font-size: 0.95rem; }
-    .tech-item span { color: var(--accent); margin-right: 8px; }
-    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-    /* ABOUT - refined glass */
-    .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; margin-top: 3rem; }
-    .about-box { 
-      background: var(--glass); 
-      backdrop-filter: blur(18px) saturate(160%); 
-      -webkit-backdrop-filter: blur(18px) saturate(160%); 
-      border: 1px solid var(--glass-border); 
-      border-radius: 16px; 
-      padding: 2.5rem; 
-      transition: var(--transition); 
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    }
-    .about-box:hover { transform: translateY(-8px); box-shadow: 0 16px 48px rgba(0, 243, 255, 0.12); }
-    /* PROJECT CARDS - toned down, cleaner glass */
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-      gap: 2.5rem;
-      margin-top: 3.5rem;
-      perspective: 1200px;
-    }
-    .project-card {
-      background: var(--glass);
-      backdrop-filter: blur(16px) saturate(150%);
-      -webkit-backdrop-filter: blur(16px) saturate(150%);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      overflow: hidden;
-      text-decoration: none;
-      color: inherit;
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease-out, box-shadow 0.4s, border-color 0.4s;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-    }
-    .project-card:hover { 
-      border-color: rgba(0,243,255,0.4); 
-      box-shadow: 0 16px 60px rgba(0,243,255,0.15); 
-      transform: translateY(-6px);
-    }
-    .card-img { height: 260px; overflow: hidden; }
-    .card-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.7) brightness(0.95); transition: 0.7s ease; }
-    .project-card:hover .card-img img { filter: grayscale(0) brightness(1.05); transform: scale(1.04); }
-    .card-content { padding: 2rem; }
-    /* CONTACT - simplified clean glass */
-    .contact-line { 
-      display: flex; align-items: center; justify-content: space-between; 
-      padding: 2rem 0; border-bottom: 1px solid var(--glass-border); 
-      transition: var(--transition); text-decoration: none;
-    }
-    .contact-line:last-child { border-bottom: none; }
-    .contact-line h2 { font-size: clamp(1.4rem, 5vw, 2.4rem); color: var(--muted); transition: var(--transition); font-weight: 500; }
-    .contact-line:hover h2 { color: #fff; text-shadow: 0 0 12px var(--accent-dim); }
-    .arrow { font-size: 2rem; color: var(--accent); opacity: 0; transform: translateX(-20px); transition: var(--transition); }
-    .contact-line:hover .arrow { opacity: 1; transform: translateX(0); }
-    /* UTILS */
-    .reveal { opacity: 0; transform: translateY(40px); transition: 0.9s var(--transition); }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .mono { font-family: 'Courier New', monospace; font-size: 0.9rem; letter-spacing: 0.15em; color: var(--muted); font-weight: 600; }
-    footer { padding: 4rem 0; text-align: center; color: var(--muted); border-top: 1px solid var(--glass-border); background: var(--glass); backdrop-filter: blur(12px); font-size: 0.95rem; }
-    @keyframes blink { 50% { opacity: 0; } }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abdulrahman Fahim | Systems Architect</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-    /* Improved Mobile Responsiveness */
-    @media (max-width: 1024px) {
-      section { padding: 0 6vw; }
-      nav { padding: 1.2rem 6vw; }
-      .nav-links { gap: 1.8rem; }
-    }
+<style>
+:root{
+    /* Palette */
+    --bg: #020202;
+    --bg-alt: #050505;
 
-    @media (max-width: 900px) {
-      .nav-links { display: none; }
-      .menu-btn { display: flex; }
-      .grid-container { grid-template-columns: 1fr; gap: 2rem; perspective: none; }
-      .project-card { transform: none !important; box-shadow: 0 6px 24px rgba(0,0,0,0.2); }
-      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-      .marquee-container { margin-left: -6vw; width: calc(100% + 12vw); }
-      .tech-item { margin: 0 2rem; font-size: 0.85rem; }
-      section { min-height: auto; padding: 6rem 6vw; }
-    }
+    /* Smoking white + neon */
+    --text-main: #f5f5f5;
+    --text-muted: #b1b1b1;
+    --smoke: rgba(255, 255, 255, 0.06);
 
-    @media (max-width: 600px) {
-      h1 { font-size: clamp(2.8rem, 12vw, 5.5rem); }
-      nav { padding: 1rem 5vw; }
-      .logo { font-size: 1.4rem; }
-      .cv-btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
-      .mobile-nav a { font-size: 1.8rem; }
-      .about-box { padding: 2rem; }
-      .card-img { height: 220px; }
-      .card-content { padding: 1.6rem; }
-      .contact-line { padding: 1.8rem 0; }
-      .contact-line h2 { font-size: 1.8rem; }
-    }
+    --accent-glow: rgba(255, 255, 255, 0.62);   /* Neon white */
+    --accent-soft: rgba(255, 255, 255, 0.22);   /* Soft halo */
 
-    @media (max-width: 400px) {
-      section { padding: 6rem 5vw; }
-      .marquee-content { animation-duration: 55s; }
+    --accent-blue: rgba(120, 210, 255, 0.55);
+    --accent-purple: rgba(190, 140, 255, 0.55);
+
+    /* Glassmorphism Variables */
+    --glass-bg: rgba(255, 255, 255, 0.02);
+    --glass-border: rgba(255, 255, 255, 0.09);
+    --glass-highlight: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 18px 60px rgba(0, 0, 0, 0.95);
+
+    --radius: 18px;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    background:#000;
+    color: var(--text-main);
+    font-family:'Space Grotesk',system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    overflow-x:hidden;
+    min-height: 100vh;
+}
+
+/* ---------------- BLACK HOLE ENGINE + BACKGROUNDS ---------------- */
+.cosmic-scene{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    perspective:1000px;
+}
+
+.black-hole-singularity {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 80px;
+    height: 80px;
+    background-color: black;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.3);
+    z-index: 10;
+}
+
+.accretion-disk-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 600px;
+    transform: translate(-50%, -50%) rotateX(75deg);
+    transform-style: preserve-3d;
+    z-index: 5;
+}
+
+.ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+    opacity: 0;
+}
+
+.inner-ring {
+    width: 160px;
+    height: 160px;
+    border: 2px solid rgba(255, 255, 255, 1);
+    filter: blur(2px) drop-shadow(0 0 8px #fff);
+    animation: fadeIn 3s forwards, rotateRing 20s linear infinite;
+    z-index: 4;
+}
+
+.outer-ring-1 {
+    width: 300px;
+    height: 300px;
+    border: 5px solid rgba(255, 255, 255, 0.4);
+    filter: blur(4px);
+    animation: fadeIn 5s forwards, rotateRing 45s linear infinite reverse;
+    z-index: 3;
+}
+
+.outer-ring-2 {
+    width: 450px;
+    height: 450px;
+    border: 8px solid rgba(150, 150, 150, 0.2);
+    filter: blur(6px);
+    animation: fadeIn 7s forwards, rotateRing 80s linear infinite;
+    z-index: 2;
+}
+
+.outer-disk-gaseous {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, transparent 40%, rgba(100, 100, 100, 0.1) 60%, transparent 80%);
+    filter: blur(10px);
+    animation: fadeIn 10s forwards;
+    z-index: 1;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+@keyframes rotateRing {
+    from { transform: translate(-50%, -50%) rotateZ(0deg); }
+    to { transform: translate(-50%, -50%) rotateZ(360deg); }
+}
+
+/* Geometric background canvas */
+#bg-canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    z-index:-3;
+    pointer-events:none;
+    background:#000;
+}
+
+/* Starfield canvas */
+#starfield{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    z-index:-2;
+    pointer-events:none;
+}
+
+/* ---------------- NAVIGATION ---------------- */
+nav{
+    position:fixed;
+    top:24px;
+    left:50%;
+    transform:translateX(-50%);
+    width:90%;
+    max-width:1200px;
+    padding:1rem 2.1rem;
+    /* Hyper-Realistic Glass */
+    background: rgba(7,7,7,0.98);
+    border-radius: 999px;
+    z-index:1000;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 0 0 1px rgba(255,255,255,0.08);
+}
+
+.nav-toggle{
+    display:none;
+    width:34px;
+    height:34px;
+    border-radius:0;
+    border:none;
+    background:transparent;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+    cursor:pointer;
+    color:#fff;
+    font-size:20px;
+    line-height:1;
+    position:relative;
+    z-index:910;
+}
+
+nav.open .nav-toggle{
+    border-color:rgba(255,255,255,0.8);
+}
+
+.logo{
+    font-family:'Space Grotesk';
+    font-weight:700;
+    letter-spacing:0.18em;
+    font-size: 0.88rem;
+    text-transform:uppercase;
+    color:var(--text-main);
+}
+
+.nav-links{
+    list-style:none;
+    display:flex;
+    gap:1.4rem;
+    align-items:center;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:var(--text-muted);
+    font-size:.72rem;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.16em;
+    padding:.4rem 0;
+    position: relative;
+}
+
+.nav-links a::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    border-radius:999px;
+    border:1px solid transparent;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.12);
+    opacity:0;
+    transition:opacity .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+
+.nav-links a span{
+    position:relative;
+    padding:0 .9rem;
+    border-radius:999px;
+}
+
+.nav-links a:hover{
+    color:#ffffff;
+}
+
+.nav-links a:hover::before{
+    opacity:1;
+    transform:translateY(-1px);
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.28),
+        0 0 18px rgba(255,255,255,0.65);
+}
+
+.cv-btn{
+    border:none;
+    background:none;
+    box-shadow:none;
+    padding:0;
+    color:inherit;
+    text-transform:inherit;
+    letter-spacing:inherit;
+    font-size:inherit;
+}
+
+main{position:relative;z-index:5}
+
+section{
+    min-height:100vh;
+    padding:10vh 12vw;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:3rem;
+}
+
+/* ---------------- TYPOGRAPHY & HERO ---------------- */
+.status-tag{
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.3em;
+    font-size:.68rem;
+    color:var(--text-main);
+    text-shadow: 0 0 18px rgba(255,255,255,0.7);
+    margin-bottom: 1.4rem;
+    display: inline-flex;
+    align-items:center;
+    gap:.6rem;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.22);
+    background:
+        linear-gradient(90deg, rgba(255,255,255,0.18), rgba(255,255,255,0.0)),
+        linear-gradient(120deg, rgba(255,255,255,0.1), rgba(255,255,255,0.0));
+    box-shadow:
+        0 0 25px rgba(255,255,255,0.55),
+        0 0 0 1px rgba(255,255,255,0.28);
+}
+
+.status-tag::before{
+    content:'●';
+    font-size:0.6rem;
+}
+
+h1{
+    font-family:'Space Grotesk';
+    font-size:clamp(3.7rem, 9vw, 7.6rem);
+    font-weight:700;
+    line-height:.86;
+    letter-spacing:-0.1em;
+    background:
+        linear-gradient(to bottom, #ffffff, #d9d9d9 40%, #b0b0b0 70%, #787878 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter:
+        drop-shadow(0 0 32px rgba(255,255,255,0.1))
+        drop-shadow(0 18px 45px rgba(0,0,0,0.9));
+}
+
+.hero-line{
+    display:inline-block;
+}
+
+.hero-letter{
+    opacity:0;
+    display:inline-block;
+    transform:translateY(40px);
+    filter:blur(8px);
+}
+
+@keyframes heroLetterIn{
+    0%{
+        opacity:0;
+        transform:translateY(40px) scale(0.98);
+        filter:blur(8px);
     }
-  </style>
+    60%{
+        opacity:1;
+        transform:translateY(-4px) scale(1.02);
+        filter:blur(2px);
+    }
+    100%{
+        opacity:1;
+        transform:translateY(0) scale(1);
+        filter:blur(0);
+    }
+}
+
+.type-wrap{
+    font-size:1.05rem;
+    color:var(--text-muted);
+    margin-top:1.7rem;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.typing{
+    border-right:2px solid var(--accent-glow);
+    padding-right:5px;
+    animation:blink .8s infinite;
+    color: var(--text-main);
+    text-shadow:0 0 12px rgba(255,255,255,0.65);
+}
+
+@keyframes blink{50%{border-color:transparent}}
+
+/* ---------------- MARQUEE ---------------- */
+.marquee-container{
+    overflow:hidden;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    background: rgba(0,0,0,0.9);
+    padding:0.5rem 0;
+    margin-left:calc(-10vw);
+    margin-right:calc(-10vw);
+}
+
+.marquee-track{
+    display:flex;
+    width:max-content;
+    animation:marquee 26s linear infinite;
+}
+
+.marquee-track:hover{animation-play-state:paused}
+
+.tech-item{
+    font-family:'JetBrains Mono';
+    font-weight:600;
+    color:var(--text-main);
+    margin:0 1.5rem;
+    white-space:nowrap;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing:0.18em;
+    position:relative;
+    padding:0.5rem 1.2rem;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.35);
+    background:rgba(0,0,0,0.7);
+}
+
+@keyframes marquee{
+    0%{transform:translateX(0)}
+    100%{transform:translateX(-50%)}
+}
+
+/* ---------------- CARDS (GLASSMORPHISM) ---------------- */
+.about-grid, .grid-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:2rem;
+}
+
+.about-box, .project-card{
+    background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.12), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.06), transparent 55%),
+        var(--glass-bg);
+    border-radius: var(--radius);
+    padding:2.6rem;
+    transition:all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.16);
+    box-shadow:
+        0 18px 40px rgba(0,0,0,0.95),
+        0 0 0 1px rgba(255,255,255,0.05);
+}
+
+.project-card{
+    text-decoration:none;
+    color:inherit;
+}
+
+/* subtle inner stroke */
+.about-box::before, .project-card::before {
+    content: '';
+    position: absolute;
+    inset:0;
+    border-radius: var(--radius);
+    border: 1px solid rgba(255,255,255,0.35);
+    mix-blend-mode:screen;
+    opacity: 0.0;
+    pointer-events:none;
+    transition: opacity 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-box::after, .project-card::after{
+    content:'';
+    position:absolute;
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    top:-60px;
+    right:-80px;
+    background:radial-gradient(circle, rgba(255,255,255,0.6), transparent 65%);
+    opacity:0.08;
+    mix-blend-mode:screen;
+    filter:blur(2px);
+    transition:opacity 0.4s ease, transform 0.4s ease;
+}
+
+.about-box:hover, .project-card:hover {
+    transform: translateY(-10px) translateZ(0);
+    background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.28), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(255,255,255,0.12), transparent 55%),
+        rgba(255, 255, 255, 0.02);
+    box-shadow:
+        0 24px 60px rgba(0,0,0,1),
+        0 0 40px rgba(255,255,255,0.22);
+}
+
+.about-box:hover::before, .project-card:hover::before {
+    opacity: 1;
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.75),
+        0 0 30px rgba(255,255,255,0.95);
+}
+
+.about-box:hover::after, .project-card:hover::after{
+    opacity:0.3;
+    transform:translate(-8px, 8px) scale(1.05);
+}
+
+.about-box h3, .card-content h3{
+    font-family:'Space Grotesk';
+    margin-bottom:1rem;
+    font-size: 1.4rem;
+    letter-spacing: -0.06em;
+    color:var(--text-main);
+}
+
+.card-content p, .about-box p{
+    color:var(--text-muted);
+    line-height: 1.7;
+    font-size: 0.94rem;
+}
+
+.tag{
+    font-family:'JetBrains Mono';
+    font-size:.62rem;
+    color:var(--text-main);
+    border: 1px solid rgba(255,255,255,0.45);
+    padding: 4px 9px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items:center;
+    gap:.4rem;
+    margin-bottom: 1rem;
+    text-transform:uppercase;
+    letter-spacing:0.18em;
+    background:rgba(0,0,0,0.7);
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.2),
+        0 12px 25px rgba(0,0,0,0.9);
+}
+
+.tag::before{
+    content:'◦';
+    font-size:0.6rem;
+}
+
+/* ---------------- PROJECT IMAGES ---------------- */
+.card-img{
+    height:200px;
+    overflow:hidden;
+    border-radius: 12px;
+    margin-bottom: 1.6rem;
+    position: relative;
+    border:1px solid rgba(255,255,255,0.12);
+}
+
+.card-img::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at top left, rgba(255,255,255,0.3), transparent 60%);
+    mix-blend-mode:screen;
+    opacity:0.14;
+}
+
+.card-img img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:.65;
+    transition:0.5s;
+    filter: grayscale(100%) contrast(1.1);
+}
+
+.project-card:hover img{
+    opacity:1;
+    transform:scale(1.04);
+    filter: grayscale(0%) contrast(1.05);
+}
+
+/* ---------------- CONTACT ---------------- */
+.contact-line{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:1.8rem 2.1rem;
+    border-radius: var(--radius);
+    text-decoration:none;
+    color:inherit;
+    transition:.3s;
+    background:
+        linear-gradient(120deg, rgba(255,255,255,0.2), rgba(255,255,255,0.02)),
+        rgba(0,0,0,0.85);
+    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow:
+        0 16px 35px rgba(0,0,0,0.96),
+        0 0 0 1px rgba(255,255,255,0.08);
+    position:relative;
+    overflow:hidden;
+}
+
+.contact-line::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at left, rgba(255,255,255,0.5), transparent 60%);
+    mix-blend-mode:screen;
+    opacity:0;
+    transition:opacity 0.4s ease, transform 0.4s ease;
+}
+
+.contact-line:hover{
+    border-color: rgba(255,255,255,0.6);
+    transform: translateX(10px);
+    box-shadow:
+        0 24px 50px rgba(0,0,0,1),
+        0 0 32px rgba(255,255,255,0.7);
+}
+
+.contact-line:hover::after{
+    opacity:0.45;
+    transform:translateX(4px);
+}
+
+.contact-line h2{
+    font-family:'Space Grotesk';
+    color:var(--text-main);
+    font-size:clamp(1.5rem,4vw,2.4rem);
+    letter-spacing:-0.04em;
+}
+
+.reveal{
+    opacity:0;
+    transform:translateY(40px);
+    transition:1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active{
+    opacity:1;
+    transform:translateY(0);
+}
+
+@media(max-width:768px){
+    nav{
+        left:0;
+        transform:none;
+        width:100%;
+        max-width:none;
+        border-radius:0;
+    }
+    .nav-links{
+        position:fixed;
+        inset:0;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        gap:1.8rem;
+        background:rgba(40,40,40,0.96);
+        backdrop-filter:blur(40px);
+        -webkit-backdrop-filter:blur(40px);
+        z-index:900;
+        transform:translateX(100%);
+        transition:transform .4s cubic-bezier(0.19, 1, 0.22, 1), opacity .3s ease-out;
+        opacity:0;
+        pointer-events:none;
+    }
+    nav.open .nav-links{
+        transform:translateX(0);
+        opacity:1;
+        pointer-events:auto;
+    }
+    .nav-links a{
+        font-size:1.4rem;
+    }
+    .nav-toggle{
+        display:flex;
+    }
+    .blackhole-wrap{width:100vw}
+    .blackhole-core{width:120px;height:120px}
+    .accretion-disk{width:360px;height:360px}
+    section{padding:8vh 7vw}
+    h1{font-size:3rem}
+    .logo{font-size:.85rem}
+}
+</style>
 </head>
+
 <body>
-<div id="cursor"></div>
-<div id="cursor-dot"></div>
+
 <canvas id="bg-canvas"></canvas>
+<canvas id="starfield"></canvas>
 
-<nav>
-  <div class="logo">AF<span class="accent">.</span></div>
-  <ul class="nav-links">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#demos">Work</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="/CV" target="_blank" class="cv-btn">Open CV</a></li>
-  </ul>
-  <button class="menu-btn" id="menuToggle"><span></span><span></span><span></span></button>
-</nav>
-
-<div class="mobile-nav" id="mobileNav">
-  <a href="#home">Home</a>
-  <a href="#about">About</a>
-  <a href="#demos">Work</a>
-  <a href="#contact">Contact</a>
-  <a href="/CV" target="_blank" style="color: var(--accent); margin-top: 20px; font-size: 1.6rem;">[ OPEN CV ]</a>
+<div class="cosmic-scene">
+    <div class="black-hole-singularity"></div>
+    <div class="accretion-disk-container">
+        <div class="ring outer-disk-gaseous"></div>
+        <div class="ring outer-ring-2"></div>
+        <div class="ring outer-ring-1"></div>
+        <div class="ring inner-ring"></div>
+    </div>
 </div>
 
+<nav>
+    <div class="logo">AF</div>
+    <button class="nav-toggle" aria-label="Toggle navigation">
+        ☰
+    </button>
+    <ul class="nav-links">
+        <li><a href="#home"><span>Home</span></a></li>
+        <li><a href="#about"><span>Logic</span></a></li>
+        <li><a href="#work"><span>Deployments</span></a></li>
+        <li><a href="mailto:abdulrahmanfahim.dev@gmail.com"><span>Contact</span></a></li>
+        <li><a href="/CV" target="_blank" class="cv-btn"> My CV </a></li>
+    </ul>
+</nav>
+
 <main>
-  <section id="home">
-    <div class="hero-content reveal">
-      <p class="status-tag" id="status-glitch">[ System Architect ]</p>
-      <h1>Abdulrahman<br>Fahim</h1>
+
+<section id="home">
+    <div class="reveal">
+        <p class="status-tag">[ SYSTEM_READY ]</p>
+        <h1 id="hero-name">Abdulrahman<br>Fahim</h1>
+        <div class="type-wrap">Executing: <span class="typing" id="type-target"></span></div>
     </div>
-    <h2 class="reveal" style="font-weight: 400; color: var(--muted); max-width: 650px; font-size: 1.5rem; margin-top: 1.5rem;">
-      <span class="typing" id="type-target"></span><span class="cursor-blink"></span>
-    </h2>
+
     <div class="marquee-container reveal">
-      <div class="marquee-content" id="marquee-inner">
-        <div class="tech-item"><span>//</span> Linux Kernel</div>
-        <div class="tech-item"><span>//</span> Linux Networking</div>
-        <div class="tech-item"><span>//</span> Docker</div>
-        <div class="tech-item"><span>//</span> Kubernetes</div>
-        <div class="tech-item"><span>//</span> React.js</div>
-        <div class="tech-item"><span>//</span> Node.js</div>
-        <div class="tech-item"><span>//</span> CI/CD & Jenkins</div>
-      </div>
+        <div class="marquee-track" id="marquee-track">
+            <div class="tech-item">// LINUX KERNEL</div>
+            <div class="tech-item">// SYSTEM ARCHITECTURE</div>
+            <div class="tech-item">// DOCKER ORCHESTRATION</div>
+            <div class="tech-item">// NODE JS</div>
+            <div class="tech-item">// KUBERNETES</div>
+            <div class="tech-item">// LINUX KERNEL</div>
+            <div class="tech-item">// SYSTEM ARCHITECTURE</div>
+            <div class="tech-item">// DOCKER ORCHESTRATION</div>
+            <div class="tech-item">// NODE JS</div>
+            <div class="tech-item">// KUBERNETES</div>
+        </div>
     </div>
-  </section>
+</section>
 
-  <section id="about" class="reveal">
-    <p class="mono accent">01. CORE_LOGIC</p>
-    <h1 style="font-size: clamp(2.5rem, 6vw, 4rem); margin-top: 1rem;">What do <span class="accent">I</span> do?</h1>
+<section id="about">
+    <p class="status-tag reveal">01. CORE_CAPABILITIES</p>
     <div class="about-grid">
-      <div class="about-box">
-        <h3 style="margin-bottom: 1.5rem; font-family: 'Space Grotesk'; font-size: 1.8rem;">Infrastructure</h3>
-        <p style="color: var(--muted); font-size: 1.1rem;">Designing resilient containerized environments. I engineer the high-availability ecosystem code lives in.</p>
-      </div>
-      <div class="about-box">
-        <h3 style="margin-bottom: 1.5rem; font-family: 'Space Grotesk'; font-size: 1.8rem;">Full Stack</h3>
-        <p style="color: var(--muted); font-size: 1.1rem;">Building pixel-perfect interfaces backed by robust backend services. Performance is a baseline requirement.</p>
-      </div>
-      <div class="about-box">
-        <h3 style="margin-bottom: 1.5rem; font-family: 'Space Grotesk'; font-size: 1.8rem;">Linux</h3>
-        <p style="color: var(--muted); font-size: 1.1rem;">Acknowledging every single step in linux networking, distros, services, and more!</p>
-      </div>
+        <div class="about-box reveal">
+            <h3>Infrastructure</h3>
+            <p>Designing resilient containerized environments and high‑availability ecosystems where mission‑critical code lives.</p>
+        </div>
+        <div class="about-box reveal">
+            <h3>Systems</h3>
+            <p>Specializing in Linux networking, custom distributions, and low‑level kernel services.</p>
+        </div>
+        <div class="about-box reveal">
+            <h3>Performance</h3>
+            <p>Building optimized transpilers and pixel‑perfect interfaces where performance is the baseline requirement.</p>
+        </div>
     </div>
-  </section>
+</section>
 
-  <section id="demos" class="reveal">
-    <p class="mono accent">02. ACTIVE_DEPLOYMENTS</p>
+<section id="work">
+    <p class="status-tag reveal">02. ACTIVE_DEPLOYMENTS</p>
     <div class="grid-container">
-      <a href="/shiftfolio-light" class="project-card tilt-card">
-        <div class="card-img"><img src="/imgs/shiftfolio-light.png" alt="Light Portfolio" loading="lazy"></div>
-        <div class="card-content"><h3>Shiftfolio Light</h3><p class="mono" style="color: var(--accent); margin-top: 10px;">Static Portfolio</p></div>
-      </a>
-      <a href="/shiftfolio-dark" class="project-card tilt-card">
-        <div class="card-img"><img src="/imgs/shiftfolio-dark.png" alt="Dark Portfolio" loading="lazy"></div>
-        <div class="card-content"><h3>Shiftfolio Dark</h3><p class="mono" style="color: var(--accent); margin-top: 10px;">Static Portfolio</p></div>
-      </a>
-      <a href="/abstract-linux" class="project-card tilt-card">
-        <div class="card-img"><img src="/imgs/abstract-linux.png" alt="Abstract Linux" loading="lazy"></div>
-        <div class="card-content"><h3>Abstract Linux</h3><p class="mono" style="color: var(--accent); margin-top: 10px;">Linux Distro</p></div>
-      </a>
+        <a href="https://abdulrahmanfahim.github.io/abstract-linux" target="_blank" class="project-card reveal">
+            <div class="card-img"><img src="/imgs/abstract-linux.png" alt="Abstract Linux"></div>
+            <div class="card-content">
+                <span class="tag">OS_DISTRIBUTION</span>
+                <h3>Abstract Linux</h3>
+                <p>A minimalist systems framework for security and micro‑kernel research.</p>
+            </div>
+        </a>
+        <a href="/shiftfolio-light" class="project-card reveal">
+            <div class="card-img"><img src="/imgs/shiftfolio-light.png" alt="Portfolio Light"></div>
+            <div class="card-content">
+                <span class="tag">UI_VARIANT</span>
+                <h3>Shiftfolio Light</h3>
+                <p>High‑contrast architecture for visibility‑focused environments.</p>
+            </div>
+        </a>
+        <a href="/shiftfolio-dark" class="project-card reveal">
+            <div class="card-img"><img src="/imgs/shiftfolio-dark.png" alt="Portfolio Dark"></div>
+            <div class="card-content">
+                <span class="tag">UI_VARIANT</span>
+                <h3>Shiftfolio Dark</h3>
+                <p>Deep‑space aesthetic optimized for low‑light focus.</p>
+            </div>
+        </a>
     </div>
-  </section>
+</section>
 
-  <section id="contact" class="reveal">
-    <p class="mono accent">03. ESTABLISH_CONNECTION</p>
-    <h1 style="margin: 1.5rem 0 3rem 0; font-size: clamp(2.5rem, 6vw, 4rem);">Contact me.</h1>
-    <div class="contact-list">
-      <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="contact-line"><h2>Email</h2><span class="arrow">→</span></a>
-      <a href="https://github.com/abdulrahmanfahim" target="_blank" class="contact-line"><h2>Github</h2><span class="arrow">→</span></a>
-      <a href="https://linkedin.com/in/abdulrahmanfahim-dev" target="_blank" class="contact-line"><h2>LinkedIn</h2><span class="arrow">→</span></a>
+<section id="contact">
+    <p class="status-tag reveal">03. ESTABLISH_LINK</p>
+    <div style="margin-top:2rem">
+        <a href="mailto:abdulrahmanfahim.dev@gmail.com" class="contact-line reveal"><h2>Email</h2></a><br>
+        <a href="https://github.com/abdulrahmanfahim" target="_blank" class="contact-line reveal"><h2>Github</h2></a><br>
+        <a href="https://linkedin.com/in/abdulrahmanfahim-dev" target="_blank" class="contact-line reveal"><h2>LinkedIn</h2></a>
     </div>
-  </section>
+</section>
+
 </main>
 
-<footer>
-  <p class="mono" style="color: var(--accent);">[ SYSTEM STATUS: OPERATIONAL ]</p>
-</footer>
-
 <script>
-// Audio (unchanged)
-const audio = new Audio('/music/background-music.mp3');
-audio.loop = true; audio.volume = 0.4;
-let audioStarted = false;
-document.addEventListener('click', () => {
-  if (!audioStarted) { audio.play().catch(() => {}); audioStarted = true; }
-}, { once: true });
-
-// Mobile menu
-const menuToggle = document.getElementById('menuToggle');
-const mobileNav = document.getElementById('mobileNav');
-menuToggle.onclick = () => { 
-  menuToggle.classList.toggle('open'); 
-  mobileNav.classList.toggle('active'); 
-};
-document.querySelectorAll('.mobile-nav a').forEach(l => {
-  l.onclick = () => { menuToggle.classList.remove('open'); mobileNav.classList.remove('active'); };
-});
-
-// 3D tilt
-const cards = document.querySelectorAll('.tilt-card');
-cards.forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const rx = ((y - cy) / cy) * -12;
-    const ry = ((x - cx) / cx) * 12;
-    card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
-  });
-  card.addEventListener('mouseleave', () => card.style.transform = `rotateX(0deg) rotateY(0deg)`);
-});
-
-// Status scramble (unchanged)
-const statusEl = document.getElementById('status-glitch');
-const phrases = ["[ System Online ]", "[ System Updating ]", "[ Portfolio Running Perfectly ]"];
-let sIdx = 0;
-function scramble(newText) {
-  let frame = 0;
-  const chars = "!<>-_\\/[]{}—=+*^?#________";
-  const timer = setInterval(() => {
-    let out = "";
-    for (let i = 0; i < newText.length; i++) {
-      out += (i < frame / 2) ? newText[i] : chars[Math.floor(Math.random() * chars.length)];
-    }
-    statusEl.innerText = out;
-    if (frame / 2 >= newText.length) clearInterval(timer);
-    frame++;
-  }, 16);
-}
-setInterval(() => { sIdx = (sIdx + 1) % phrases.length; scramble(phrases[sIdx]); }, 6000);
-
-// Canvas particles (softer)
-const canvas = document.getElementById('bg-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-class Particle {
-  constructor() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.vx = (Math.random() - 0.5) * 0.8;
-    this.vy = (Math.random() - 0.5) * 0.8;
-  }
-  update() {
-    this.x += this.vx; this.y += this.vy;
-    if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-    if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-  }
-}
-function initParticles() { particles = []; for(let i = 0; i < 70; i++) particles.push(new Particle()); }
-function animate() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  particles.forEach((p, i) => {
-    p.update();
-    ctx.fillStyle = 'rgba(0, 243, 255, 0.6)';
-    ctx.beginPath(); ctx.arc(p.x, p.y, 1.8, 0, Math.PI*2); ctx.fill();
-    for(let j = i+1; j < particles.length; j++) {
-      const d = Math.hypot(p.x - particles[j].x, p.y - particles[j].y);
-      if (d < 180) {
-        ctx.strokeStyle = `rgba(0, 243, 255, ${0.4 - d/180})`;
-        ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
-      }
-    }
-  });
-  requestAnimationFrame(animate);
-}
-window.onresize = resize; resize(); initParticles(); animate();
-
-// Typewriter (unchanged)
-const roles = ["Systems Engineer", "Full Stack Dev", "Infrastructure Architect"];
-const typeEl = document.getElementById("type-target");
-let wIdx=0, cIdx=0, isDel=false;
-function type() {
-  const word = roles[wIdx];
-  typeEl.textContent = isDel ? word.substring(0, cIdx--) : word.substring(0, cIdx++);
-  let speed = isDel ? 40 : 90;
-  if(!isDel && cIdx > word.length) { isDel=true; speed=1800; }
-  else if(isDel && cIdx < 0) { isDel=false; wIdx=(wIdx+1)%roles.length; cIdx=0; speed=400; }
-  setTimeout(type, speed);
+// TYPEWRITER EFFECT
+const roles=["Systems Engineer","Infrastructure Architect","Full Stack Developer"];
+let r=0,c=0,del=false;
+function type(){
+    const el=document.getElementById("type-target");
+    if(!el) return;
+    let word=roles[r];
+    el.textContent=del?word.substring(0,c--):word.substring(0,c++);
+    let t=del?40:90;
+    if(!del&&c>word.length){del=true;t=1200;}
+    else if(del&&c<0){del=false;r=(r+1)%roles.length;}
+    setTimeout(type,t);
 }
 type();
 
-// Cursor
-const cursor = document.getElementById('cursor'), dot = document.getElementById('cursor-dot');
-window.onmousemove = e => {
-  cursor.style.top = dot.style.top = e.clientY + 'px';
-  cursor.style.left = dot.style.left = e.clientX + 'px';
-};
+// HERO NAME LETTER-BY-LETTER ANIMATION
+const heroNameEl = document.getElementById('hero-name');
+if (heroNameEl) {
+    const lines = ["Abdulrahman", "Fahim"];
+    const letters = [];
+    heroNameEl.innerHTML = lines.map(line => {
+        const lineHTML = line.split('').map(ch => {
+            const span = document.createElement('span');
+            span.className = 'hero-letter';
+            span.textContent = ch;
+            letters.push(span);
+            return span.outerHTML;
+        }).join('');
+        return `<span class="hero-line">${lineHTML}</span>`;
+    }).join('<br>');
 
-// Reveal
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, {threshold: 0.15});
-document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    const createdLetters = heroNameEl.querySelectorAll('.hero-letter');
+    createdLetters.forEach((el, idx) => {
+        el.style.animation = `heroLetterIn 0.85s cubic-bezier(0.19, 1, 0.22, 1) forwards`;
+        el.style.animationDelay = `${0.04 * idx}s`;
+    });
+}
 
-// Marquee duplicate
-const marqueeInner = document.getElementById('marquee-inner');
-marqueeInner.innerHTML += marqueeInner.innerHTML + marqueeInner.innerHTML;
+// GEOMETRIC BACKGROUND
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('bg-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let stars = [];
+    const color = "255, 255, 255";
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    class Star {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 1.2;
+            this.opacity = Math.random() * 0.25;
+            this.factor = (Math.random() * 0.004) * 2;
+        }
+        draw() {
+            this.opacity += this.factor;
+            if (this.opacity > 0.3 || this.opacity < 0.05) this.factor *= -1;
+            ctx.fillStyle = `rgba(${color}, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.5;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+        draw() {
+            ctx.fillStyle = `rgb(${color})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function init() {
+        particles = [];
+        stars = [];
+        for (let i = 0; i < 40; i++) stars.push(new Star());
+        for (let i = 0; i < 24; i++) particles.push(new Particle());
+    }
+
+    function connect() {
+        const maxDistSq = 220 * 220;
+        for (let a = 0; a < particles.length; a++) {
+            for (let b = a + 1; b < particles.length; b++) {
+                const dx = particles[a].x - particles[b].x;
+                const dy = particles[a].y - particles[b].y;
+                const distSq = dx * dx + dy * dy;
+                if (distSq < maxDistSq) {
+                    const opacity = (1 - distSq / maxDistSq) * 0.5;
+                    ctx.strokeStyle = `rgba(${color}, ${opacity})`;
+                    ctx.lineWidth = 0.8;
+                    ctx.shadowBlur = 3;
+                    ctx.shadowColor = `rgba(${color}, ${opacity})`;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[a].x, particles[a].y);
+                    ctx.lineTo(particles[b].x, particles[b].y);
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(s => s.draw());
+        particles.forEach(p => { p.update(); p.draw(); });
+        connect();
+        requestAnimationFrame(animate);
+    }
+
+    resize();
+    init();
+    animate();
+    window.addEventListener('resize', () => {
+        resize();
+        init();
+    });
+});
+
+// STARFIELD BACKGROUND
+(function(){
+    const starCanvas = document.getElementById('starfield');
+    if (!starCanvas) return;
+    const starCtx = starCanvas.getContext('2d');
+    const stars = [];
+    const numStars = 220;
+
+    function resizeStarfield() {
+        starCanvas.width = window.innerWidth;
+        starCanvas.height = window.innerHeight;
+    }
+
+    function initStars() {
+        stars.length = 0;
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * starCanvas.width,
+                y: Math.random() * starCanvas.height,
+                radius: Math.random() * 1.5,
+                alpha: Math.random(),
+                alphaSpeed: 0.005 + Math.random() * 0.01
+            });
+        }
+    }
+
+    function drawStars() {
+        starCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+        for (let i = 0; i < stars.length; i++) {
+            const s = stars[i];
+            starCtx.beginPath();
+            starCtx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+            s.alpha += s.alphaSpeed;
+            if (s.alpha > 1 || s.alpha < 0) {
+                s.alphaSpeed = -s.alphaSpeed;
+            }
+            starCtx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.1, s.alpha)})`;
+            starCtx.fill();
+        }
+        requestAnimationFrame(drawStars);
+    }
+
+    resizeStarfield();
+    initStars();
+    drawStars();
+    window.addEventListener('resize', () => {
+        resizeStarfield();
+        initStars();
+    });
+})();
+
+// REVEAL ON SCROLL
+const obs=new IntersectionObserver(e=>{
+    e.forEach(i=>{if(i.isIntersecting)i.target.classList.add("active");});
+},{threshold:.1});
+
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// MOBILE NAV TOGGLE
+const nav = document.querySelector('nav');
+const navToggle = document.querySelector('.nav-toggle');
+if (nav && navToggle) {
+    navToggle.addEventListener('click', () => {
+        nav.classList.toggle('open');
+        navToggle.textContent = nav.classList.contains('open') ? '✕' : '☰';
+    });
+
+    // Close menu when clicking any nav link (auto-scroll handled by anchor)
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (nav.classList.contains('open')) {
+                nav.classList.remove('open');
+                navToggle.textContent = '☰';
+            }
+        });
+    });
+}
 </script>
+
 </body>
 </html>
+
