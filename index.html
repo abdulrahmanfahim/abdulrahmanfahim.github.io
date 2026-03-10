@@ -313,34 +313,59 @@ h1{
     filter:
         drop-shadow(0 0 32px rgba(255,255,255,0.1))
         drop-shadow(0 18px 45px rgba(0,0,0,0.9));
+    transition: text-shadow 0.5s ease;
 }
 
-.hero-line{
-    display:inline-block;
+/* Hero name glow effect (initial flash) */
+h1.glow {
+    text-shadow: 
+        0 0 30px rgba(255, 255, 255, 0.8),
+        0 0 60px rgba(255, 255, 255, 0.5),
+        0 0 90px rgba(255, 255, 255, 0.3);
 }
 
-.hero-letter{
-    opacity:0;
-    display:inline-block;
-    transform:translateY(40px);
-    filter:blur(8px);
+/* Individual word hover glow (white & smokey – accretion disk style) */
+.hero-line-first:hover,
+.hero-line-second:hover {
+    text-shadow: 
+        0 0 20px rgba(255, 255, 255, 0.9),
+        0 0 40px rgba(255, 255, 255, 0.6),
+        0 0 60px rgba(255, 255, 255, 0.3);
+    transition: text-shadow 0.3s ease;
 }
 
-@keyframes heroLetterIn{
-    0%{
-        opacity:0;
-        transform:translateY(40px) scale(0.98);
-        filter:blur(8px);
+.hero-line {
+    display: inline-block;
+    opacity: 0; /* initially hidden, revealed by animations */
+}
+
+.hero-line-first {
+    animation: slideInFromRight 0.8s ease forwards;
+}
+
+.hero-line-second {
+    animation: slideInFromLeft 0.8s ease forwards;
+}
+
+@keyframes slideInFromRight {
+    0% {
+        opacity: 0;
+        transform: translateX(100px);
     }
-    60%{
-        opacity:1;
-        transform:translateY(-4px) scale(1.02);
-        filter:blur(2px);
+    100% {
+        opacity: 1;
+        transform: translateX(0);
     }
-    100%{
-        opacity:1;
-        transform:translateY(0) scale(1);
-        filter:blur(0);
+}
+
+@keyframes slideInFromLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
@@ -375,10 +400,13 @@ h1{
 .marquee-track{
     display:flex;
     width:max-content;
-    animation:marquee 26s linear infinite;
+    will-change: transform;
 }
 
-.marquee-track:hover{animation-play-state:paused}
+.marquee-set {
+    display: flex;
+    flex-shrink: 0;
+}
 
 .tech-item{
     font-family:'JetBrains Mono';
@@ -394,11 +422,6 @@ h1{
     border-radius:999px;
     border:1px solid rgba(255,255,255,0.35);
     background:rgba(0,0,0,0.7);
-}
-
-@keyframes marquee{
-    0%{transform:translateX(0)}
-    100%{transform:translateX(-50%)}
 }
 
 /* ---------------- CARDS (GLASSMORPHISM) ---------------- */
@@ -429,6 +452,9 @@ h1{
 .project-card{
     text-decoration:none;
     color:inherit;
+    display: flex;
+    flex-direction: column;
+    padding: 0; /* remove padding to let image touch edges */
 }
 
 /* subtle inner stroke */
@@ -522,12 +548,11 @@ h1{
 
 /* ---------------- PROJECT IMAGES ---------------- */
 .card-img{
-    height:200px;
+    height: 180px; /* fixed height for top half */
     overflow:hidden;
-    border-radius: 12px;
-    margin-bottom: 1.6rem;
+    border-radius: var(--radius) var(--radius) 0 0; /* round only top corners */
     position: relative;
-    border:1px solid rgba(255,255,255,0.12);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
 }
 
 .card-img::after{
@@ -552,6 +577,16 @@ h1{
     opacity:1;
     transform:scale(1.04);
     filter: grayscale(0%) contrast(1.05);
+}
+
+/* Card content area */
+.card-content {
+    padding: 2rem;
+    text-align: center; /* center all text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
 }
 
 /* ---------------- CONTACT ---------------- */
@@ -616,6 +651,46 @@ h1{
     transform:translateY(0);
 }
 
+/* ---------------- FOOTER ---------------- */
+footer {
+    margin-top: 3rem;
+    padding: 2rem 1rem;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(100, 150, 255, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(200, 100, 255, 0.15) 0%, transparent 40%),
+        linear-gradient(135deg, rgba(20, 20, 30, 0.9) 0%, rgba(5, 5, 10, 0.95) 100%);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(2px);
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.2em;
+    font-size: 1.2rem;
+    color: rgba(255,255,255,0.7);
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    position: relative;
+    z-index: 10;
+}
+
+footer .copyright {
+    display: inline-block;
+    padding: 0.5rem 2rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 999px;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(5px);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+}
+
+footer .copyright span {
+    color: white;
+    font-weight: 700;
+    font-size: 1.4rem;
+    margin-right: 0.5rem;
+    text-shadow: 0 0 20px rgba(255,255,255,0.8);
+}
+
 @media(max-width:768px){
     nav{
         left:0;
@@ -658,6 +733,14 @@ h1{
     section{padding:8vh 7vw}
     h1{font-size:3rem}
     .logo{font-size:.85rem}
+    footer {
+        margin-top: 2rem;
+        padding: 2rem 1rem;
+        font-size: 1rem;
+    }
+    footer .copyright span {
+        font-size: 0.8rem;
+    }
 }
 </style>
 </head>
@@ -696,22 +779,35 @@ h1{
 <section id="home">
     <div class="reveal">
         <p class="status-tag">[ SYSTEM_READY ]</p>
-        <h1 id="hero-name">Abdulrahman<br>Fahim</h1>
+        <!-- Hero name with edge-line letters -->
+        <h1 id="hero-name">
+            <span class="hero-line hero-line-first">
+                <span class="first-letter">A</span>bdulrahman
+            </span><br>
+            <span class="hero-line hero-line-second">
+                Fahi<span class="last-letter">m</span>
+            </span>
+        </h1>
         <div class="type-wrap">Executing: <span class="typing" id="type-target"></span></div>
     </div>
 
-    <div class="marquee-container reveal">
+    <!-- FIXED INFINITE MARQUEE (NO GLITCH, PAUSE ON HOVER) -->
+    <div class="marquee-container reveal" id="marquee-container">
         <div class="marquee-track" id="marquee-track">
-            <div class="tech-item">// LINUX KERNEL</div>
-            <div class="tech-item">// SYSTEM ARCHITECTURE</div>
-            <div class="tech-item">// DOCKER ORCHESTRATION</div>
-            <div class="tech-item">// NODE JS</div>
-            <div class="tech-item">// KUBERNETES</div>
-            <div class="tech-item">// LINUX KERNEL</div>
-            <div class="tech-item">// SYSTEM ARCHITECTURE</div>
-            <div class="tech-item">// DOCKER ORCHESTRATION</div>
-            <div class="tech-item">// NODE JS</div>
-            <div class="tech-item">// KUBERNETES</div>
+            <div class="marquee-set">
+                <div class="tech-item">// LINUX KERNEL</div>
+                <div class="tech-item">// SYSTEM ARCHITECTURE</div>
+                <div class="tech-item">// DOCKER ORCHESTRATION</div>
+                <div class="tech-item">// NODE JS</div>
+                <div class="tech-item">// KUBERNETES</div>
+            </div>
+            <div class="marquee-set">
+                <div class="tech-item">// LINUX KERNEL</div>
+                <div class="tech-item">// SYSTEM ARCHITECTURE</div>
+                <div class="tech-item">// DOCKER ORCHESTRATION</div>
+                <div class="tech-item">// NODE JS</div>
+                <div class="tech-item">// KUBERNETES</div>
+            </div>
         </div>
     </div>
 </section>
@@ -775,6 +871,13 @@ h1{
 
 </main>
 
+<!-- New Footer with abstract background and cool copyright -->
+<footer class="reveal">
+    <div class="copyright">
+        <span>AF</span> © 2025 ABDULRAHMAN FAHIM
+    </div>
+</footer>
+
 <script>
 // TYPEWRITER EFFECT
 const roles=["Systems Engineer","Infrastructure Architect","Full Stack Developer"];
@@ -791,30 +894,21 @@ function type(){
 }
 type();
 
-// HERO NAME LETTER-BY-LETTER ANIMATION
-const heroNameEl = document.getElementById('hero-name');
-if (heroNameEl) {
-    const lines = ["Abdulrahman", "Fahim"];
-    const letters = [];
-    heroNameEl.innerHTML = lines.map(line => {
-        const lineHTML = line.split('').map(ch => {
-            const span = document.createElement('span');
-            span.className = 'hero-letter';
-            span.textContent = ch;
-            letters.push(span);
-            return span.outerHTML;
-        }).join('');
-        return `<span class="hero-line">${lineHTML}</span>`;
-    }).join('<br>');
+// HERO NAME ANIMATION (slide + glow) - smoother and shorter hold
+document.addEventListener('DOMContentLoaded', () => {
+    const heroName = document.getElementById('hero-name');
+    if (!heroName) return;
 
-    const createdLetters = heroNameEl.querySelectorAll('.hero-letter');
-    createdLetters.forEach((el, idx) => {
-        el.style.animation = `heroLetterIn 0.85s cubic-bezier(0.19, 1, 0.22, 1) forwards`;
-        el.style.animationDelay = `${0.04 * idx}s`;
-    });
-}
+    // After the slide animation duration (0.8s), apply glow for 0.4s then remove.
+    setTimeout(() => {
+        heroName.classList.add('glow');
+        setTimeout(() => {
+            heroName.classList.remove('glow');
+        }, 400);
+    }, 800);
+});
 
-// GEOMETRIC BACKGROUND
+// GEOMETRIC BACKGROUND - only dots, no lines, many stars
 document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('bg-canvas');
     if (!canvas) return;
@@ -850,9 +944,10 @@ document.addEventListener('DOMContentLoaded', () => {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2 + 0.5;
-            this.vx = (Math.random() - 0.5) * 0.5;
-            this.vy = (Math.random() - 0.5) * 0.5;
+            this.size = Math.random() * 1.5 + 0.5;
+            this.vx = (Math.random() - 0.5) * 0.2;
+            this.vy = (Math.random() - 0.5) * 0.2;
+            this.opacity = Math.random() * 0.5 + 0.2;
         }
         update() {
             this.x += this.vx;
@@ -861,7 +956,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
         }
         draw() {
-            ctx.fillStyle = `rgb(${color})`;
+            ctx.fillStyle = `rgba(${color}, ${this.opacity})`;
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
             ctx.fill();
@@ -871,37 +966,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function init() {
         particles = [];
         stars = [];
-        for (let i = 0; i < 40; i++) stars.push(new Star());
-        for (let i = 0; i < 24; i++) particles.push(new Particle());
-    }
-
-    function connect() {
-        const maxDistSq = 220 * 220;
-        for (let a = 0; a < particles.length; a++) {
-            for (let b = a + 1; b < particles.length; b++) {
-                const dx = particles[a].x - particles[b].x;
-                const dy = particles[a].y - particles[b].y;
-                const distSq = dx * dx + dy * dy;
-                if (distSq < maxDistSq) {
-                    const opacity = (1 - distSq / maxDistSq) * 0.5;
-                    ctx.strokeStyle = `rgba(${color}, ${opacity})`;
-                    ctx.lineWidth = 0.8;
-                    ctx.shadowBlur = 3;
-                    ctx.shadowColor = `rgba(${color}, ${opacity})`;
-                    ctx.beginPath();
-                    ctx.moveTo(particles[a].x, particles[a].y);
-                    ctx.lineTo(particles[b].x, particles[b].y);
-                    ctx.stroke();
-                }
-            }
-        }
+        // Increase number of stars and particles
+        for (let i = 0; i < 200; i++) stars.push(new Star());
+        for (let i = 0; i < 100; i++) particles.push(new Particle());
     }
 
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         stars.forEach(s => s.draw());
         particles.forEach(p => { p.update(); p.draw(); });
-        connect();
+        // No connections drawn
         requestAnimationFrame(animate);
     }
 
@@ -914,13 +988,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// STARFIELD BACKGROUND
+// STARFIELD BACKGROUND (secondary layer)
 (function(){
     const starCanvas = document.getElementById('starfield');
     if (!starCanvas) return;
     const starCtx = starCanvas.getContext('2d');
     const stars = [];
-    const numStars = 220;
+    const numStars = 300; // even more stars
 
     function resizeStarfield() {
         starCanvas.width = window.innerWidth;
@@ -965,7 +1039,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 })();
 
-// REVEAL ON SCROLL
+// REVEAL ON SCROLL (include footer)
 const obs=new IntersectionObserver(e=>{
     e.forEach(i=>{if(i.isIntersecting)i.target.classList.add("active");});
 },{threshold:.1});
@@ -981,7 +1055,7 @@ if (nav && navToggle) {
         navToggle.textContent = nav.classList.contains('open') ? '✕' : '☰';
     });
 
-    // Close menu when clicking any nav link (auto-scroll handled by anchor)
+    // Close menu when clicking any nav link
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
             if (nav.classList.contains('open')) {
@@ -991,8 +1065,98 @@ if (nav && navToggle) {
         });
     });
 }
+
+// ---------- FIXED INFINITE MARQUEE (NO GLITCH, PAUSE ON HOVER) ----------
+(function() {
+    const track = document.getElementById('marquee-track');
+    const container = document.getElementById('marquee-container');
+    if (!track || !container) return;
+
+    let speed = 0.08; // pixels per millisecond (adjust for desired speed)
+    let pos = 0;
+    let setWidth = 0;
+    let rafId = null;
+    let lastTimestamp = null;
+    let paused = false;
+
+    const sets = track.querySelectorAll('.marquee-set');
+    if (sets.length < 2) return;
+
+    // Measure the width of one set (including margins)
+    function measureSetWidth() {
+        return sets[0].offsetWidth;
+    }
+
+    // Initial measure (if zero, try again later)
+    setWidth = measureSetWidth();
+    if (setWidth === 0) {
+        setTimeout(() => {
+            setWidth = measureSetWidth();
+        }, 100);
+    }
+
+    // Animation loop
+    function step(timestamp) {
+        if (!lastTimestamp) {
+            lastTimestamp = timestamp;
+            rafId = requestAnimationFrame(step);
+            return;
+        }
+
+        if (!paused) {
+            const delta = timestamp - lastTimestamp;
+            pos += speed * delta;
+
+            // When we've scrolled the width of one full set, rotate the sets
+            if (pos >= setWidth && setWidth > 0) {
+                pos -= setWidth; // keep the overflow to maintain smoothness
+
+                // Move the first set to the end of the track
+                const firstSet = sets[0];
+                track.appendChild(firstSet); // this automatically detaches it from its current position
+            }
+
+            // Apply transform
+            track.style.transform = `translateX(-${pos}px)`;
+        }
+
+        lastTimestamp = timestamp;
+        rafId = requestAnimationFrame(step);
+    }
+
+    // Start animation
+    rafId = requestAnimationFrame(step);
+
+    // Pause on hover
+    container.addEventListener('mouseenter', () => {
+        paused = true;
+        // Also reset lastTimestamp to avoid large delta when resuming
+        lastTimestamp = null;
+    });
+    container.addEventListener('mouseleave', () => {
+        paused = false;
+        // Reset lastTimestamp to avoid jump
+        lastTimestamp = null;
+    });
+
+    // Re-measure on resize and adjust pos if necessary
+    window.addEventListener('resize', () => {
+        const newWidth = measureSetWidth();
+        if (newWidth > 0) {
+            // Adjust pos proportionally to avoid visual jump
+            if (setWidth > 0) {
+                pos = (pos / setWidth) * newWidth;
+            }
+            setWidth = newWidth;
+        }
+    });
+
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+        if (rafId) cancelAnimationFrame(rafId);
+    });
+})();
 </script>
 
 </body>
 </html>
-
